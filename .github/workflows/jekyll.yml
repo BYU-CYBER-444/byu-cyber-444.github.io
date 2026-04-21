@@ -24,20 +24,24 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.2"
-          bundler-cache: true
+          ruby-version: "3.3"
+          bundler-cache: true   # runs `bundle install` and caches gems automatically
 
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Build with Jekyll
+        # Use bundle exec jekyll build directly — NOT actions/jekyll-build-pages,
+        # which forces the github-pages gem (Jekyll 3) and breaks just-the-docs v0.8+.
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
 
   deploy:
     environment:

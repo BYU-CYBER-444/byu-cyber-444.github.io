@@ -1,17 +1,8 @@
 ---
 ---
-// Custom theme overrides for IT&C 444 course site
-// Applied on top of just-the-docs base styles
-
-// ── Brand colors ─────────────────────────────────────────────────────────────
-$link-color:           #2E75B6;
-$sidebar-color:        #1F3864;
-$base-button-color:    #2E75B6;
-$btn-primary-color:    #2E75B6;
-$code-background-color: #f3f6fa;
-
-// ── Import just-the-docs base ─────────────────────────────────────────────────
-@import "just-the-docs";
+// IT&C 444 — plain CSS overrides applied after just-the-docs renders.
+// SASS variable overrides live in _sass/color_schemes/custom.scss.
+// Do NOT add @import "just-the-docs" here — the remote theme handles that.
 
 // ── Sidebar nav styling ───────────────────────────────────────────────────────
 .side-bar {

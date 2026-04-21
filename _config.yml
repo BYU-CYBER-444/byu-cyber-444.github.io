@@ -3,14 +3,18 @@ description: "Course site for IT&C 444 at [University Name]. Infrastructure Trac
 baseurl: "/cyb4400"         # ← change to your GitHub repo name
 url: "https://[your-username].github.io"   # ← change to your GitHub username
 
-# Theme: just-the-docs (great sidebar nav, no config needed beyond front matter)
+# Theme: just-the-docs
+# Using remote_theme for GitHub Pages compatibility (GitHub Actions build).
+# The workflow in .github/workflows/jekyll.yml handles bundling with the
+# correct gem versions — it does NOT use the built-in GitHub Pages builder.
 remote_theme: just-the-docs/just-the-docs@v0.8.2
 
-# Plugins
+# Plugins (jekyll-remote-theme is required for remote_theme to work)
 plugins:
   - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-sitemap
+  - jekyll-include-cache
 
 # Site settings
 color_scheme: custom         # uses assets/css/custom.scss overrides
