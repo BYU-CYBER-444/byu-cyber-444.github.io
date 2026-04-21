@@ -1,0 +1,85 @@
+title: "IT&C 444 — Advanced System Administration & Hardening"
+description: "Course site for IT&C 444 at [University Name]. Infrastructure Track · 3 Credit Hours."
+baseurl: "/cyb4400"         # ← change to your GitHub repo name
+url: "https://[your-username].github.io"   # ← change to your GitHub username
+
+# Theme: just-the-docs (great sidebar nav, no config needed beyond front matter)
+remote_theme: just-the-docs/just-the-docs@v0.8.2
+
+# Plugins
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Site settings
+color_scheme: custom         # uses assets/css/custom.scss overrides
+search_enabled: true
+search:
+  heading_level: 3
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+  tokenizer_separator: /[\s/]+/
+  rel_url: true
+  button: false
+
+# Navigation structure (just-the-docs uses front matter nav_order + parent)
+# See individual page front matter for ordering.
+
+# Heading anchor links
+heading_anchors: true
+
+# Footer links
+footer_content: "IT&C 444 · Advanced System Administration &amp; Hardening · <a href='https://github.com/[your-username]/cyb4400'>View on GitHub</a>"
+
+# Back to top link
+back_to_top: true
+back_to_top_text: "Back to top"
+
+# Callouts (used for TODO boxes, tips, warnings throughout pages)
+callouts_level: quiet
+callouts:
+  highlight:
+    title: Note
+    color: yellow
+  important:
+    title: Important
+    color: blue
+  warning:
+    title: Warning
+    color: red
+  tip:
+    title: Tip
+    color: green
+  due:
+    title: Due Date
+    color: purple
+
+# Collections (not needed for just-the-docs flat/hierarchical pages, but
+# keeping labs/hw as regular pages under subfolders works fine)
+# All .md files in subfolders are picked up automatically.
+
+# Exclude from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - "*.sh"
+  - README.md
+
+# Markdown settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+    span:
+      line_numbers: false
+    block:
+      line_numbers: false
+
+# Permalink style
+permalink: pretty

@@ -1,0 +1,89 @@
+---
+---
+// Custom theme overrides for IT&C 444 course site
+// Applied on top of just-the-docs base styles
+
+// ── Brand colors ─────────────────────────────────────────────────────────────
+$link-color:           #2E75B6;
+$sidebar-color:        #1F3864;
+$base-button-color:    #2E75B6;
+$btn-primary-color:    #2E75B6;
+$code-background-color: #f3f6fa;
+
+// ── Import just-the-docs base ─────────────────────────────────────────────────
+@import "just-the-docs";
+
+// ── Sidebar nav styling ───────────────────────────────────────────────────────
+.side-bar {
+  background-color: #1F3864;
+  .site-title {
+    color: #BDD7EE;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  .nav-list-item .nav-list-link {
+    color: #BDD7EE;
+    &:hover, &.active {
+      background-color: #2E75B6;
+      color: #ffffff;
+    }
+  }
+  .nav-list .nav-list-item .nav-list-link.active {
+    font-weight: 700;
+    background-color: #2E75B6;
+  }
+}
+
+// ── Assignment badge pills ────────────────────────────────────────────────────
+.badge-lab    { background:#1F3864; color:#fff; border-radius:4px; padding:2px 8px; font-size:.75rem; font-weight:600; }
+.badge-hw     { background:#2E75B6; color:#fff; border-radius:4px; padding:2px 8px; font-size:.75rem; font-weight:600; }
+.badge-quiz   { background:#C55A11; color:#fff; border-radius:4px; padding:2px 8px; font-size:.75rem; font-weight:600; }
+.badge-exam   { background:#7B2C2C; color:#fff; border-radius:4px; padding:2px 8px; font-size:.75rem; font-weight:600; }
+.badge-due    { background:#1F6B75; color:#fff; border-radius:4px; padding:2px 8px; font-size:.75rem; font-weight:600; }
+
+// ── Week header cards (schedule page) ────────────────────────────────────────
+.week-card {
+  border-left: 4px solid #2E75B6;
+  background: #f5f8fc;
+  padding: .75rem 1rem;
+  margin-bottom: .5rem;
+  border-radius: 0 4px 4px 0;
+  h3 { margin-top: 0; color: #1F3864; }
+}
+.week-card.midterm { border-left-color: #C55A11; background: #fff8f0; }
+.week-card.capstone { border-left-color: #1F6B75; background: #f0faf9; }
+
+// ── Step boxes for lab procedures ────────────────────────────────────────────
+.step-box {
+  counter-increment: step-counter;
+  border: 1px solid #BDD7EE;
+  border-radius: 6px;
+  padding: .6rem 1rem;
+  margin-bottom: .5rem;
+  background: #f9fbfd;
+  &::before {
+    content: "Step " counter(step-counter);
+    display: inline-block;
+    background: #1F3864;
+    color: #fff;
+    border-radius: 3px;
+    padding: 0 6px;
+    font-size: .75rem;
+    font-weight: 700;
+    margin-right: .5rem;
+  }
+}
+.steps { counter-reset: step-counter; }
+
+// ── Callout overrides ─────────────────────────────────────────────────────────
+.callout.due    { border-left-color: #7B2C9E; background: #f8f0ff; }
+.callout.tip    { border-left-color: #217346; background: #f0faf4; }
+
+// ── Tables ────────────────────────────────────────────────────────────────────
+table {
+  width: 100%;
+  font-size: .9rem;
+  thead tr { background-color: #1F3864; color: #fff; }
+  tbody tr:nth-child(even) { background-color: #f2f6fc; }
+}
