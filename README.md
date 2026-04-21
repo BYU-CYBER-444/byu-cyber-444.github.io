@@ -8,7 +8,7 @@ Course website built with [Jekyll](https://jekyllrb.com) and the
 ```bash
 bundle install
 bundle exec jekyll serve
-# Open http://localhost:4000/cyb4400/
+# Open http://localhost:4000/cyber444/
 ```
 
 ## Deployment
@@ -18,14 +18,14 @@ Push to `main` — GitHub Actions (`.github/workflows/jekyll.yml`) builds and de
 ## Configuration
 
 Update `_config.yml`:
-- Set `baseurl` to your repo name (e.g., `/cyb4400`)
+- Set `baseurl` to your repo name (e.g., `/cyber444`)
 - Set `url` to `https://[your-username].github.io`
 - Update `footer_content` with your GitHub username
 
 ## Structure
 
 ```
-cyb4400-site/
+cyber444-site/
 ├── _config.yml           # Jekyll + just-the-docs configuration
 ├── Gemfile               # Ruby dependencies
 ├── index.md              # Home page

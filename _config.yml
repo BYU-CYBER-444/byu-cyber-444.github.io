@@ -1,7 +1,7 @@
-title: "IT&C 444 — Advanced System Administration & Hardening"
-description: "Course site for IT&C 444 at [University Name]. Infrastructure Track · 3 Credit Hours."
-baseurl: "/cyb4400"         # ← change to your GitHub repo name
-url: "https://[your-username].github.io"   # ← change to your GitHub username
+title: "CYBER 444 — System Administration"
+description: "Course site for CYBER 444 at Brigham Young University"
+baseurl: "/cyber444"         # ← change to your GitHub repo name
+url: "https://byu-cyber-444.github.io"   # ← change to your GitHub username
 
 # Theme: just-the-docs
 # Using remote_theme for GitHub Pages compatibility (GitHub Actions build).
@@ -35,7 +35,7 @@ search:
 heading_anchors: true
 
 # Footer links
-footer_content: "IT&C 444 · Advanced System Administration &amp; Hardening · <a href='https://github.com/[your-username]/cyb4400'>View on GitHub</a>"
+footer_content: "CYBER 444 · System Administration · <a href='https://byu-cyber-444.github.io/cyber444'>View on GitHub</a>"
 
 # Back to top link
 back_to_top: true
