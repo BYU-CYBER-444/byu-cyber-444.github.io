@@ -19,7 +19,7 @@ nav_order: 2
 
 | | |
 |---|---|
-| **Course Number** | IT&C 444 |
+| **Course Number** | CYBER 444 |
 | **Credits** | 3 |
 | **Prerequisites** | IT&C 201 (Computer Systems & OS) and IT&C 320 (Network Security Operations) |
 | **Delivery** | Hybrid — 2 hrs lecture + 2 hrs in-person lab/week |

@@ -1,11 +1,11 @@
 ---
 title: Home
 nav_order: 1
-description: "IT&C 444 — Advanced System Administration & Hardening"
+description: "CYBER 444 — Advanced System Administration & Hardening"
 permalink: /
 ---
 
-# IT&C 444 — Advanced System Administration & Hardening
+# CYBER 444 — Advanced System Administration & Hardening
 {: .no_toc }
 
 **Infrastructure Track &nbsp;·&nbsp; 3 Credit Hours &nbsp;·&nbsp; Year 4 Elective**

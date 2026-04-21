@@ -1,4 +1,4 @@
-# IT&C 444 — Advanced System Administration & Hardening
+# CYBER 444 — Advanced System Administration & Hardening
 
 Course website built with [Jekyll](https://jekyllrb.com) and the
 [just-the-docs](https://just-the-docs.com) theme, hosted on GitHub Pages.
