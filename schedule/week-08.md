@@ -26,13 +26,13 @@ Post-exam: Final Project introduction — requirements, deliverables, rubric, te
 
 ## Lab
 
-[LAB 8 — Capstone Environment Setup]({% link labs/lab-08.md %})
+[LAB 8 — final-project Environment Setup]({% link labs/lab-08.md %})
 
 ---
 
 ## Due This Week
 
-[HW 7 — Windows Hardening Comparison Table]({% link homework/hw-07.md %}) + [Capstone Proposal]({% link capstone/proposal.md %})
+[HW 7 — Windows Hardening Comparison Table]({% link homework/hw-07.md %}) + [final-project Proposal]({% link final-project/proposal.md %})
 
 ## Quiz / Assessment
 

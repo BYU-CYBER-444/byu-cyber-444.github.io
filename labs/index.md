@@ -25,7 +25,7 @@ All labs must be conducted in your designated lab environment (local VMs or prov
 | [LAB 5]({% link labs/lab-05.md %}) | CIS-CAT Pro Benchmark Assessment | 2 hrs | Week 5 |
 | [LAB 6]({% link labs/lab-06.md %}) | OpenSCAP & DISA STIG Compliance | 2 hrs | Week 6 |
 | [LAB 7]({% link labs/lab-07.md %}) | Windows Server 2022 Hardening | 2 hrs | Week 7 |
-| [LAB 8]({% link labs/lab-08.md %}) | Capstone Environment Setup | 2 hrs | Week 8 |
+| [LAB 8]({% link labs/lab-08.md %}) | final-project Environment Setup | 2 hrs | Week 8 |
 | [LAB 9]({% link labs/lab-09.md %}) | Ansible Hardening Playbook | 2 hrs | Week 9 |
 | [LAB 10]({% link labs/lab-10.md %}) | Ansible Galaxy Hardening Role | 2 hrs | Week 10 |
 | [LAB 11]({% link labs/lab-11.md %}) | Centralized Logging with auditd & Graylog | 2 hrs | Week 11 |

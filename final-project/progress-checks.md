@@ -4,7 +4,7 @@ parent: Final Project
 nav_order: 2
 ---
 
-# Capstone Progress Checks
+# final-project Progress Checks
 {: .no_toc }
 
 <details open markdown="block">
@@ -40,7 +40,7 @@ Compressed `.zip` of your playbook/config directory + `README.md` + CIS-CAT or S
 
 **Due:** Week 12 &nbsp;·&nbsp; **Weight:** 5% of final grade
 
-Submit CIS-CAT Pro and/or STIG scan reports for **all 3 servers** in your capstone environment.
+Submit CIS-CAT Pro and/or STIG scan reports for **all 3 servers** in your final-project environment.
 
 ### Requirements
 
@@ -53,4 +53,4 @@ Submit CIS-CAT Pro and/or STIG scan reports for **all 3 servers** in your capsto
 
 One `.zip` containing all scan reports + a one-page progress narrative.
 
-[← Back to Capstone Overview]({% link final-project/index.md%})
+[← Back to final-project Overview]({% link final-project/index.md%})

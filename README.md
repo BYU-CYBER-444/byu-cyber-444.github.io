@@ -1,4 +1,4 @@
-# CYBER 444 — Advanced System Administration & Hardening
+# CYBER 444 — System Administration
 
 Course website built with [Jekyll](https://jekyllrb.com) and the
 [just-the-docs](https://just-the-docs.com) theme, hosted on GitHub Pages.
@@ -33,7 +33,7 @@ cyb4400-site/
 ├── schedule/             # Weekly schedule pages (week-01.md ... week-15.md)
 ├── homework/             # Homework assignment pages (hw-01.md ... hw-14.md)
 ├── labs/                 # Lab assignment pages (lab-01.md ... lab-14.md)
-├── capstone/             # Final Project pages
+├── final-project/             # Final Project pages
 ├── resources/            # Tools, downloads, references
 ├── assets/css/           # Custom SCSS overrides
 └── .github/workflows/    # GitHub Actions CI/CD deploy workflow

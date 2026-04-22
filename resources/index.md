@@ -57,8 +57,8 @@ All lab ISOs and provided files are available on the course LMS:
 - Lab report templates (`.docx`)
 - STIG Checklist template (HW 6)
 - Gap Analysis template (HW 5)
-- Capstone SSP template
-- Capstone Proposal template
+- final-project SSP template
+- final-project Proposal template
 
 ---
 

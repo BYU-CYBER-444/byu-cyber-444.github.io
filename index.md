@@ -8,9 +8,6 @@ permalink: /
 # CYBER 444 — System Administration
 {: .no_toc }
 
-**Infrastructure Track &nbsp;·&nbsp; 3 Credit Hours &nbsp;·&nbsp; Year 4 Elective**
-{: .fs-5 .fw-300 }
-
 
 ## Quick Links
 {: .no_toc }

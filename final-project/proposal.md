@@ -33,6 +33,6 @@ feedback session will occur in Week 9 lab to confirm scope.
 
 ## Template
 
-A proposal template is available on the LMS (`Capstone_Proposal_Template.docx`).
+A proposal template is available on the LMS (`final-project_Proposal_Template.docx`).
 
-[← Back to Capstone Overview]({% link final-project/index.md%})
+[← Back to final-project Overview]({% link final-project/index.md%})

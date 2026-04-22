@@ -2,7 +2,7 @@
 title: Final Project
 nav_order: 6
 has_children: true
-permalink: /capstone/
+permalink: /final-project/
 ---
 
 # Final Project — Hardened Infrastructure Build
@@ -38,11 +38,11 @@ minimum of 3 servers.
 
 | Milestone | Due | Weight |
 |---|---|---|
-| [Project Proposal]({% link capstone/proposal.md %}) | End of Week 8 | 5% |
-| [Progress Check 1 — Automation]({% link capstone/progress-checks.md %}) | Week 10 | 5% |
-| [Progress Check 2 — Compliance Scans]({% link capstone/progress-checks.md %}#progress-check-2) | Week 12 | 5% |
-| [Final Documentation Package]({% link capstone/final-deliverables.md %}) | Week 15 | 5% |
-| [Live Presentation & Demo]({% link capstone/final-deliverables.md %}#presentation) | Week 15 | 5% |
+| [Project Proposal]({% link final-project/proposal.md %}) | End of Week 8 | 5% |
+| [Progress Check 1 — Automation]({% link final-project/progress-checks.md %}) | Week 10 | 5% |
+| [Progress Check 2 — Compliance Scans]({% link final-project/progress-checks.md %}#progress-check-2) | Week 12 | 5% |
+| [Final Documentation Package]({% link final-project/final-deliverables.md %}) | Week 15 | 5% |
+| [Live Presentation & Demo]({% link final-project/final-deliverables.md %}#presentation) | Week 15 | 5% |
 
 ---
 

@@ -1,10 +1,10 @@
 ---
-title: "LAB 8 — Capstone Environment Setup"
+title: "LAB 8 — final-project Environment Setup"
 parent: Labs
 nav_order: 8
 ---
 
-# LAB 8 — Capstone Environment Setup
+# LAB 8 — final-project Environment Setup
 {: .no_toc }
 
 **Duration:** 2 hours &nbsp;·&nbsp; **Week:** Week 8
@@ -21,7 +21,7 @@ nav_order: 8
 
 ## Objectives
 
-- Design and document the capstone infrastructure topology
+- Design and document the final-project infrastructure topology
 - Deploy all 3 required VMs in an isolated network
 - Run baseline CIS-CAT scans on all servers
 - Define per-server compliance targets and project milestones
@@ -40,7 +40,7 @@ nav_order: 8
 ## Procedure
 
 
-1. Define your capstone scope — minimum 3 servers:
+1. Define your final-project scope — minimum 3 servers:
    - **Server 1**: Linux Identity Server (Ubuntu 22.04 — LDAP/SSSD, SSH CA)
    - **Server 2**: Windows App Server (Windows Server 2022 — AD or standalone)
    - **Server 3**: Ubuntu Web/Docker Host (Ubuntu 22.04 — Docker or Nginx)
@@ -56,7 +56,7 @@ nav_order: 8
 
 ## Submission Requirements
 
-Capstone Setup Package: network topology diagram (PNG/PDF), VM inventory table, initial CIS-CAT scores for all 3 servers, compliance target definition table, project milestone schedule.
+final-project Setup Package: network topology diagram (PNG/PDF), VM inventory table, initial CIS-CAT scores for all 3 servers, compliance target definition table, project milestone schedule.
 
 ---
 

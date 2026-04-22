@@ -30,7 +30,7 @@ Linux `auditd` rule writing (syscall, file watch, key-based); Windows Event Log 
 
 ## Due This Week
 
-[HW 10 — Capstone Ansible/Terraform Progress]({% link homework/hw-10.md %})
+[HW 10 — final-project Ansible/Terraform Progress]({% link homework/hw-10.md %})
 
 ## Quiz / Assessment
 

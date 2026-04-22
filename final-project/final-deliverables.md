@@ -4,7 +4,7 @@ parent: Final Project
 nav_order: 3
 ---
 
-# Capstone Final Deliverables
+# final-project Final Deliverables
 {: .no_toc }
 
 **Due:** Week 15 (before your presentation slot) &nbsp;·&nbsp; **Weight:** 5% documentation + 5% presentation
@@ -57,4 +57,4 @@ Each team has **20 minutes** (15 min demo + 5 min Q&A).
 {: .tip }
 Rehearse your demo at least once beforehand. Live demos can fail — have screenshots as backup for each demo component.
 
-[← Back to Capstone Overview]({% link final-project/index.md%})
+[← Back to final-project Overview]({% link final-project/index.md%})

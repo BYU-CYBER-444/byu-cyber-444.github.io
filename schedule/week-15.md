@@ -4,7 +4,7 @@ parent: Schedule
 nav_order: 15
 ---
 
-# Week 15 — Capstone Presentations & Course Review
+# Week 15 — final-project Presentations & Course Review
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,7 +18,7 @@ nav_order: 15
 
 ## Lecture Topics
 
-Course review: key frameworks and tools; Certification pathway roadmap (Linux+, RHCSA, AZ-104, GCWN); Career paths in IO category (SysAdmin, Network Ops, DB Admin); Q&A and exam preparation; **Student capstone presentations** (20 min each)
+Course review: key frameworks and tools; Certification pathway roadmap (Linux+, RHCSA, AZ-104, GCWN); Career paths in IO category (SysAdmin, Network Ops, DB Admin); Q&A and exam preparation; **Student final-project presentations** (20 min each)
 
 ---
 
@@ -30,11 +30,11 @@ Final Project Live Presentations
 
 ## Due This Week
 
-[HW 14 — Post-Incident Report]({% link homework/hw-14.md %}) + [Capstone Final Package]({% link capstone/final-deliverables.md %})
+[HW 14 — Post-Incident Report]({% link homework/hw-14.md %}) + [final-project Final Package]({% link final-project/final-deliverables.md %})
 
 ## Quiz / Assessment
 
-**CAPSTONE DUE**
+**final-project DUE**
 
 ---
 

@@ -26,7 +26,7 @@ All assignments must be submitted through the LMS by 11:59 PM on the due date un
 | [HW 6]({% link homework/hw-06.md %}) | STIG Checklist Completion | Week 7 | 100 |
 | [HW 7]({% link homework/hw-07.md %}) | Windows Hardening Comparison Table | Week 8 | 100 |
 | [HW 9]({% link homework/hw-09.md %}) | Ansible Playbook Enhancement | Week 10 | 100 |
-| [HW 10]({% link homework/hw-10.md %}) | Capstone Ansible/Terraform Progress | Week 11 | 100 |
+| [HW 10]({% link homework/hw-10.md %}) | final-project Ansible/Terraform Progress | Week 11 | 100 |
 | [HW 11]({% link homework/hw-11.md %}) | Audit Log Analysis Exercise | Week 12 | 100 |
 | [HW 12]({% link homework/hw-12.md %}) | Container Security Checklist | Week 13 | 100 |
 | [HW 13]({% link homework/hw-13.md %}) | IAM Policy Design Document | Week 14 | 100 |
