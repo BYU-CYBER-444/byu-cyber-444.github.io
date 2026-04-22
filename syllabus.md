@@ -53,7 +53,7 @@ Upon successful completion of this course, students will be able to:
 | Homework (12) | 20% | Written, scripted, and analysis assignments |
 | Weekly Quizzes (12) | 10% | 10-question online quiz each lab session |
 | Midterm Exam | 15% | Week 8 — closed-book, 90 min |
-| Final Project | 25% | Weeks 8–15 — see [Capstone]({% link capstone/index.md %}) |
+| Final Project | 25% | Weeks 8–15 — see [Capstone]({% link final-project/index.md%}) |
 
 ### Grade Scale
 

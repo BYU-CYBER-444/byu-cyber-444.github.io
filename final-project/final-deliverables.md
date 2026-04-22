@@ -57,4 +57,4 @@ Each team has **20 minutes** (15 min demo + 5 min Q&A).
 {: .tip }
 Rehearse your demo at least once beforehand. Live demos can fail — have screenshots as backup for each demo component.
 
-[← Back to Capstone Overview]({% link capstone/index.md %})
+[← Back to Capstone Overview]({% link final-project/index.md%})

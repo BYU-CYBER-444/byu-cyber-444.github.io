@@ -53,4 +53,4 @@ Submit CIS-CAT Pro and/or STIG scan reports for **all 3 servers** in your capsto
 
 One `.zip` containing all scan reports + a one-page progress narrative.
 
-[← Back to Capstone Overview]({% link capstone/index.md %})
+[← Back to Capstone Overview]({% link final-project/index.md%})
