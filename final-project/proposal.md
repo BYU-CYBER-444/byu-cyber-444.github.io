@@ -1,10 +1,10 @@
 ---
 title: Project Proposal
-parent: Capstone Project
+parent: Final Project
 nav_order: 1
 ---
 
-# Capstone Project Proposal
+# Final Project Proposal
 {: .no_toc }
 
 **Due:** End of Week 8 &nbsp;·&nbsp; **Weight:** 5% of final grade

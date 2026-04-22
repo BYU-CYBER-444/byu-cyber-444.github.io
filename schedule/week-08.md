@@ -4,7 +4,7 @@ parent: Schedule
 nav_order: 8
 ---
 
-# Week 8 — Midterm Exam + Capstone Project Kickoff
+# Week 8 — Midterm Exam + Final Project Kickoff
 {: .no_toc }
 
 <details open markdown="block">
@@ -20,7 +20,7 @@ nav_order: 8
 
 **MIDTERM EXAM** — Weeks 1–7 material. Closed-book. 90 minutes. Format: 30 MC + 4 scenario analysis questions.
 
-Post-exam: Capstone Project introduction — requirements, deliverables, rubric, team formation.
+Post-exam: Final Project introduction — requirements, deliverables, rubric, team formation.
 
 ---
 

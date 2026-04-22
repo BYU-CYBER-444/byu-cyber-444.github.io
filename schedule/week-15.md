@@ -24,7 +24,7 @@ Course review: key frameworks and tools; Certification pathway roadmap (Linux+, 
 
 ## Lab
 
-Capstone Project Live Presentations
+Final Project Live Presentations
 
 ---
 

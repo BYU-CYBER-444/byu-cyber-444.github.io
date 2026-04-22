@@ -1,6 +1,6 @@
 ---
 title: Final Deliverables
-parent: Capstone Project
+parent: Final Project
 nav_order: 3
 ---
 

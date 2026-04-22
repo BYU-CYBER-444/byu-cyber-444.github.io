@@ -33,7 +33,7 @@ cyb4400-site/
 ├── schedule/             # Weekly schedule pages (week-01.md ... week-15.md)
 ├── homework/             # Homework assignment pages (hw-01.md ... hw-14.md)
 ├── labs/                 # Lab assignment pages (lab-01.md ... lab-14.md)
-├── capstone/             # Capstone project pages
+├── capstone/             # Final Project pages
 ├── resources/            # Tools, downloads, references
 ├── assets/css/           # Custom SCSS overrides
 └── .github/workflows/    # GitHub Actions CI/CD deploy workflow

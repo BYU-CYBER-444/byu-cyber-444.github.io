@@ -1,6 +1,6 @@
 ---
 title: Progress Checks
-parent: Capstone Project
+parent: Final Project
 nav_order: 2
 ---
 
@@ -20,7 +20,7 @@ nav_order: 2
 
 **Due:** Week 10 &nbsp;·&nbsp; **Weight:** 5% of final grade
 
-Submit the current state of your Capstone Project Ansible playbook or Terraform configuration for
+Submit the current state of your Final Project Ansible playbook or Terraform configuration for
 **one server** in your infrastructure.
 
 ### Requirements

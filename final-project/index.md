@@ -1,11 +1,11 @@
 ---
-title: Capstone Project
+title: Final Project
 nav_order: 6
 has_children: true
 permalink: /capstone/
 ---
 
-# Capstone Project — Hardened Infrastructure Build
+# Final Project — Hardened Infrastructure Build
 {: .no_toc }
 
 25% of course grade · Weeks 8–15 · Individual or teams of 2
@@ -15,7 +15,7 @@ permalink: /capstone/
 
 ## Overview
 
-The Capstone Project is a multi-week applied project in which students design, deploy, harden, document,
+The Final Project is a multi-week applied project in which students design, deploy, harden, document,
 and defend a compliant multi-server infrastructure. The project spans Weeks 8–15 and accounts for 25% of
 the course grade.
 
