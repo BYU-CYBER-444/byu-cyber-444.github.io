@@ -3,13 +3,13 @@ description: "Course site for CYBER 444 at [University Name]. Infrastructure Tra
 baseurl: ""               # Empty for user/org Pages repos (byu-cyber-444.github.io)
 url: "https://byu-cyber-444.github.io"
 
-# Theme: just-the-docs
-# Using `theme` (not `remote_theme`) because the GitHub Actions workflow runs
-# `bundle exec jekyll build` directly with the gem installed — remote_theme is
-# only needed for GitHub's built-in Pages builder, which we are not using.
-remote_theme: just-the-docs/just-the-docs
+# Theme: just-the-docs via remote_theme
+# remote_theme fetches the theme from GitHub at build time, avoiding native
+# gem dependency issues (sass-embedded, google-protobuf, rake).
+remote_theme: just-the-docs/just-the-docs@v0.8.2
 
 plugins:
+  - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-include-cache
@@ -79,9 +79,3 @@ kramdown:
   syntax_highlighter_opts:
     css_class: highlight
     span:
-      line_numbers: false
-    block:
-      line_numbers: false
-
-# Permalink style
-permalink: pretty

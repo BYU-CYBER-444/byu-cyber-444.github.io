@@ -10,6 +10,7 @@ gem "jekyll", "~> 4.3"
 gem "just-the-docs", "~> 0.8.2"
 
 group :jekyll_plugins do
+  gem "jekyll-remote-theme", "~> 0.4"
   gem "jekyll-seo-tag",      "~> 2.8"
   gem "jekyll-sitemap",      "~> 1.4"
   gem "jekyll-include-cache","~> 0.2"
