@@ -1,0 +1,17 @@
+# Jekyll build output — deployed via GitHub Actions, not committed to the repo
+_site/
+
+# Jekyll cache and metadata
+.jekyll-cache/
+.jekyll-metadata
+
+# Bundler
+.bundle/
+vendor/
+
+# Gemfile.lock is intentionally committed to pin gem versions
+# (do not add Gemfile.lock here)
+
+# OS clutter
+.DS_Store
+Thumbs.db
