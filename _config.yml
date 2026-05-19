@@ -4,14 +4,12 @@ baseurl: ""               # Empty for user/org Pages repos (byu-cyber-444.github
 url: "https://byu-cyber-444.github.io"
 
 # Theme: just-the-docs
-# Using remote_theme for GitHub Pages compatibility (GitHub Actions build).
-# The workflow in .github/workflows/jekyll.yml handles bundling with the
-# correct gem versions — it does NOT use the built-in GitHub Pages builder.
-remote_theme: just-the-docs/just-the-docs@v0.8.2
+# Using `theme` (not `remote_theme`) because the GitHub Actions workflow runs
+# `bundle exec jekyll build` directly with the gem installed — remote_theme is
+# only needed for GitHub's built-in Pages builder, which we are not using.
+theme: just-the-docs
 
-# Plugins (jekyll-remote-theme is required for remote_theme to work)
 plugins:
-  - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-include-cache

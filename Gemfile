@@ -10,7 +10,6 @@ gem "jekyll", "~> 4.3"
 gem "just-the-docs", "~> 0.8.2"
 
 group :jekyll_plugins do
-  gem "jekyll-remote-theme", "~> 0.4"
   gem "jekyll-seo-tag",      "~> 2.8"
   gem "jekyll-sitemap",      "~> 1.4"
   gem "jekyll-include-cache","~> 0.2"
@@ -22,3 +21,7 @@ platforms :mingw, :x64_mingw, :mswin, :jruby do
   gem "tzinfo-data"
 end
 gem "wdm", "~> 0.1.1", platforms: [:mingw, :x64_mingw, :mswin]
+
+# sass-embedded >= 1.99 adds a google-protobuf dependency requiring native
+# compilation — pin below that to avoid build failures on Windows and CI.
+gem "sass-embedded", "< 1.99"
