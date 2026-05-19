@@ -7,7 +7,7 @@ url: "https://byu-cyber-444.github.io"
 # Using `theme` (not `remote_theme`) because the GitHub Actions workflow runs
 # `bundle exec jekyll build` directly with the gem installed — remote_theme is
 # only needed for GitHub's built-in Pages builder, which we are not using.
-theme: just-the-docs
+remote_theme: just-the-docs/just-the-docs
 
 plugins:
   - jekyll-seo-tag
