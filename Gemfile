@@ -1,13 +1,10 @@
 source "https://rubygems.org"
 
-# Jekyll 4 — required by just-the-docs v0.8+
-# Do NOT use the "github-pages" gem here: it pins Jekyll 3 and breaks
-# just-the-docs. Instead, GitHub Actions (jekyll.yml) runs bundle exec jekyll
-# build directly, which uses these versions.
+# Jekyll 4
+# Do NOT use the "github-pages" gem — it pins Jekyll 3.
+# The just-the-docs theme is loaded via remote_theme (jekyll-remote-theme),
+# so the just-the-docs gem does NOT need to be listed here.
 gem "jekyll", "~> 4.3"
-
-# just-the-docs theme
-gem "just-the-docs", "~> 0.8.2"
 
 group :jekyll_plugins do
   gem "jekyll-remote-theme", "~> 0.4"
@@ -22,7 +19,3 @@ platforms :mingw, :x64_mingw, :mswin, :jruby do
   gem "tzinfo-data"
 end
 gem "wdm", "~> 0.1.1", platforms: [:mingw, :x64_mingw, :mswin]
-
-# sass-embedded >= 1.99 adds a google-protobuf dependency requiring native
-# compilation — pin below that to avoid build failures on Windows and CI.
-gem "sass-embedded", "< 1.99"
