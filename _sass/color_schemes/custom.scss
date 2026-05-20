@@ -7,6 +7,7 @@ $link-color:            #2E75B6;
 $btn-primary-color:     #2E75B6;
 $body-background-color: #ffffff;
 $sidebar-color:         #1F3864;
+$sidebar-width:         5rem;   // ~240px; default is 16.5rem (~264px)
 $base-button-color:     #2E75B6;
 
 // ── Code blocks ───────────────────────────────────────────────────────────────
@@ -16,5 +17,5 @@ $code-background-color: #f3f6fa;
 $body-heading-color:    #1F3864;
 
 // ── Nav / sidebar ─────────────────────────────────────────────────────────────
-$nav-width:             1rem;   // ~240px; default is 16.5rem (~264px)
+$nav-width:             15rem;   // ~240px; default is 16.5rem (~264px)
 $nav-child-link-color:  #BDD7EE;
