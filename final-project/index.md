@@ -50,7 +50,7 @@ minimum of 3 servers.
 
 ---
 
-### Project Proposal — Pass/Fail (Required)
+### Project Proposal - Pass/Fail (Required)
 
 The proposal is graded on completeness. All five sections must be present and specific to receive a passing grade. A brief instructor feedback session in Week 9 lab will confirm scope.
 
@@ -64,7 +64,7 @@ The proposal is graded on completeness. All five sections must be present and sp
 
 ---
 
-### Progress Check 1 — Automation (100 pts)
+### Progress Check 1 - Automation (100 pts)
 
 | Criterion | Points | Excellent | Proficient | Developing |
 |---|---|---|---|---|
@@ -76,7 +76,7 @@ The proposal is graded on completeness. All five sections must be present and sp
 
 ---
 
-### Progress Check 2 — Compliance Scans (100 pts)
+### Progress Check 2 - Compliance Scans (100 pts)
 
 | Criterion | Points | Excellent | Proficient | Developing |
 |---|---|---|---|---|
