@@ -4,7 +4,7 @@ parent: Schedule
 nav_order: 1
 ---
 
-# Week 1 — Introduction & Environment Setup
+# Week 1 — Thursday, Sept 3
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,7 +18,7 @@ nav_order: 1
 
 ## Lecture Topics
 
-Course overview; SysAdmin roles & responsibilities; NICE IO work roles; Lab environment orientation (VMware/VirtualBox); Intro to CIS Controls v8 and DISA STIG framework; Toolchain overview (Ansible, Nessus, STIG Viewer)
+Course overview; SysAdmin roles & responsibilities; NICE IO work roles; Lab environment orientation; Intro to CIS Controls v8 and DISA STIG framework; Toolchain overview (Ansible, Nessus, STIG Viewer)
 
 ---
 
@@ -27,6 +27,10 @@ Course overview; SysAdmin roles & responsibilities; NICE IO work roles; Lab envi
 [LAB 1 — Environment Setup & Baseline Scanning]({% link labs/lab-01.md %})
 
 ---
+
+## Due Next Week
+
+- **LAB 1 report** — due Thursday, Sept 10 by 11:59 PM (Learning Suite)
 
 ## Quiz / Assessment
 
