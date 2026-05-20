@@ -1,18 +1,11 @@
 ---
-title: "Week 5 - CIS Benchmarks & Security Baselines"
+title: "Week 5"
 parent: Schedule
 nav_order: 5
 ---
 
 # Week 5 - CIS Benchmarks & Security Baselines
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
 
 ---
 

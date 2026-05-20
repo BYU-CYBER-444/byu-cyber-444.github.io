@@ -1,18 +1,11 @@
 ---
-title: "Week 9 - Configuration Management & IaC Security"
+title: "Week 9"
 parent: Schedule
 nav_order: 9
 ---
 
 # Week 9 - Configuration Management & IaC Security
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
 
 ---
 

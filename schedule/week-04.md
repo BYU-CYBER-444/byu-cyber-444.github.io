@@ -1,18 +1,11 @@
 ---
-title: "Week 4 - Patch Management & Update Pipelines"
+title: "Week 4"
 parent: Schedule
 nav_order: 4
 ---
 
 # Week 4 - Patch Management & Update Pipelines
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
 
 ---
 

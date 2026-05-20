@@ -1,18 +1,11 @@
 ---
-title: "Week 6 - DISA STIGs"
+title: "Week 6"
 parent: Schedule
 nav_order: 6
 ---
 
 # Week 6 - DISA STIGs
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
 
 ---
 

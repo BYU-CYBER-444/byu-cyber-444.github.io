@@ -1,19 +1,11 @@
 ---
-title: "Week 13 - Identity & Access Management for Admins"
+title: "Week 13"
 parent: Schedule
 nav_order: 13
 ---
 
 # Week 13 - Identity & Access Management for Admins
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
-
 ---
 
 ## Lecture Topics

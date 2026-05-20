@@ -1,19 +1,11 @@
 ---
-title: "Week 15 - Final Project Presentations & Review"
+title: "Week 15"
 parent: Schedule
 nav_order: 15
 ---
 
 # Week 15 - Final Project Presentations & Review
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
-
 ---
 
 ## Lecture Topics

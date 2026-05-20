@@ -1,19 +1,11 @@
 ---
-title: "Week 14 - Incident Response: The SysAdmin Role"
+title: "Week 14"
 parent: Schedule
 nav_order: 14
 ---
 
 # Week 14 - Incident Response: The SysAdmin Role
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
-
 ---
 
 ## Lecture Topics

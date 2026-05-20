@@ -1,18 +1,11 @@
 ---
-title: "Week 7 - Hardening Windows Systems"
+title: "Week 7"
 parent: Schedule
 nav_order: 7
 ---
 
 # Week 7 - Hardening Windows Systems
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
 
 ---
 

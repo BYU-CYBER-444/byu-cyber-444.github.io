@@ -1,18 +1,11 @@
 ---
-title: "Week 12 - Virtualization & Container Security"
+title: "Week 12"
 parent: Schedule
 nav_order: 12
 ---
 
 # Week 12 - Virtualization & Container Security
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
 
 ---
 

@@ -1,18 +1,11 @@
 ---
-title: "Week 10 - Automated Hardening at Scale"
+title: "Week 10"
 parent: Schedule
 nav_order: 10
 ---
 
 # Week 10 - Automated Hardening at Scale
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
 
 ---
 

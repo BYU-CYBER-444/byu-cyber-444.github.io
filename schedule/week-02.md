@@ -1,5 +1,5 @@
 ---
-title: "Week 2 - Linux Administration Fundamentals"
+title: "Week 2"
 parent: Schedule
 nav_order: 2
 ---
@@ -7,12 +7,6 @@ nav_order: 2
 # Week 2 - Linux Administration Fundamentals
 {: .no_toc }
 
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
 
 ---
 

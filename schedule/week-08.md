@@ -1,18 +1,11 @@
 ---
-title: "Week 8 - Midterm Exam & Final Project Kickoff"
+title: "Week 8"
 parent: Schedule
 nav_order: 8
 ---
 
 # Week 8 - Midterm Exam & Final Project Kickoff
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
 
 ---
 

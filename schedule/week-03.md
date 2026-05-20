@@ -1,18 +1,11 @@
 ---
-title: "Week 3 - Windows Server Administration"
+title: "Week 3"
 parent: Schedule
 nav_order: 3
 ---
 
 # Week 3 - Windows Server Administration
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
 
 ---
 

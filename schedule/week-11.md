@@ -1,18 +1,11 @@
 ---
-title: "Week 11 - Logging, Monitoring & Audit Architecture"
+title: "Week 11"
 parent: Schedule
 nav_order: 11
 ---
 
 # Week 11 - Logging, Monitoring & Audit Architecture
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
 
 ---
 
