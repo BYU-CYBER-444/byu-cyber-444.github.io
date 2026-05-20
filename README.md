@@ -1,4 +1,4 @@
-# CYBER 444 — System Administration
+# CYBER 444 - System Administration
 
 Course website built with [Jekyll](https://jekyllrb.com) and the
 [just-the-docs](https://just-the-docs.com) theme, hosted on GitHub Pages.
@@ -13,7 +13,7 @@ bundle exec jekyll serve
 
 ## Deployment
 
-Push to `main` — GitHub Actions (`.github/workflows/jekyll.yml`) builds and deploys automatically.
+Push to `main` - GitHub Actions (`.github/workflows/jekyll.yml`) builds and deploys automatically.
 
 ## Configuration
 

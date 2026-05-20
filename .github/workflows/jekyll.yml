@@ -38,7 +38,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Build with Jekyll
-        # Use bundle exec jekyll build directly — NOT actions/jekyll-build-pages,
+        # Use bundle exec jekyll build directly - NOT actions/jekyll-build-pages,
         # which forces the github-pages gem (Jekyll 3) and breaks just-the-docs v0.8+.
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:

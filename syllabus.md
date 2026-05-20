@@ -21,8 +21,8 @@ nav_order: 2
 |---|---|
 | **Course Number** | CYBER 444 |
 | **Credits** | 3 |
-| **Prerequisites** | CYBER 366 |
-| **Delivery** | 2 hrs lecture + 2 hrs in-person lab/week |
+| **Prerequisites** | CYBER 366 or instructors consent |
+| **Delivery** | 2 hrs. lecture + 2 hrs. in-person lab/week |
 | **Instructor** | Sebastian Hayes |
 | **Office Hours** | By Appointment |
 | **Email** | sebasitan.hayes@byu.edu |
@@ -48,11 +48,11 @@ Upon successful completion of this course, students will be able to:
 
 | Component | Weight | Details |
 |---|---|---|
-| Weekly Labs (14) | 50% | Completed in lab session; report due within one week |
+| Weekly Labs (14) | 50% | Started in lab session; report due within one week |
 | Homework (12) | 30% | Written, scripted, and analysis assignments |
-| Weekly Quizzes (12) | 5% | 10-question online quiz each lab session |
-| Midterm Exam | 5% | Week 8 — closed-book, 90 min |
-| Final Project | 10% | Weeks 8–15 — see [Final Project]({% link final-project/index.md %}) |
+| Weekly Quizzes (12) | 5% | 10-question online quiz each Thursday lab session |
+| Midterm Exam | 5% | Week 8, closed-book, 90 min |
+| Final Project | 10% | Weeks 8–15 |
 
 
 ### Grade Scale
@@ -78,27 +78,29 @@ Upon successful completion of this course, students will be able to:
 
 ### Weekly Labs
 
-Labs are the core of this course and are submitted through a GitHub-based workflow that mirrors professional sysadmin documentation practice. At the start of the semester you will create a personal GitHub Pages portfolio site from the course template. Each lab is submitted as a **pull request** to your site, reviewed by the TA, and merged into your live portfolio — the same change-management workflow used by operations teams.
+Labs are the core of this course and are submitted through a GitHub-based workflow that mirrors professional sysadmin documentation practice. At the start of the semester you will create a personal GitHub Pages portfolio site from the course template. Each lab is submitted as a pull request to your site, reviewed by the TA, and merged into your live portfolio, the same change-management workflow used by operations teams.
 
 **Workflow for each lab:**
 
 1. Create a branch from `main` named `lab-NN-short-description` (e.g., `lab-03-windows-hardening`)
-2. Add your report as `labs/lab-NN.md` written in Markdown — runbook style, with commands, expected vs. actual output, screenshots, and analysis
+2. Add your report as `labs/lab-NN.md` written in Markdown in runbook style, with commands, expected vs. actual output, screenshots, and analysis
 3. Commit any supporting artifacts to the branch: config files, scripts, scan outputs (XCCDF XML, CIS-CAT HTML), STIG checklists
-4. Open a pull request to `main` with the title `Lab NN — [Topic]` and link the lab assignment in the description
+4. Open a pull request to `main` with the title `Lab NN: [Topic]` and link the lab assignment in the description
 5. The TA will review and leave inline comments; address any requested changes with additional commits
-6. Once approved, merge the PR — your report goes live on your portfolio site
+6. Once approved, merge the PR; your report goes live on your portfolio site
 7. Submit the PR link on Learning Suite by the due date (one week after the lab session, Thursday 11:59 PM)
 
-Your portfolio site will grow throughout the semester into a technical reference you can share with employers. By the final week it will contain 14 lab reports, supporting scripts and configs, and your final project documentation — a real artifact of the work you did in this course.
+Your portfolio site will grow throughout the semester into a technical reference you can share with employers. By the final week it will contain 14 lab reports, supporting scripts and configs, and your final project documentation, a real artifact of the work you did in this course.
+
+See the [Schedule]({% link schedule/index.md %}) for specific due dates and the [Portfolio Setup]({% link resources/portfolio-setup.md %}) guide for the full workflow.
 
 ### Homework
 
-Homework assignments are written, scripted, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable such as a gap analysis, a hardening checklist, a policy document, or an Ansible playbook. Homework follows the same GitHub PR workflow as labs — write your submission in `homework/hw-NN.md`, commit any supporting files, open a pull request, and submit the PR link on Learning Suite. Assignments are due at the start of class on Tuesday of the following week. See the [Schedule]({% link schedule/index.md %}) for specific due dates and the [Portfolio Setup]({% link resources/portfolio-setup.md %}) guide for the full workflow.
+Homework assignments are written, scripted, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable such as a gap analysis, a hardening checklist, a policy document, or an Ansible playbook. Homework follows the same GitHub PR workflow as labs, commit any supporting files, open a pull request, and submit the PR link on Learning Suite. Assignments are due at the on Tuesday's at 11:59 PM. See the [Schedule]({% link schedule/index.md %}) for specific due dates and the [Portfolio Setup]({% link resources/portfolio-setup.md %}) guide for the full workflow.
 
 ### Weekly Quizzes
 
-A 10-question online quiz is administered during each lab session on Thursday. Quizzes cover the current week's lecture and reading material and are open for a fixed window during lab — they cannot be made up if missed. Quizzes are graded automatically and results are visible immediately after deadline has passed.
+A 10-question online quiz is administered during each Thursday lab session. Quizzes cover the current week's lecture and reading material and are open for a fixed window during lab; they cannot be made up if missed. Quizzes are graded automatically and results are visible immediately after deadline has passed.
 
 ### Midterm Exam
 
@@ -106,7 +108,7 @@ The midterm is held in class during Week 8 (Tuesday, Oct 20) and covers all mate
 
 ### Final Project
 
-The final project is a multi-week project running from Week 8 through the last class. You will design, harden, document, and present a fully compliant server infrastructure meeting CIS Level 2 and applicable DISA STIG requirements. All project documentation is submitted through your GitHub portfolio using the same PR workflow as labs — the finished project becomes the centerpiece of your portfolio site. A project proposal is due Week 8 and the final deliverable and live presentation are due on the last class day (Dec 10). Full requirements and the grading rubric are on the [Final Project]({% link final-project/index.md %}) page.
+The final project is a multi-week capstone running from Week 8 through the last class. You will design, harden, document, and present a fully compliant server infrastructure meeting CIS Level 2 and applicable DISA STIG requirements. All project documentation is submitted through your GitHub portfolio using the same PR workflow as labs; the finished project becomes the centerpiece of your portfolio site. A project proposal is due Week 8 and the final deliverable and live presentation are due on the last class day (Dec 10). Full requirements and the grading rubric are on the [Final Project]({% link final-project/index.md %}) page. This is an individual assignment and serves as the final exam for the course.
 
 ---
 
@@ -116,7 +118,7 @@ The final project is a multi-week project running from Week 8 through the last c
 
 Attendance at both lecture and lab is expected. If you need to miss a class, please notify the instructor in advance whenever possible.
 
-Lectures will **not** be recorded as a general practice. Recordings may be made on a case-by-case basis for university-excused absences (e.g., documented illness, university travel) — contact the instructor before the missed session to arrange this.
+Lectures will **not** be recorded as a general practice. Recordings may be made on a case-by-case basis for university-excused absences (e.g., documented illness, university travel); contact the instructor before the missed session to arrange this.
 
 Attendance is not a graded component of the course; however, missing lecture and lab sessions will put you at a significant disadvantage. Course material builds week over week, lab work cannot easily be replicated outside of scheduled sessions, and in-class discussions and walkthroughs are not captured elsewhere. Frequent absences will likely be reflected in your overall performance.
 
@@ -126,19 +128,19 @@ Late work is not accepted. Assignments, lab reports, and homework are due at the
 
 If you have a documented university accommodation that may affect your ability to meet a deadline, it is your responsibility to contact the instructor **at least 24 hours before the due date** so that alternative arrangements can be discussed. Accommodation requests made after a deadline has passed will not be considered retroactively.
 
-Plan ahead — technical issues (network outages, VM failures, hardware problems) are a routine hazard in a systems administration course and are not grounds for an extension. Maintain regular backups of your lab environments and submit early when possible.
+Plan ahead. Technical issues (network outages, VM failures, hardware problems) are a routine hazard in a systems administration course and are not grounds for an extension. Maintain regular backups of your lab environments and submit early when possible.
 
 ### Make-Up Exams
 
 Make-up exams will not be administered. If you miss an exam, you will receive a zero for that component.
 
-The only exceptions are university-recognized excused absences — documented illness, university-sponsored travel, a death in the immediate family, or other circumstances explicitly recognized by BYU policy. In any of these cases, you must contact the instructor **before the exam date** (or as soon as reasonably possible in the case of an emergency) with supporting documentation. Make-up exams granted under these conditions will be scheduled at the instructor's discretion, typically within one week of the original date, and may differ in format from the original.
+The only exceptions are university-recognized excused absences, including documented illness, university-sponsored travel, a death in the immediate family, or other circumstances explicitly recognized by BYU policy. In any of these cases, you must contact the instructor **before the exam date** (or as soon as reasonably possible in the case of an emergency) with supporting documentation. Make-up exams granted under these conditions will be scheduled at the instructor's discretion, typically within one week of the original date, and may differ in format from the original.
 
 ### Use of AI Tools
 
-Generative AI tools (ChatGPT, Claude, Copilot, Gemini, and similar) are permitted as study and reference aids in this course — roughly in the same spirit as using a search engine, man page, or Stack Overflow. You may use them to look up syntax, understand a concept, debug an error message, or brainstorm an approach.
+Generative AI tools (ChatGPT, Claude, Copilot, Gemini, and similar) are permitted as study and reference aids in this course, roughly in the same spirit as using a search engine, man page, or Stack Overflow. You may use them to look up syntax, understand a concept, debug an error message, or brainstorm an approach.
 
-What is not permitted is using AI to produce the substance of your work. Submitting output that was generated, drafted, or heavily rewritten by an AI tool — whether for a lab report, homework write-up, analysis, or script — and presenting it as your own thinking is a violation of the Academic Honesty Policy, regardless of how much you edited the result afterward.
+What is not permitted is using AI to produce the substance of your work. Submitting output that was generated, drafted, or heavily rewritten by an AI tool, whether for a lab report, homework write-up, analysis, or script, and presenting it as your own work is a violation of the Academic Honesty Policy, regardless of how much you edited the result afterward.
 
 **Permitted uses include:**
 - Asking an AI to explain a concept or tool (e.g., "how does SELinux label inheritance work?")
@@ -151,21 +153,21 @@ What is not permitted is using AI to produce the substance of your work. Submitt
 - Having an AI write, significantly rewrite, or restructure your scripts or configuration files and submitting them as your own
 - Using AI output to answer short-answer or reflection questions that are intended to demonstrate your own understanding
 
-The practical test: if you could not explain what you submitted — line by line for a script, paragraph by paragraph for a written response — to the instructor on request, you have likely crossed the line.
+The practical test: if you could not explain what you submitted to the instructor on request, line by line for a script or paragraph by paragraph for a written response, you have likely crossed the line.
 
 When in doubt, disclose. Add a brief note at the end of your submission describing how you used AI (e.g., "used Claude to look up the auditd rule syntax in Step 3"). Voluntary disclosure will not be held against you; undisclosed use that surfaces during review will be treated as an academic honesty violation.
 
 ### Communication
 
-The best ways to reach the instructor are **Discord** or **email**. Both channels are monitored equally — use whichever is most convenient for you.
+The best ways to reach the instructor are **Discord** or **email**. Both channels are monitored equally; use whichever is most convenient for you.
 
 Response time: expect a reply within one business day. Messages sent on weekends or after 5:00 PM will be answered the following business day. Hours of availability are **Monday–Friday, 9:00 AM – 5:00 PM**.
 
-For lab-related questions, grading questions on lab reports, or help troubleshooting your environment, you are encouraged to contact the **Teaching Assistant** first — they are your fastest resource for hands-on technical issues and typically respond within the same business day. TA contact information is posted in Learning Suite.
+For lab-related questions, grading questions on lab reports, or help troubleshooting your environment, you are encouraged to contact the **Teaching Assistant** first. They are your fastest resource for hands-on technical issues and typically respond within the same business day. TA contact information is posted in Learning Suite.
 
 A few norms that keep things running smoothly:
 
-- For questions about assignment requirements, grading, or course content that others might benefit from, post in the appropriate Discord channel rather than a DM — you'll get a faster answer and your classmates will thank you.
+- For questions about assignment requirements, grading, or course content that others might benefit from, post in the appropriate Discord channel rather than a DM; you'll get a faster answer and your classmates will thank you.
 - For anything personal (grade disputes, accommodation requests, sensitive circumstances), email or a private Discord message is appropriate.
 - Office hours details are listed in the Course Information table above. If you cannot make scheduled hours, reply to your email thread and we can find a time that works.
 
@@ -187,10 +189,10 @@ Intentional plagiarism is a form of intellectual theft that violates widely reco
 
 Examples of plagiarism include:
 
-- **Direct Plagiarism** — The verbatim copying of an original source without acknowledging the source.
-- **Paraphrased Plagiarism** — The paraphrasing, without acknowledgement, of ideas from another that the reader might mistake for the author's own.
-- **Plagiarism Mosaic** — Borrowing words, ideas, or data from an original source and blending this original material with one's own without acknowledging the source.
-- **Insufficient Acknowledgement** — Partial or incomplete attribution of words, ideas, or data from an original source.
+- **Direct Plagiarism:** The verbatim copying of an original source without acknowledging the source.
+- **Paraphrased Plagiarism:** The paraphrasing, without acknowledgement, of ideas from another that the reader might mistake for the author's own.
+- **Plagiarism Mosaic:** Borrowing words, ideas, or data from an original source and blending this original material with one's own without acknowledging the source.
+- **Insufficient Acknowledgement:** Partial or incomplete attribution of words, ideas, or data from an original source.
 
 Copying another student's work and submitting it as your own individual work without proper attribution is a serious form of plagiarism.
 
@@ -200,7 +202,7 @@ All course materials (e.g., outlines, handouts, syllabi, exams, quizzes, PowerPo
 
 ### Lab Environment Policy
 
-All lab activities must be conducted within your designated lab environment (local VMs or provided cloud lab). Students are **prohibited** from deploying course tools — including vulnerability scanners (Nessus, OpenSCAP), configuration scanners (CIS-CAT), or Ansible playbooks — against any system they do not own or have explicit written permission to test. Unauthorized scanning may violate the Computer Fraud and Abuse Act (18 U.S.C. § 1030) and university policy.
+All lab activities must be conducted within your designated lab environment (local VMs or provided cloud lab). Students are **prohibited** from deploying course tools, including vulnerability scanners (Nessus, OpenSCAP), configuration scanners (CIS-CAT), and Ansible playbooks, against any system they do not own or have explicit written permission to test. Unauthorized scanning may violate the Computer Fraud and Abuse Act (18 U.S.C. § 1030) and university policy.
 
 ### Accessibility & Accommodations
 
@@ -216,7 +218,7 @@ University policy requires all faculty members to promptly report incidents of s
 
 ### Respectful Environment & Diversity
 
-Because we feel the depth of God's love for His children, we care deeply about every child of God, regardless of age, personal circumstances, gender, sexual orientation, or other unique challenges. As a university community we strive to foster an educational environment that promotes the personal dignity of every student. Our course participation reflects our understanding that every individual is a child of Heavenly Parents. We use language that is polite, considerate, and courteous — even when we strongly disagree.
+Because we feel the depth of God's love for His children, we care deeply about every child of God, regardless of age, personal circumstances, gender, sexual orientation, or other unique challenges. As a university community we strive to foster an educational environment that promotes the personal dignity of every student. Our course participation reflects our understanding that every individual is a child of Heavenly Parents. We use language that is polite, considerate, and courteous, even when we strongly disagree.
 
 Derogatory or demeaning comments about other students, their career choices, or their backgrounds are completely out of place at BYU and in this course.
 
@@ -233,17 +235,17 @@ If you have questions about university policies, please visit [policy.byu.edu](h
 ## Required Materials
 
 ### Readings (all free)
-- **CIS Benchmarks** — Ubuntu 22.04 LTS & Windows Server 2022 ([cisecurity.org](https://cisecurity.org))
-- **DISA STIG Library** — RHEL 9 & Windows Server 2022 STIGs ([public.cyber.mil](https://public.cyber.mil))
-- **NIST SP 800-61 Rev. 2** — Incident Handling Guide ([csrc.nist.gov](https://csrc.nist.gov))
-- **NIST SP 800-92** — Log Management Guide ([csrc.nist.gov](https://csrc.nist.gov))
+- **CIS Benchmarks:** Ubuntu 22.04 LTS & Windows Server 2022 ([cisecurity.org](https://cisecurity.org))
+- **DISA STIG Library:** RHEL 9 & Windows Server 2022 STIGs ([public.cyber.mil](https://public.cyber.mil))
+- **NIST SP 800-61 Rev. 2:** Incident Handling Guide ([csrc.nist.gov](https://csrc.nist.gov))
+- **NIST SP 800-92:** Log Management Guide ([csrc.nist.gov](https://csrc.nist.gov))
 
 ### Software & Tools (all free or provided)
 - VMware Workstation Pro or VirtualBox
 - Ubuntu 22.04 LTS ISO + Windows Server 2022 Evaluation ISO _(provided via Learning Suite)_
 - CIS-CAT
 - Ansible 2.14+, Terraform 1.6+, OpenSCAP, STIG Viewer 2.x
-- Nessus Essentials _(free license — [tenable.com](https://www.tenable.com/products/nessus/nessus-essentials))_
+- Nessus Essentials _(free license: [tenable.com](https://www.tenable.com/products/nessus/nessus-essentials))_
 - Docker Desktop / Docker Engine
 - Graylog or Elastic Stack _(Docker Compose files provided)_
 
@@ -252,4 +254,4 @@ If you have questions about university policies, please visit [policy.byu.edu](h
 - Storage: 100 GB free disk space
 - CPU: x86-64 with Intel VT-x or AMD-V virtualization extensions enabled in BIOS
 
-If you don't have access to a machine with the required resources, a lab environment can be made available to you.                                                                                                                
+If you don't have access to a machine with the required resources, a lab environment can be made available to you.    

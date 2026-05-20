@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Jekyll 4
-# Do NOT use the "github-pages" gem — it pins Jekyll 3.
+# Do NOT use the "github-pages" gem - it pins Jekyll 3.
 # The just-the-docs theme is loaded via remote_theme (jekyll-remote-theme),
 # so the just-the-docs gem does NOT need to be listed here.
 gem "jekyll", "~> 4.3"

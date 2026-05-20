@@ -1,4 +1,4 @@
-# Jekyll build output — deployed via GitHub Actions, not committed to the repo
+# Jekyll build output - deployed via GitHub Actions, not committed to the repo
 _site/
 
 # Jekyll cache and metadata

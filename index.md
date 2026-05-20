@@ -1,11 +1,11 @@
 ---
 title: Home
 nav_order: 1
-description: "CYBER 444 — System Administration"
+description: "CYBER 444 - System Administration"
 permalink: /
 ---
 
-# CYBER 444 — System Administration
+# CYBER 444 - System Administration
 {: .no_toc }
 
 
