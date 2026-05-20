@@ -1,10 +1,10 @@
 ---
-title: "Week 15"
+title: "Week 15 - Final Project Presentations & Review"
 parent: Schedule
 nav_order: 15
 ---
 
-# Week 15 — final-project Presentations & Course Review
+# Week 15 - Final Project Presentations & Review
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,7 +18,11 @@ nav_order: 15
 
 ## Lecture Topics
 
-Course review: key frameworks and tools; Certification pathway roadmap (Linux+, RHCSA, AZ-104, GCWN); Career paths in IO category (SysAdmin, Network Ops, DB Admin); Q&A and exam preparation; **Student final-project presentations** (20 min each)
+- Course review: key frameworks and tools covered this semester
+- Certification pathway roadmap (Linux+, RHCSA, AZ-104, GCWN)
+- Career paths in the IO work role category (SysAdmin, Network Ops, DB Admin)
+- Q&A and student questions
+- **Final Project presentations** (20 minutes each)
 
 ---
 
@@ -27,10 +31,6 @@ Course review: key frameworks and tools; Certification pathway roadmap (Linux+, 
 Final Project Live Presentations
 
 ---
-
-## Due This Week
-
-[HW 14 — Post-Incident Report]({% link homework/hw-14.md %}) + [final-project Final Package]({% link final-project/final-deliverables.md %})
 
 ## Quiz / Assessment
 

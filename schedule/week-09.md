@@ -1,10 +1,10 @@
 ---
-title: "Week 9"
+title: "Week 9 - Configuration Management & IaC Security"
 parent: Schedule
 nav_order: 9
 ---
 
-# Week 9 — Configuration Management & IaC Security
+# Week 9 - Configuration Management & IaC Security
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,13 +18,17 @@ nav_order: 9
 
 ## Lecture Topics
 
-Infrastructure-as-Code (IaC) concepts and security implications; Ansible architecture (inventory, playbooks, roles, vault); Idempotency; Configuration drift detection; Terraform basics (providers, state, plan/apply); Secrets management in IaC
+- Infrastructure-as-Code (IaC) concepts and security implications
+- Ansible architecture (inventory, playbooks, roles, vault)
+- Idempotency and configuration drift detection
+- Terraform basics (providers, state, plan/apply)
+- Secrets management in IaC
 
 ---
 
 ## Lab
 
-[LAB 9 — Ansible Hardening Playbook]({% link labs/lab-09.md %})
+[LAB 9 - Ansible Hardening Playbook]({% link labs/lab-09.md %})
 
 ---
 

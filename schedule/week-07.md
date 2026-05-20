@@ -1,10 +1,10 @@
 ---
-title: "Week 7"
+title: "Week 7 - Hardening Windows Systems"
 parent: Schedule
 nav_order: 7
 ---
 
-# Week 7 — Hardening Windows Systems
+# Week 7 - Hardening Windows Systems
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,19 +18,21 @@ nav_order: 7
 
 ## Lecture Topics
 
-Windows Security Baseline (Microsoft SCT); AppLocker / WDAC; Credential Guard; BitLocker; Windows Firewall with Advanced Security; Disabling legacy protocols (SMBv1, NTLMv1); Attack surface reduction rules
+- Windows Security Baseline (Microsoft SCT)
+- AppLocker and WDAC
+- Credential Guard
+- BitLocker
+- Windows Firewall with Advanced Security
+- Disabling legacy protocols (SMBv1, NTLMv1)
+- Attack surface reduction rules
 
 ---
 
 ## Lab
 
-[LAB 7 — Windows Server 2022 Hardening]({% link labs/lab-07.md %})
+[LAB 7 - Windows Server 2022 Hardening]({% link labs/lab-07.md %})
 
 ---
-
-## Due This Week
-
-[HW 6 — STIG Checklist Completion]({% link homework/hw-06.md %})
 
 ## Quiz / Assessment
 

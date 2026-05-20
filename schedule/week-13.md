@@ -1,10 +1,10 @@
 ---
-title: "Week 13"
+title: "Week 13 - Identity & Access Management for Admins"
 parent: Schedule
 nav_order: 13
 ---
 
-# Week 13 — Identity & Access Management for Admins
+# Week 13 - Identity & Access Management for Admins
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,19 +18,20 @@ nav_order: 13
 
 ## Lecture Topics
 
-Privileged Access Management (PAM) principles; sudo hardening (sudoers, visudo, command whitelisting); SSH certificate authorities; LDAP/AD integration for Linux (sssd); MFA for admin access (Google Authenticator PAM, YubiKey); Bastion host architecture
+- Privileged Access Management (PAM) principles
+- sudo hardening (sudoers, visudo, command whitelisting)
+- SSH certificate authorities
+- LDAP/AD integration for Linux (sssd)
+- MFA for admin access (Google Authenticator PAM, YubiKey)
+- Bastion host architecture
 
 ---
 
 ## Lab
 
-[LAB 13 — SSH Certificate Authority & PAM MFA]({% link labs/lab-13.md %})
+[LAB 13 - SSH Certificate Authority & PAM MFA]({% link labs/lab-13.md %})
 
 ---
-
-## Due This Week
-
-[HW 12 — Container Security Checklist]({% link homework/hw-12.md %})
 
 ## Quiz / Assessment
 

@@ -1,10 +1,10 @@
 ---
-title: "Week 11"
+title: "Week 11 - Logging, Monitoring & Audit Architecture"
 parent: Schedule
 nav_order: 11
 ---
 
-# Week 11 — Logging, Monitoring & Audit Architecture
+# Week 11 - Logging, Monitoring & Audit Architecture
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,19 +18,20 @@ nav_order: 11
 
 ## Lecture Topics
 
-Linux `auditd` rule writing (syscall, file watch, key-based); Windows Event Log forwarding (WEF/WEC); Syslog-ng and rsyslog pipelines; Centralized log aggregation with Graylog or Elastic; Log retention policies; NIST SP 800-92 log management
+- Linux `auditd` rule writing (syscall, file watch, key-based)
+- Windows Event Log forwarding (WEF/WEC)
+- Syslog-ng and rsyslog pipelines
+- Centralized log aggregation with Graylog or Elastic
+- Log retention policies
+- NIST SP 800-92 log management
 
 ---
 
 ## Lab
 
-[LAB 11 — Centralized Logging with auditd & Graylog]({% link labs/lab-11.md %})
+[LAB 11 - Centralized Logging with auditd & Graylog]({% link labs/lab-11.md %})
 
 ---
-
-## Due This Week
-
-[HW 10 — final-project Ansible/Terraform Progress]({% link homework/hw-10.md %})
 
 ## Quiz / Assessment
 

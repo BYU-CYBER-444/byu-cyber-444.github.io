@@ -1,10 +1,10 @@
 ---
-title: "Week 8"
+title: "Week 8 - Midterm Exam & Final Project Kickoff"
 parent: Schedule
 nav_order: 8
 ---
 
-# Week 8 — Midterm Exam + Final Project Kickoff
+# Week 8 - Midterm Exam & Final Project Kickoff
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,21 +18,17 @@ nav_order: 8
 
 ## Lecture Topics
 
-**MIDTERM EXAM** — Weeks 1–7 material. Closed-book. 90 minutes. Format: 30 MC + 4 scenario analysis questions.
-
-Post-exam: Final Project introduction — requirements, deliverables, rubric, team formation.
+- **Midterm Exam** — Weeks 1–7 material, closed-book, 90 minutes
+- Format: 30 multiple-choice + 4 scenario analysis questions
+- Post-exam: Final Project introduction, requirements, deliverables, and rubric walkthrough
 
 ---
 
 ## Lab
 
-[LAB 8 — final-project Environment Setup]({% link labs/lab-08.md %})
+[LAB 8 - final-project Environment Setup]({% link labs/lab-08.md %})
 
 ---
-
-## Due This Week
-
-[HW 7 — Windows Hardening Comparison Table]({% link homework/hw-07.md %}) + [final-project Proposal]({% link final-project/proposal.md %})
 
 ## Quiz / Assessment
 

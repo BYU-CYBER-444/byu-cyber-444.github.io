@@ -1,10 +1,10 @@
 ---
-title: "Week 2"
+title: "Week 2 - Linux Administration Fundamentals"
 parent: Schedule
 nav_order: 2
 ---
 
-# Week 2 — Linux Administration Fundamentals
+# Week 2 - Linux Administration Fundamentals
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,19 +18,21 @@ nav_order: 2
 
 ## Lecture Topics
 
-Linux filesystem hierarchy (FHS); User/group management; File permissions (DAC, ACLs, umask); Sudo policy design; PAM basics; systemd service management; Key sysadmin commands (`find`, `awk`, `ss`, `lsof`)
+- Linux filesystem hierarchy (FHS)
+- User and group management
+- File permissions (DAC, ACLs, umask)
+- Sudo policy design
+- PAM basics
+- systemd service management
+- Key sysadmin commands (`find`, `awk`, `ss`, `lsof`)
 
 ---
 
 ## Lab
 
-[LAB 2 — Linux User Management & auditd]({% link labs/lab-02.md %})
+[LAB 2 - Linux User Management & auditd]({% link labs/lab-02.md %})
 
 ---
-
-## Due This Week
-
-[HW 1 — Syllabus Quiz]({% link homework/hw-01.md %})
 
 ## Quiz / Assessment
 

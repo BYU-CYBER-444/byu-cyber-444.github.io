@@ -26,6 +26,6 @@ permalink: /schedule/
 | [10]({% link schedule/week-10.md %}) | Nov 3 & 5 | Automated Hardening at Scale | 
 | [11]({% link schedule/week-11.md %}) | Nov 10 & 12 | Logging, Monitoring & Audit Architecture | 
 | [12]({% link schedule/week-12.md %}) | Nov 17 & 19 | Virtualization & Container Security | 
-| [13] | **Nov 24 & 26** | **Thanksgiving Break - No Class** |
+| [13]({% link schedule/week-13.md %}) | Nov 24 & 26 | Identity & Access Management for Admins, **Thanksgiving Break - No Class on Nov 26** |
 | [14]({% link schedule/week-13.md %}) | Dec 1 & 3 | Identity & Access Management for Admins | 
 | [15]({% link schedule/week-14.md %}) | Dec 8 & 10 | Incident Response - The SysAdmin Role & Final Project Presentations | 

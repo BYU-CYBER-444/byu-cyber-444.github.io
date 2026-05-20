@@ -1,10 +1,10 @@
 ---
-title: "Week 14"
+title: "Week 14 - Incident Response: The SysAdmin Role"
 parent: Schedule
 nav_order: 14
 ---
 
-# Week 14 — Incident Response — The SysAdmin Role
+# Week 14 - Incident Response: The SysAdmin Role
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,19 +18,20 @@ nav_order: 14
 
 ## Lecture Topics
 
-NIST SP 800-61 IR lifecycle (Prepare, Detect, Contain, Eradicate, Recover, Post-Incident); SysAdmin responsibilities at each phase; Evidence preservation (live forensics, memory acquisition with LiME); Chain of custody; System restoration and hardening post-compromise; Lessons learned documentation
+- NIST SP 800-61 IR lifecycle (Prepare, Detect, Contain, Eradicate, Recover, Post-Incident)
+- SysAdmin responsibilities at each IR phase
+- Evidence preservation (live forensics, memory acquisition with LiME)
+- Chain of custody
+- System restoration and hardening post-compromise
+- Lessons learned documentation
 
 ---
 
 ## Lab
 
-[LAB 14 — Incident Response Scenario]({% link labs/lab-14.md %})
+[LAB 14 - Incident Response Scenario]({% link labs/lab-14.md %})
 
 ---
-
-## Due This Week
-
-[HW 13 — IAM Policy Design Document]({% link homework/hw-13.md %})
 
 ## Quiz / Assessment
 

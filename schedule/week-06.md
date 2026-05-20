@@ -1,10 +1,10 @@
 ---
-title: "Week 6"
+title: "Week 6 - DISA STIGs"
 parent: Schedule
 nav_order: 6
 ---
 
-# Week 6 — DISA STIGs
+# Week 6 - DISA STIGs
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,19 +18,20 @@ nav_order: 6
 
 ## Lecture Topics
 
-DoD STIG overview and purpose; STIG Viewer 2.x walkthrough; CAT I / II / III severity definitions; RHEL 9 STIG and Windows Server 2022 STIG structure; OpenSCAP and SCAP content; STIG checklists and POA&M creation
+- DoD STIG overview and purpose
+- STIG Viewer 2.x walkthrough
+- CAT I / II / III severity definitions
+- RHEL 9 STIG and Windows Server 2022 STIG structure
+- OpenSCAP and SCAP content
+- STIG checklists and POA&M creation
 
 ---
 
 ## Lab
 
-[LAB 6 — OpenSCAP & DISA STIG Compliance]({% link labs/lab-06.md %})
+[LAB 6 - OpenSCAP & DISA STIG Compliance]({% link labs/lab-06.md %})
 
 ---
-
-## Due This Week
-
-[HW 5 — CIS Benchmark Gap Analysis Report]({% link homework/hw-05.md %})
 
 ## Quiz / Assessment
 

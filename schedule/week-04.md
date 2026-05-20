@@ -1,10 +1,10 @@
 ---
-title: "Week 4"
+title: "Week 4 - Patch Management & Update Pipelines"
 parent: Schedule
 nav_order: 4
 ---
 
-# Week 4 — Patch Management & Update Pipelines
+# Week 4 - Patch Management & Update Pipelines
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,19 +18,21 @@ nav_order: 4
 
 ## Lecture Topics
 
-Vulnerability lifecycle (CVE, NVD, CVSS v3.1 scoring); Patch priority frameworks; Linux: `apt`/`dnf` unattended-upgrades; Windows: WSUS architecture; Testing patches in staging; Rollback strategies; Patch SLA definitions
+- Vulnerability lifecycle (CVE, NVD, CVSS v3.1 scoring)
+- Patch priority frameworks
+- Linux: `apt`/`dnf` unattended-upgrades
+- Windows: WSUS architecture
+- Testing patches in staging
+- Rollback strategies
+- Patch SLA definitions
 
 ---
 
 ## Lab
 
-[LAB 4 — Patch Management Implementation]({% link labs/lab-04.md %})
+[LAB 4 - Patch Management Implementation]({% link labs/lab-04.md %})
 
 ---
-
-## Due This Week
-
-[HW 3 — Inactive AD Account PowerShell Script]({% link homework/hw-03.md %})
 
 ## Quiz / Assessment
 
