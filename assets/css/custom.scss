@@ -15,15 +15,16 @@
     line-height: 1.3;
   }
   .nav-list-item .nav-list-link {
-    color: #BDD7EE;
-    &:hover, &.active {
-      background-color: #2E75B6;
-      color: #000000;
-    }
+    color: #BDD7EE !important;
+  }
+  .nav-list-item .nav-list-link:hover {
+    background-color: #2E75B6 !important;
+    color: #ffffff !important;
   }
   .nav-list .nav-list-item .nav-list-link.active {
+    background-color: #2E75B6 !important;
+    color: #ffffff !important;
     font-weight: 700;
-    background-color: #2E75B6;
   }
 }
 
@@ -76,6 +77,4 @@
 table {
   width: 100%;
   font-size: .9rem;
-  thead tr { background-color: #1F3864; color: #fff; }
-  tbody tr:nth-child(even) { background-color: #f2f6fc; }
-}
+  thead tr { background-color: #1F3864; color:

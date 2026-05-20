@@ -17,5 +17,8 @@ $code-background-color: #f3f6fa;
 $body-heading-color:    #1F3864;
 
 // ── Nav / sidebar ─────────────────────────────────────────────────────────────
-$nav-width:             15rem;   // ~240px; default is 16.5rem (~264px)
-$nav-child-link-color:  #BDD7EE;
+$nav-width:             15rem;
+$nav-list-item-height:  auto;
+$nav-active-link-color:       #ffffff;        // text color on active/hover item
+$nav-active-background-color: #2E75B6;        // background on active/hover item
+$nav-child-link-color:        #BDD7EE;        // default link text color
