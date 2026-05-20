@@ -1,18 +1,11 @@
 ---
-title: "Week 1 - Introduction & Environment Setup"
+title: "Week 1"
 parent: Schedule
 nav_order: 1
 ---
 
 # Week 1 - Introduction & Environment Setup
 {: .no_toc }
-
-<details open markdown="block">
-  <summary>Contents</summary>
-  {: .text-delta }
-1. TOC
-{:toc}
-</details>
 
 ---
 
