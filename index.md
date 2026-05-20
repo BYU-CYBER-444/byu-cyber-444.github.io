@@ -38,8 +38,8 @@ STIG requirements.
 
 | Component | Weight | Count |
 |---|---|---|
-| Weekly Labs | 40% | 14 labs |
-| Homework Assignments | 20% | 12 assignments |
-| Weekly Quizzes | 10% | 12 quizzes |
-| Midterm Exam | 10% | 1 exam (Week 8) |
-| Final Project | 20% | Weeks 8–15 |
+| Weekly Labs | 50% | 14 labs |
+| Homework Assignments | 30% | 12 assignments |
+| Weekly Quizzes | 5% | 12 quizzes |
+| Midterm Exam | 5% | 1 exam (Week 8) |
+| Final Project | 10% | Weeks 8–15 |

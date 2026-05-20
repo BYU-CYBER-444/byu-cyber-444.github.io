@@ -22,11 +22,11 @@ nav_order: 2
 | **Course Number** | CYBER 444 |
 | **Credits** | 3 |
 | **Prerequisites** | CYBER 366 |
-| **Delivery** | Hybrid — 2 hrs lecture + 2 hrs in-person lab/week |
+| **Delivery** | 2 hrs lecture + 2 hrs in-person lab/week |
 | **Instructor** | Sebastian Hayes |
-| **Office Hours** | _[By Appointment]_ |
-| **Email** | _sebasitan.hayes@byu.edu_ |
-| **Class Location** | _[Building, Room]_ |
+| **Office Hours** | By Appointment |
+| **Email** | sebasitan.hayes@byu.edu |
+| **Class Location** | CTB 345 |
 
 ---
 
@@ -54,6 +54,7 @@ Upon successful completion of this course, students will be able to:
 | Midterm Exam | 5% | Week 8 — closed-book, 90 min |
 | Final Project | 10% | Weeks 8–15 — see [Final Project]({% link final-project/index.md %}) |
 
+
 ### Grade Scale
 
 | Grade | Range |
@@ -70,6 +71,42 @@ Upon successful completion of this course, students will be able to:
 | D  | 63% |
 | D- | 60% |
 | E  |  0% |
+
+---
+
+## Assignments
+
+### Weekly Labs
+
+Labs are the core of this course and are submitted through a GitHub-based workflow that mirrors professional sysadmin documentation practice. At the start of the semester you will create a personal GitHub Pages portfolio site from the course template. Each lab is submitted as a **pull request** to your site, reviewed by the TA, and merged into your live portfolio — the same change-management workflow used by operations teams.
+
+**Workflow for each lab:**
+
+1. Create a branch from `main` named `lab-NN-short-description` (e.g., `lab-03-windows-hardening`)
+2. Add your report as `labs/lab-NN.md` written in Markdown — runbook style, with commands, expected vs. actual output, screenshots, and analysis
+3. Commit any supporting artifacts to the branch: config files, scripts, scan outputs (XCCDF XML, CIS-CAT HTML), STIG checklists
+4. Open a pull request to `main` with the title `Lab NN — [Topic]` and link the lab assignment in the description
+5. The TA will review and leave inline comments; address any requested changes with additional commits
+6. Once approved, merge the PR — your report goes live on your portfolio site
+7. Submit the PR link on Learning Suite by the due date (one week after the lab session, Thursday 11:59 PM)
+
+Your portfolio site will grow throughout the semester into a technical reference you can share with employers. By the final week it will contain 14 lab reports, supporting scripts and configs, and your final project documentation — a real artifact of the work you did in this course.
+
+### Homework
+
+Homework assignments are written, scripted, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable such as a gap analysis, a hardening checklist, a policy document, or an Ansible playbook. Homework follows the same GitHub PR workflow as labs — write your submission in `homework/hw-NN.md`, commit any supporting files, open a pull request, and submit the PR link on Learning Suite. Assignments are due at the start of class on Tuesday of the following week. See the [Schedule]({% link schedule/index.md %}) for specific due dates and the [Portfolio Setup]({% link resources/portfolio-setup.md %}) guide for the full workflow.
+
+### Weekly Quizzes
+
+A 10-question online quiz is administered during each lab session on Thursday. Quizzes cover the current week's lecture and reading material and are open for a fixed window during lab — they cannot be made up if missed. Quizzes are graded automatically and results are visible immediately after deadline has passed.
+
+### Midterm Exam
+
+The midterm is held in class during Week 8 (Tuesday, Oct 20) and covers all material from Weeks 1–7. It is closed-book and closed-note, 90 minutes, and consists of multiple-choice and short scenario-analysis questions. No make-up midterms are given except for university-approved absences arranged in advance.
+
+### Final Project
+
+The final project is a multi-week project running from Week 8 through the last class. You will design, harden, document, and present a fully compliant server infrastructure meeting CIS Level 2 and applicable DISA STIG requirements. All project documentation is submitted through your GitHub portfolio using the same PR workflow as labs — the finished project becomes the centerpiece of your portfolio site. A project proposal is due Week 8 and the final deliverable and live presentation are due on the last class day (Dec 10). Full requirements and the grading rubric are on the [Final Project]({% link final-project/index.md %}) page.
 
 ---
 
@@ -124,7 +161,7 @@ The best ways to reach the instructor are **Discord** or **email**. Both channel
 
 Response time: expect a reply within one business day. Messages sent on weekends or after 5:00 PM will be answered the following business day. Hours of availability are **Monday–Friday, 9:00 AM – 5:00 PM**.
 
-For lab-related questions, grading questions on lab reports, or help troubleshooting your environment, you are encouraged to contact the **Teaching Assistant** first — they are your fastest resource for hands-on technical issues and typically respond within the same business day. TA contact information is posted in Canvas.
+For lab-related questions, grading questions on lab reports, or help troubleshooting your environment, you are encouraged to contact the **Teaching Assistant** first — they are your fastest resource for hands-on technical issues and typically respond within the same business day. TA contact information is posted in Learning Suite.
 
 A few norms that keep things running smoothly:
 
@@ -203,7 +240,7 @@ If you have questions about university policies, please visit [policy.byu.edu](h
 
 ### Software & Tools (all free or provided)
 - VMware Workstation Pro or VirtualBox
-- Ubuntu 22.04 LTS ISO + Windows Server 2022 Evaluation ISO _(provided via LMS)_
+- Ubuntu 22.04 LTS ISO + Windows Server 2022 Evaluation ISO _(provided via Learning Suite)_
 - CIS-CAT
 - Ansible 2.14+, Terraform 1.6+, OpenSCAP, STIG Viewer 2.x
 - Nessus Essentials _(free license — [tenable.com](https://www.tenable.com/products/nessus/nessus-essentials))_
@@ -215,4 +252,4 @@ If you have questions about university policies, please visit [policy.byu.edu](h
 - Storage: 100 GB free disk space
 - CPU: x86-64 with Intel VT-x or AMD-V virtualization extensions enabled in BIOS
 
-If you don't have access to a machine with the required resources, a lab environment can be made available to you.
+If you don't have access to a machine with the required resources, a lab environment can be made available to you.                                                                                                                
