@@ -16,7 +16,7 @@ permalink: /
 |---|---|
 | [Syllabus]({% link syllabus.md %}) | Course policies, grading, and outcomes |
 | [Schedule]({% link schedule/index.md %}) | 15-week lecture & lab calendar |
-| [Homework]({% link homework/index.md %}) | 12 homework assignments |
+| [Homework]({% link homework/index.md %}) | 14 homework assignments |
 | [Labs]({% link labs/index.md %}) | 14 hands-on lab exercises |
 | [Final Project]({% link final-project/index.md %}) | Multi-week infrastructure build |
 | [Resources]({% link resources/index.md %}) | Tools, downloads, and references |
@@ -30,7 +30,7 @@ Ansible and Terraform, and develop automated patch management pipelines.
 
 Topics include identity and access management for administrators, centralized logging and audit trail
 architecture, virtualization and container security hardening, and the systems administrator's role in
-incident response. The course culminates in a **Final Project** where students design, harden,
+incident response. The course culminates in a Final Project where students design, harden,
 document, and defend a fully compliant server infrastructure meeting CIS Level 2 and applicable DISA
 STIG requirements.
 
@@ -39,7 +39,7 @@ STIG requirements.
 | Component | Weight | Count |
 |---|---|---|
 | Weekly Labs | 50% | 14 labs |
-| Homework Assignments | 30% | 12 assignments |
-| Weekly Quizzes | 5% | 12 quizzes |
+| Homework Assignments | 30% | 14 assignments |
+| Weekly Quizzes | 5% | 11 quizzes |
 | Midterm Exam | 5% | 1 exam (Week 8) |
 | Final Project | 10% | Weeks 8–15 |
