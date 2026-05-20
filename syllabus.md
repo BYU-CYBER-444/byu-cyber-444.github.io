@@ -26,7 +26,7 @@ nav_order: 2
 | **Instructor** | Sebastian Hayes |
 | **Office Hours** | By Appointment |
 | **Email** | sebasitan.hayes@byu.edu |
-| **Class Location** | CTB 345 |
+| **Class Location** | CTB 345 · Tuesdays & Thursdays · 4:00–5:50 PM |
 
 ---
 
