@@ -33,7 +33,7 @@ Both tracks complete these assignments.
 | # | Title | Due | Points |
 |---|---|---|---|
 | [CYBER HW 2]({% link homework/cyber-hw-02.md %}) | User Account Audit Bash Script | Week 3 | 100 |
-| [CYBER HW 4]({% link homework/hw-04.md %}) | Patch Management Policy Document | Week 5 | 100 |
+| [CYBER HW 4]({% link homework/cyber-hw-04.md %}) | Patch Management Policy Document | Week 5 | 100 |
 | [CYBER HW 5]({% link homework/cyber-hw-05.md %}) | CIS Benchmark Gap Analysis Report | Week 6 | 100 |
 | [CYBER HW 6]({% link homework/cyber-hw-06.md %}) | STIG Checklist Completion | Week 7 | 100 |
 | [CYBER HW 7]({% link homework/cyber-hw-07.md %}) | Midterm Practice Exam | Week 8 | Ungraded |
