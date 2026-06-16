@@ -42,4 +42,4 @@ STIG requirements.
 | Homework Assignments | 30% | 14 assignments |
 | Weekly Quizzes | 5% | 11 quizzes |
 | Midterm Exam | 5% | 1 exam (Week 8) |
-| Final Project | 10% | Weeks 8–15 |
+| Final Project | 10% | Weeks 8-15 |
