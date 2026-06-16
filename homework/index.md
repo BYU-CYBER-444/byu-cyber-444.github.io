@@ -33,15 +33,15 @@ Both tracks complete these assignments.
 | # | Title | Due | Points |
 |---|---|---|---|
 | [CYBER HW 2]({% link homework/cyber-hw-02.md %}) | Linux Security Audit Script Suite | Week 3 | 100 |
-| [CYBER HW 4]({% link homework/cyber-hw-04.md %}) | Patch Management Policy Document | Week 5 | 100 |
-| [CYBER HW 5]({% link homework/cyber-hw-05.md %}) | CIS Benchmark Gap Analysis Report | Week 6 | 100 |
-| [CYBER HW 6]({% link homework/cyber-hw-06.md %}) | STIG Checklist Completion | Week 7 | 100 |
+| [CYBER HW 4]({% link homework/cyber-hw-04.md %}) | Patch Management & Vulnerability Policy | Week 5 | 100 |
+| [CYBER HW 5]({% link homework/cyber-hw-05.md %}) | CIS Benchmark Gap Analysis & Remediation Plan | Week 6 | 100 |
+| [CYBER HW 6]({% link homework/cyber-hw-06.md %}) | STIG Assessment, POAM & Automated Remediation | Week 7 | 100 |
 | [CYBER HW 7]({% link homework/cyber-hw-07.md %}) | Midterm Practice Exam | Week 8 | Ungraded |
-| [CYBER HW 8]({% link homework/cyber-hw-08.md %}) | Windows Hardening Comparison Table | Week 9 | 100 |
-| [CYBER HW 9]({% link homework/cyber-hw-09.md %}) | Ansible Playbook Enhancement | Week 10 | 100 |
-| [CYBER HW 10]({% link homework/cyber-hw-10.md %}) | Drift Detection Report | Week 11 | 100 |
-| [CYBER HW 11]({% link homework/cyber-hw-11.md %}) | Audit Log Analysis Exercise | Week 12 | 100 |
-| [CYBER HW 12]({% link homework/cyber-hw-12.md %}) | Container Security Checklist | Week 13 | 100 |
+| [CYBER HW 8]({% link homework/cyber-hw-08.md %}) | Windows Hardening Deep Dive | Week 9 | 100 |
+| [CYBER HW 9]({% link homework/cyber-hw-09.md %}) | Ansible Hardening Playbook: Advanced Features & Testing| Week 10 | 100 |
+| [CYBER HW 10]({% link homework/cyber-hw-10.md %}) | Configuration Drift: Detection, Threat Modeling & Monitoring | Week 11 | 100 |
+| [CYBER HW 11]({% link homework/cyber-hw-11.md %}) | Audit Log Analysis & Attack Reconstruction | Week 12 | 100 |
+| [CYBER HW 12]({% link homework/cyber-hw-12.md %}) | Container Security Audit & Hardened Deployment | Week 13 | 100 |
 | [CYBER HW 13]({% link homework/cyber-hw-13.md %}) | SSH CA & MFA Deployment Design | Week 14 | 100 |
 | [CYBER HW 14]({% link homework/cyber-hw-14.md %}) | Incident Response Report & HIPAA Breach Analysis | Week 15 | 100 |
 
