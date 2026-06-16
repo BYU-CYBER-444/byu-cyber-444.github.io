@@ -4,28 +4,48 @@ parent: Schedule
 nav_order: 8
 ---
 
-# Week 8 - Midterm Exam & Final Project Kickoff
+# Week 8 - Midterm Exams & PKI
 {: .no_toc }
 
 ---
 
-## Lecture Topics
+## Topics
 
-- **Midterm Exam** — Weeks 1–7 material, closed-book, 90 minutes
-- Format: 30 multiple-choice + 4 scenario analysis questions
-- Post-exam: Final Project introduction, requirements, deliverables, and rubric walkthrough
-
----
-
-## Lab
-
-[LAB 8 - final-project Environment Setup]({% link labs/lab-08.md %})
+- **Midterm exams** - closed-book, 90 minutes per track (Weeks 1-7 material)
+- Cyber Track: Linux/Windows hardening, CIS Benchmarks, DISA STIGs, patch management, change control, PKI concepts
+- IT Track: ITIL/ITSM, data center infrastructure, Windows Server roles, network services, HA concepts, DNS/email security
+- PKI lab: building a two-tier internal CA, issuing server certificates, configuring CRL/OCSP, validating with testssl.sh
 
 ---
 
-## Quiz / Assessment
+## Slides
 
-**MIDTERM EXAM**
+[Week08_Midterm_and_PKI.pptx]({{ site.baseurl }}/lectures/Week08_Midterm_and_PKI.pptx)
+
+---
+
+## Labs
+
+| Track | Lab |
+|---|---|
+| **Both Tracks** | [LAB 8 - PKI & Certificate Management]({% link labs/lab-08.md %}) |
+
+---
+
+## Homework
+
+| Track | Assignment |
+|---|---|
+| **Cyber Track** | [CYBER HW 8 - Windows Hardening Deep Dive]({% link homework/cyber-hw-08.md %}) |
+| **IT Track** | [IT HW 8 - Windows Server Infrastructure Design]({% link homework/it-hw-08.md %}) |
+
+---
+
+## Assessments
+
+**Cyber Track:** Midterm Exam (Weeks 1-7 Cyber content) · [Cyber Final Project Proposal]({% link final-project/proposal.md %}) DUE (pass/fail)
+
+**IT Track:** Midterm Exam (Weeks 1-7 IT content) · [IT Final Project Proposal]({% link final-project-it/proposal.md %}) DUE (pass/fail)
 
 ---
 

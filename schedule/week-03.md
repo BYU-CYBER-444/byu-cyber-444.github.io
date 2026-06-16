@@ -9,27 +9,47 @@ nav_order: 3
 
 ---
 
-## Lecture Topics
+## Topics
 
-- Active Directory architecture
-- Domain controllers, OUs, and GPOs
+- Active Directory architecture: domain controllers, OUs, and GPOs
 - Windows Server roles (DNS, DHCP, File Services)
-- Local Security Policy vs. GPO
-- Windows Event Log overview
-- PowerShell for administration
+- Local Security Policy vs. Group Policy; Windows Event Log overview
+- PowerShell for administration: pipelines, objects, filtering, AD module cmdlets
+- Scheduling scripts with Task Scheduler
+- Windows Server Update Services (WSUS) architecture and configuration
+- Distributed File System (DFS) namespaces and replication
+- Windows Server Backup and VSS snapshots
+- Windows Server licensing: Standard vs. Datacenter, core model, CALs, volume licensing (EA, CSP)
+- Hyper-V virtualization rights by edition
 
 ---
 
-## Lab
+## Slides
 
-[LAB 3 - Active Directory & GPO Configuration]({% link labs/lab-03.md %})
+[Week03_Windows_Server_Administration.pptx]({{ site.baseurl }}/lectures/Week03_Windows_Server_Administration.pptx)
 
 ---
 
+## Labs
 
-## Quiz / Assessment
+| Track | Lab |
+|---|---|
+| **IT Track** | [IT LAB 3 - Windows Server Infrastructure Roles]({% link labs/it-lab-03.md %}) |
+| **Cyber Track** | [LAB 3 - Active Directory & GPO Configuration]({% link labs/lab-03.md %}) |
 
-Quiz 2: AD & GPO fundamentals (10 Qs)
+---
+
+## Homework
+
+| Track | Assignment |
+|---|---|
+| **Both Tracks** | [HW 3 - Stale Account Remediation Pipeline]({% link homework/hw-03.md %}) |
+
+---
+
+## Assessments
+
+None this week.
 
 ---
 

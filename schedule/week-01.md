@@ -9,25 +9,45 @@ nav_order: 1
 
 ---
 
-## Lecture Topics
+## Topics
 
-- Course overview and SysAdmin roles and responsibilities
-- NICE IO work roles
-- Lab environment orientation
+- Course overview and SysAdmin/IT admin roles and responsibilities
+- NICE IO work roles and career frameworks
 - Intro to CIS Controls v8 and DISA STIG framework
 - Toolchain overview (Ansible, Nessus, STIG Viewer)
+- ITIL 4 framework introduction (service management practices)
+- Data center tiers overview (Uptime Institute Tier I-IV)
+- ITSM concepts and tooling overview (ServiceNow, Jira Service Management)
+- IT governance frameworks overview (COBIT, ISO 20000)
 
 ---
 
-## Lab
+## Slides
 
-[LAB 1 - Environment Setup & Baseline Scanning]({% link labs/lab-01.md %})
+[Week01_Introduction_and_Environment_Setup.pptx]({{ site.baseurl }}/lectures/Week01_Introduction_and_Environment_Setup.pptx)
 
 ---
 
-## Quiz / Assessment
+## Labs
 
-None
+| Track | Lab |
+|---|---|
+| **IT Track** | [IT LAB 1 - ITSM Ticketing Orientation]({% link labs/it-lab-01.md %}) |
+| **Cyber Track** | [CYBER LAB 1 - Environment Setup & Baseline Scanning]({% link labs/lab-01.md %}) |
+
+---
+
+## Homework
+
+| Track | Assignment |
+|---|---|
+| **Both Tracks** | [HW 1 - Syllabus Quiz]({% link homework/hw-01.md %}) |
+
+---
+
+## Assessments
+
+None this week.
 
 ---
 
