@@ -78,6 +78,7 @@ exclude:
   - vendor
   - "*.sh"
   - README.md
+  - infra
 
 # Markdown settings
 markdown: kramdown
