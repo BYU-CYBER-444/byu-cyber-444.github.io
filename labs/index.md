@@ -29,7 +29,7 @@ Both tracks complete these labs.
 
 ---
 
-<!-- ## Cyber Track Labs
+## Cyber Track Labs
 
 | Lab | Title | Week |
 |---|---|---|
@@ -59,4 +59,4 @@ Both tracks complete these labs.
 | [IT LAB 11]({% link labs/it-lab-11.md %}) | Prometheus & Grafana Monitoring Stack | Week 11 |
 | [IT LAB 12]({% link labs/it-lab-12.md %}) | AI Inference Server Setup | Week 12 |
 | [IT LAB 13]({% link labs/it-lab-13.md %}) | Enterprise Policy Drafting | Week 13 |
-| [IT LAB 14]({% link labs/it-lab-14.md %}) | Major Incident Tabletop Exercise | Week 14 | -->
+| [IT LAB 14]({% link labs/it-lab-14.md %}) | Major Incident Tabletop Exercise | Week 14 |

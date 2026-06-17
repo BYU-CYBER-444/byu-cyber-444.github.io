@@ -41,7 +41,7 @@ None this week.
 
 ## Assessments
 
-**Cyber Track:** [Cyber Final Project - Final Deliverables]({% link final-project/final-deliverables.md %}) DUE · Live presentation during lab
+**Cyber Track:** [Cyber Final Project - Final Deliverables]({% link final-project-cyber/final-deliverables.md %}) DUE · Live presentation during lab
 
 **IT Track:** [IT Final Project - Final Deliverables]({% link final-project-it/final-deliverables.md %}) DUE · Live presentation during lab
 

@@ -43,7 +43,7 @@ nav_order: 8
 
 ## Assessments
 
-**Cyber Track:** Midterm Exam (Weeks 1-7 Cyber content) · [Cyber Final Project Proposal]({% link final-project/proposal.md %}) DUE (pass/fail)
+**Cyber Track:** Midterm Exam (Weeks 1-7 Cyber content) · [Cyber Final Project Proposal]({% link final-project-cyber/proposal.md %}) DUE (pass/fail)
 
 **IT Track:** Midterm Exam (Weeks 1-7 IT content) · [IT Final Project Proposal]({% link final-project-it/proposal.md %}) DUE (pass/fail)
 
