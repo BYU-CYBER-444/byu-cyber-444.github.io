@@ -34,7 +34,7 @@ permalink: /resources/
 
 | Tool | Purpose | Download |
 |---|---|---|
-| CIS-CAT Pro | CIS Benchmark assessment | Department license (LMS) |
+| CIS-CAT Pro | CIS Benchmark assessment | Department license (Learning Suite) |
 | STIG Viewer 2.x | View and manage STIG checklists | [public.cyber.mil](https://public.cyber.mil/stigs/srg-stig-tools/) |
 | OpenSCAP | SCAP-based compliance scanning | `sudo apt install openscap-scanner ssg-debderived` |
 | Nessus Essentials | Vulnerability scanning | [tenable.com/nessus-essentials](https://www.tenable.com/products/nessus/nessus-essentials) |
@@ -48,31 +48,17 @@ permalink: /resources/
 
 ## Lab ISOs & Files
 
-All lab ISOs and provided files are available on the course LMS:
+All lab ISOs and provided files are available on the course Learning Suite:
 
 - Ubuntu 22.04 LTS Server ISO
 - Windows Server 2022 Evaluation ISO
 - Compromised VM `.ova` (Lab 14)
 - Graylog Docker Compose file
-- Lab report templates (`.docx`)
 - STIG Checklist template (HW 6)
 - Gap Analysis template (HW 5)
 - final-project SSP template
 - final-project Proposal template
 
----
-
-## Certification Pathways
-
-This course directly prepares you for the following certifications:
-
-| Certification | Vendor | Related Topics |
-|---|---|---|
-| CompTIA Linux+ | CompTIA | Linux administration, scripting, hardening |
-| Red Hat RHCSA | Red Hat | Linux system administration, RHEL |
-| Microsoft AZ-104 | Microsoft | Azure + Windows Server administration |
-| GIAC GCWN (Windows) | GIAC | Windows security configuration |
-| CIS Hardened Image Compliance | CIS | CIS Benchmark implementation |
 
 ---
 

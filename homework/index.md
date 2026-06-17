@@ -12,7 +12,7 @@ permalink: /homework/
 {: .fs-5 .fw-300 }
 
 {: .important }
-All homework assignments are submitted through a **GitHub pull request** on your portfolio site. Write your response in the file path listed in the assignment, commit any supporting files to `homework/assets/`, open a PR, and paste the PR link into Learning Suite by the due date. See [Portfolio Setup]({% link resources/portfolio-setup.md %}) for the step-by-step workflow.
+All homework assignments are submitted through a **GitHub pull request** on your portfolio site. Write your response in the file path listed in the assignment, commit any supporting files to `homework/assets/`, open a PR, and paste the PR link into Learning Suite by the due date.
 
 ---
 

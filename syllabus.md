@@ -153,12 +153,11 @@ A handful of labs are **shared** (required for both tracks); the rest are split 
 
 Your portfolio site will grow throughout the semester into a technical reference you can share with employers. By the final week it will contain 14 lab reports, supporting scripts and configs, and your final project documentation, a real artifact of the work you did in this course.
 
-See the [Schedule]({% link schedule/index.md %}) for specific due dates and the [Portfolio Setup]({% link resources/portfolio-setup.md %}) guide for the full workflow.
+See the [Schedule]({% link schedule/index.md %}) for specific due dates.
 
 ### Homework
 
-Homework assignments are written, scripted, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable such as a gap analysis, a hardening checklist, a policy document, or an Ansible playbook (Cyber Track), or an architecture design, an ITSM workflow, a risk assessment, or a cloud audit (IT Track). Homework follows the same GitHub PR workflow as labs: commit any supporting files, open a pull request, and submit the PR link on Learning Suite. Assignments are due on Tuesdays at 11:59 PM. See the [Schedule]({% link schedule/index.md %}) for specific due dates, the [Homework index]({% link homework/index.md %}) for which weeks are shared vs. split by track, and the [Portfolio Setup]({% link resources/portfolio-setup.md %}) guide for the full workflow.
-
+Homework assignments are written, scripted, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable such as a gap analysis, a hardening checklist, a policy document, or an Ansible playbook (Cyber Track), or an architecture design, an ITSM workflow, a risk assessment, or a cloud audit (IT Track). Homework follows the same GitHub PR workflow as labs: commit any supporting files, open a pull request, and submit the PR link on Learning Suite. Assignments are due on Tuesdays at 11:59 PM. See the [Schedule]({% link schedule/index.md %}) for specific due dates, the [Homework index]({% link homework/index.md %}) for which weeks are shared vs. split by track.
 ### Midterm Exam
 
 The midterm is held in class during Week 8 (Tuesday, Oct 20) and covers all material from Weeks 1-7. It is closed-book and closed-note, 90 minutes, and consists of multiple-choice and short scenario-analysis questions. No make-up midterms are given except for university-approved absences arranged in advance.
