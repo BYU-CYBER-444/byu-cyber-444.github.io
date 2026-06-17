@@ -56,7 +56,7 @@ Commit your automation directory, README, and scan report to your portfolio site
 
 | Criterion | Points | Excellent | Proficient | Developing |
 |---|---|---|---|---|
-| Control Count | 30 | 20+ controls implemented and verified | 15–19 controls | Fewer than 15 controls |
+| Control Count | 30 | 20+ controls implemented and verified | 15-19 controls | Fewer than 15 controls |
 | Code Quality | 25 | Fully idempotent (0 changed on second run), handlers used correctly, tasks well-named | Mostly idempotent; minor issues | Not idempotent or significant structural problems |
 | Variable Externalization | 20 | All site-specific values in a separate file; no hardcoded values in task files | Most values externalized; a few hardcoded | Variables mixed into task files |
 | README | 15 | Covers purpose, prerequisites, all variables described, and exact run instructions | Most sections present; minor gaps | Missing key sections |

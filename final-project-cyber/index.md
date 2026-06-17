@@ -1,22 +1,25 @@
 ---
-title: Final Project
+title: Final Project (Cyber Track)
 nav_order: 6
 has_children: true
 permalink: /final-project/
 ---
 
-# Final Project - Hardened Infrastructure Build
+# Final Project - Cyber Track
 {: .no_toc }
 
-10% of course grade · Weeks 8–15 · Individual Assignment
+Hardened Infrastructure Build · 10% of course grade · Weeks 8-15 · Individual Assignment
 {: .fs-5 .fw-300 }
+
+{: .note }
+This is the **Cyber Track** final project. IT Track students complete the [IT Track Final Project]({% link final-project-it/index.md %}) instead.
 
 ---
 
 ## Overview
 
-The Final Project is a multi-week applied project in which students design, deploy, harden, document,
-and defend a compliant multi-server infrastructure. The project spans Weeks 8–15 and accounts for 10% of
+The Cyber Track Final Project is a multi-week applied project in which students design, deploy, harden, document,
+and defend a compliant multi-server infrastructure. The project spans Weeks 8-15 and accounts for 10% of
 the course grade.
 
 The infrastructure must meet **CIS Benchmark Level 2** AND applicable **DISA STIG requirements** across a
@@ -68,7 +71,7 @@ The proposal is graded on completeness. All five sections must be present and sp
 
 | Criterion | Points | Excellent | Proficient | Developing |
 |---|---|---|---|---|
-| Control Count | 30 | 20+ hardening controls implemented and verified | 15–19 controls | Fewer than 15 controls |
+| Control Count | 30 | 20+ hardening controls implemented and verified | 15-19 controls | Fewer than 15 controls |
 | Code Quality | 25 | Fully idempotent (0 changed on second run), handlers used correctly, tasks well-named | Mostly idempotent; minor issues | Not idempotent or significant structural problems |
 | Variable Externalization | 20 | All site-specific values in a separate `vars/` or `.tfvars` file; no hardcoded values | Most values externalized; a few hardcoded | Variables mixed into task files |
 | README | 15 | Covers purpose, prerequisites, all variables described, and exact run instructions | Most sections present; minor gaps | Missing key sections |
