@@ -12,7 +12,7 @@ IT Infrastructure Operations Build · 10% of course grade · Weeks 8-15 · Indiv
 {: .fs-5 .fw-300 }
 
 {: .note }
-This is the **IT Track** final project. Cyber Track students complete the [Cyber Track Final Project]({% link final-project/index.md %}) instead.
+This is the **IT Track** final project. Cyber Track students complete the [Cyber Track Final Project]({% link final-project-cyber/index.md %}) instead.
 
 ---
 

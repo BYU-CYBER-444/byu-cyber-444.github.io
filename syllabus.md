@@ -60,7 +60,7 @@ If you are unsure which track to pick, the default recommendation is:
 - Pick **Cyber** if you are pursuing a security, GRC, SOC, or compliance career, or if you plan to take CYBER electives focused on offensive/defensive security.
 - Pick **IT** if you are pursuing an IT operations, infrastructure engineering, cloud, SRE, or platform career, or if you intend to pursue certifications like ITIL, AWS/Azure infrastructure tracks, or RHCE/RHCSA-style admin paths.
 
-The final project has both a Cyber-track and IT-track version; you may pick either regardless of which track you have been doing weekly. See [Final Project]({% link final-project/index.md %}) and [Final Project (IT)]({% link final-project-it/index.md %}) for the respective scopes.
+The final project has both a Cyber-track and IT-track version; you may pick either regardless of which track you have been doing weekly. See [Final Project (Cyber)]({% link final-project-cyber/index.md %}) and [Final Project (IT)]({% link final-project-it/index.md %}) for the respective scopes.
 
 ### Midterm and final project
 
@@ -167,7 +167,7 @@ The midterm is held in class during Week 8 (Tuesday, Oct 20) and covers all mate
 
 The final project is a multi-week capstone running from Week 8 through the last class, and has a version aligned with each track:
 
-- **Cyber Track final project:** design, harden, document, and present a fully compliant server infrastructure meeting CIS Level 2 and applicable DISA STIG requirements. See [Final Project (Cyber)]({% link final-project/index.md %}).
+- **Cyber Track final project:** design, harden, document, and present a fully compliant server infrastructure meeting CIS Level 2 and applicable DISA STIG requirements. See [Final Project (Cyber)]({% link final-project-cyber/index.md %}).
 - **IT Track final project:** design, build, document, and present an enterprise infrastructure deliverable aligned with the IT Track's focus on operations, networking, cloud, monitoring, and policy. See [Final Project (IT)]({% link final-project-it/index.md %}).
 
 You may pick either version regardless of which weekly track you have been following - most students will pick the version that matches the track they have practiced on most. All project documentation is submitted through your GitHub portfolio using the same PR workflow as labs; the finished project becomes the centerpiece of your portfolio site. A project proposal is due Week 8 and the final deliverable and live presentation are due on the last class day (Dec 10). This is an individual assignment and serves as the final exam for the course.

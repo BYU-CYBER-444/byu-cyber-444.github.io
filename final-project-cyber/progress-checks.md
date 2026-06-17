@@ -100,4 +100,4 @@ Commit all six scan reports and your progress narrative to your portfolio site a
 | Progress Narrative | 20 | Clearly explains unremediated controls, root cause, and remediation plan for each | Narrative present but surface-level | Narrative missing or fewer than one paragraph |
 | Trend vs. Baseline | 10 | Scores compared to Progress Check 1 baseline with measurable improvement shown | Some comparison to prior state | No comparison to prior scan |
 
-[Back to Final Project Overview]({% link final-project/index.md %})
+[Back to Final Project Overview]({% link final-project-cyber/index.md %})

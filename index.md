@@ -18,7 +18,8 @@ permalink: /
 | [Schedule]({% link schedule/index.md %}) | 15-week lecture & lab calendar |
 | [Homework]({% link homework/index.md %}) | 14 homework assignments |
 | [Labs]({% link labs/index.md %}) | 14 hands-on lab exercises |
-| [Final Project]({% link final-project/index.md %}) | Multi-week infrastructure build |
+| [Final Project (Cyber Track)]({% link final-project-cyber/index.md %}) | Multi-week infrastructure build (Cyber) |
+| [Final Project (IT Track)]({% link final-project-it/index.md %}) | Multi-week infrastructure build (IT) |
 | [Resources]({% link resources/index.md %}) | Tools, downloads, and references |
 
 ## Course Description

@@ -41,11 +41,11 @@ minimum of 3 servers.
 
 | Milestone | Weight |
 |---|---|---|
-| [Project Proposal]({% link final-project/proposal.md %}) | Required |
-| [Progress Check 1 - Automation]({% link final-project/progress-checks.md %}) | 2.5% |
-| [Progress Check 2 - Compliance Scans]({% link final-project/progress-checks.md %}#progress-check-2) | 2.5% |
-| [Final Documentation Package]({% link final-project/final-deliverables.md %}) | 2.5% |
-| [Live Presentation & Demo]({% link final-project/final-deliverables.md %}#presentation) | 2.5% |
+| [Project Proposal]({% link final-project-cyber/proposal.md %}) | Required |
+| [Progress Check 1 - Automation]({% link final-project-cyber/progress-checks.md %}) | 2.5% |
+| [Progress Check 2 - Compliance Scans]({% link final-project-cyber/progress-checks.md %}#progress-check-2) | 2.5% |
+| [Final Documentation Package]({% link final-project-cyber/final-deliverables.md %}) | 2.5% |
+| [Live Presentation & Demo]({% link final-project-cyber/final-deliverables.md %}#presentation) | 2.5% |
 
 ---
 
