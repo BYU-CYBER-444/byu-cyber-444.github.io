@@ -15,7 +15,7 @@ plugins:
   - jekyll-include-cache
 
 # Site settings
-color_scheme: custom         # uses assets/css/custom.scss overrides
+color_scheme: custom         # SASS vars: _sass/color_schemes/custom.scss · extra rules: _sass/custom/custom.scss
 search_enabled: true
 search:
   heading_level: 3
