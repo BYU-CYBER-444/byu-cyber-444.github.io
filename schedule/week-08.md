@@ -4,16 +4,14 @@ parent: Schedule
 nav_order: 8
 ---
 
-# Week 8 - Midterm Exams & PKI
+# Week 8 - Midterm Tabletop Exercise & PKI
 {: .no_toc }
 
 ---
 
 ## Topics
 
-- **Midterm exams** - closed-book, 90 minutes per track (Weeks 1-7 material)
-- Cyber Track: Linux/Windows hardening, CIS Benchmarks, DISA STIGs, patch management, change control, PKI concepts
-- IT Track: ITIL/ITSM, data center infrastructure, Windows Server roles, network services, HA concepts, DNS/email security
+- **Midterm exam** - an individual, AI-adjudicated incident response tabletop exercise (shared scenario, both tracks), replacing the written midterm exam
 - PKI lab: building a two-tier internal CA, issuing server certificates, configuring CRL/OCSP, validating with testssl.sh
 
 ---
@@ -43,9 +41,11 @@ nav_order: 8
 
 ## Assessments
 
-**Cyber Track:** Midterm Exam (Weeks 1-7 Cyber content) · [Cyber Final Project Proposal]({% link final-project-cyber/proposal.md %}) DUE (pass/fail)
+**Both Tracks:** [Midterm Exam - Incident Response Tabletop]({% link labs/cyber-lab-tabletop.md %}) (individual, AI-adjudicated)
 
-**IT Track:** Midterm Exam (Weeks 1-7 IT content) · [IT Final Project Proposal]({% link final-project-it/proposal.md %}) DUE (pass/fail)
+**Cyber Track:** [Cyber Final Project Proposal]({% link final-project-cyber/proposal.md %}) DUE (pass/fail)
+
+**IT Track:** [IT Final Project Proposal]({% link final-project-it/proposal.md %}) DUE (pass/fail)
 
 ---
 

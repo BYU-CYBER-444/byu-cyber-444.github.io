@@ -34,6 +34,7 @@ nav_order: 6
 | Track | Lab |
 |---|---|
 | **IT Track** | [IT LAB 6 - HAProxy & keepalived High Availability]({% link labs/it-lab-06.md %}) |
+| **IT Track** | [IT LAB 6B - Centralized Log Management & SIEM for IT Operations]({% link labs/it-lab-siem.md %}) |
 | **Cyber Track** | [CYBER LAB 6 - OpenSCAP & DISA STIG Compliance]({% link labs/cyber-lab-06.md %}) |
 
 ---

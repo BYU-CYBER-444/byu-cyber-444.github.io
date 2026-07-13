@@ -33,7 +33,7 @@ nav_order: 1
 | Track | Lab |
 |---|---|
 | **IT Track** | [IT LAB 1 - ITSM Ticketing Orientation]({% link labs/it-lab-01.md %}) |
-| **Cyber Track** | [CYBER LAB 1 - Environment Setup & Baseline Scanning]({% link labs/lab-01.md %}) |
+| **Cyber Track** | [LAB 1 - Environment Setup & Access Verification]({% link labs/lab-01.md %}) |
 
 ---
 
@@ -51,5 +51,5 @@ None this week.
 
 ---
 
-[← Previous Week]({{ site.baseurl }}/schedule/week-01/)&nbsp;&nbsp;&nbsp;[Next Week →]({{ site.baseurl }}/schedule/week-02/)
+[Next Week →]({{ site.baseurl }}/schedule/week-02/)
 {: .text-right }
