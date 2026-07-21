@@ -1,13 +1,13 @@
 ---
-title: "LAB 3 - Active Directory & GPO Configuration"
+title: "LAB 3 - Active Directory, GPO & Centralized AAA"
 parent: Labs
 nav_order: 3
 ---
 
-# LAB 3 - Active Directory & GPO Configuration
+# LAB 3 - Active Directory, GPO & Centralized AAA
 {: .no_toc }
 
-**Duration:** ~3 hours &nbsp;·&nbsp; **Week:** Week 3
+**Duration:** ~4.5 hours &nbsp;·&nbsp; **Week:** Week 3
 {: .fs-5 }
 
 <details open markdown="block">
@@ -21,35 +21,31 @@ nav_order: 3
 
 ## Objectives
 
-- Promote Windows Server 2022 to a domain controller with a properly designed domain
+- Verify a pre-promoted Active Directory domain controller and understand its design
 - Build a multi-tiered OU structure reflecting real-world administrative delegation
 - Implement a security baseline GPO and a separate audit policy GPO
 - Configure Fine-Grained Password Policy (PSO) for privileged accounts
 - Test and verify policy application, account lockout, and audit logging
+- Write and test LDAP search filters against the domain, and deploy a minimal FreeRADIUS instance backed by it
 
 ---
 
 ## Tools Required
 
-- Windows Server 2022 VM from Lab 1
-- Active Directory Domain Services (AD DS) role
+- Windows Server 2022 VM from Lab 1 (**domain controller already promoted** on your template - see Part 1)
 - Group Policy Management Console (GPMC)
 - Active Directory Users & Computers (ADUC)
 - Active Directory Administrative Center (ADAC)
+- A separate Linux VM to run FreeRADIUS (`freeradius` package)
+- `ldapsearch` (from `ldap-utils` / `openldap-clients`)
 
 ---
 
 ## Procedure
 
-### Part 1 - Domain Controller Promotion
+### Part 1 - Verify the Domain Controller
 
-1. Install the AD DS role and promote to domain controller:
-   ```powershell
-   Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
-   Install-ADDSForest -DomainName "lab.local" -DomainNetbiosName "LAB" `
-     -SafeModeAdministratorPassword (Read-Host -AsSecureString) -Force
-   ```
-2. After reboot, verify the domain is healthy:
+Your VM template ships with AD DS already installed and the forest already promoted - you don't need to run `Install-ADDSForest` yourself. Start by confirming the domain is healthy:
    ```powershell
    Get-ADDomain
    dcdiag /test:replications /test:dns /test:netlogon
@@ -212,6 +208,46 @@ Unlock-ADAccount -Identity ajohnson
 Get-WinEvent -LogName Security | Where-Object {$_.Id -eq 4625} | Select-Object -First 5 | Format-List
 ```
 
+### Part 8 - Centralized AAA: LDAP Queries & RADIUS
+
+Your domain isn't just used by desktop logons - network infrastructure (routers, switches, VPN concentrators) authenticates administrators against a central directory too, using RADIUS instead of Kerberos/NTLM. This part gives you hands-on time with the query language itself and a minimal RADIUS deployment backed by your domain.
+
+**LDAP filters (write and run against your domain with `ldapsearch`):**
+
+1. Find every user whose `sAMAccountName` belongs to a group called `NetworkAdmins` (create this group first and put 2 test users in it):
+   ```
+   ldapsearch -x -H ldap://<dc-host> -D "<bind-dn>" -W \
+     -b "<base-dn>" "(&(objectClass=person)(memberOf=cn=NetworkAdmins,...))"
+   ```
+2. Find every account that is **disabled** (bit 2 set in `userAccountControl` - use filter `(userAccountControl:1.2.840.113556.1.4.803:=2)`).
+3. Find every account whose password has expired or is locked - tie this back to your PSO-protected `enovak-adm` account, and confirm the filter actually returns it after you intentionally lock it.
+
+For each query, write 1-2 sentences explaining **why** that filter syntax produces that result (e.g., what the `:1.2.840.113556.1.4.803:` matching-rule OID means, or why `memberOf` requires the group's full DN rather than its short name).
+
+**Minimal FreeRADIUS deployment:**
+
+On a separate Linux VM (do not run this on the domain controller itself), install and sanity-check FreeRADIUS with a local flat-file user first:
+
+```bash
+sudo apt install freeradius -y
+sudo systemctl stop freeradius   # so you can run it in debug mode
+
+echo 'testuser Cleartext-Password := "testpass123"' | sudo tee -a /etc/freeradius/3.0/users
+
+sudo freeradius -X   # run in foreground debug mode, leave this terminal open
+```
+
+In a second terminal, on the same host:
+
+```bash
+radtest testuser testpass123 localhost 0 testing123
+```
+
+Capture the full debug output showing the Access-Request coming in and the Access-Accept going out. Identify in your write-up: which line shows the shared secret being validated, and which line shows the final accept/reject decision.
+
+{: .note }
+Wiring FreeRADIUS to authenticate against your AD domain itself (rather than the local flat-file test above), plus standing up a second "network device" client VM, privilege mapping, and packet-level analysis, are covered in the Graduate Extension below.
+
 ---
 
 ## Submission Requirements
@@ -224,6 +260,8 @@ Get-WinEvent -LogName Security | Where-Object {$_.Id -eq 4625} | Select-Object -
 - Security event log screenshot showing Event ID 4625 (failed logon) entries from the lockout test
 - PSO verification: `Get-ADUserResultantPasswordPolicy` output for `enovak-adm` vs. `ajohnson`
 - Written reflection (3-4 sentences): Why does the tiered admin model (separate `enovak` and `enovak-adm` accounts) reduce risk compared to a single all-powerful admin account?
+- LDAP filters and outputs for all 3 Part 8 queries, with explanations
+- FreeRADIUS local flat-file debug output (Part 8)
 
 ---
 
@@ -248,6 +286,63 @@ Get-WinEvent -LogName Security | Where-Object {$_.Id -eq 4625} | Select-Object -
    Get-ADUser -Filter {TrustedForDelegation -eq $true} | Select-Object Name
    ```
    Explain why unconstrained delegation is dangerous and what a Kerberos delegation attack (S4U2Proxy, S4U2Self) looks like.
+
+### Extension B - Full RADIUS/LDAP Backend Integration
+
+4. **Point FreeRADIUS at the directory.** Configure the `ldap` module (`/etc/freeradius/3.0/mods-available/ldap`, symlinked into `mods-enabled`) to bind to your AD domain:
+   ```
+   ldap {
+       server = '<dc-host>'
+       identity = '<bind-dn>'
+       password = '<bind-password>'
+       base_dn = '<base-dn>'
+       user {
+           base_dn = "${..base_dn}"
+           filter  = "(uid=%{%{Stripped-User-Name}:-%{User-Name}}))"
+       }
+       group {
+           base_dn = "${..base_dn}"
+           filter  = '(objectClass=groupOfNames)'
+       }
+   }
+   ```
+   Switch the default `authorize` and `authenticate` sections in `/etc/freeradius/3.0/sites-available/default` to use `ldap`. Restart in debug mode and re-run `radtest` with a **real directory account**. Paste the debug output and identify the specific line where FreeRADIUS performs the LDAP bind.
+
+   {: .tip }
+   If the LDAP bind fails, the most common causes are: wrong base DN, a bind account without read access to the user subtree, or needing to bind as `user@domain.fqdn` rather than a full DN. Debug output will tell you exactly which LDAP operation failed.
+
+5. **Authenticate a "network device" logon via RADIUS.** On a second Linux VM (standing in for a router/switch admin console), install and configure `pam_radius_auth`:
+   ```bash
+   sudo apt install libpam-radius-auth -y
+   echo "<freeradius-host> <shared-secret> 3" | sudo tee /etc/pam_radius_auth.conf
+   ```
+   Edit `/etc/pam.d/sshd` to insert RADIUS **before** standard Unix authentication:
+   ```
+   auth    sufficient    pam_radius_auth.so
+   auth    include       common-auth
+   ```
+   Add the FreeRADIUS host as a known client in `/etc/freeradius/3.0/clients.conf`. SSH into the device VM using a directory account's credentials - **the account should not exist as a local Linux user on this VM.** Then intentionally lock the directory account and attempt the SSH logon again. Capture the rejection in both the SSH client output and the FreeRADIUS debug log, and explain which component made the reject decision - FreeRADIUS, the directory, or PAM.
+
+6. **Group-to-privilege mapping.** Configure FreeRADIUS to return a `Filter-Id` based on directory group membership, so members of `NetworkAdmins` get a different value than everyone else:
+   ```
+   if (LDAP-Group == "NetworkAdmins") {
+       update reply {
+           Filter-Id := "admin-profile"
+       }
+   }
+   else {
+       update reply {
+           Filter-Id := "readonly-profile"
+       }
+   }
+   ```
+   Test with two different accounts and show the differing `Filter-Id` in each Access-Accept.
+
+7. **Read the wire.** Capture a single authentication attempt with `tcpdump -i any -w radius-capture.pcap port 1812 or port 1813`. Identify, by name, at least 6 distinct RADIUS attribute-value pairs (AVPs) present across the Access-Request and Access-Accept packets. For 2 of them, explain what the attribute is for.
+
+8. **TACACS+ comparison.** Install `tac_plus` alongside your FreeRADIUS setup and configure an equivalent policy with the same two privilege tiers. Write a 1-page comparison covering transport (UDP vs. TCP), encryption scope (RADIUS encrypts only the password by default vs. TACACS+ encrypting the full body), and command-level authorization (TACACS+ can authorize individual commands per session, RADIUS cannot natively). Give one concrete scenario where command-level authorization matters operationally.
+
+9. **802.1X port-based authentication (optional, if hardware/GNS3 available).** Configure `dot1x` port-based authentication on one switch port backed by your FreeRADIUS server, or a `wpa_supplicant`-configured Linux host acting as the supplicant. Capture the EAP exchange and explain how 802.1X's EAP-over-LAN differs from the username/password RADIUS flow above. If hardware isn't available, write a detailed sequence diagram (supplicant → authenticator/switch → RADIUS server) for the handshake instead.
 
 ---
 

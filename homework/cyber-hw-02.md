@@ -33,7 +33,7 @@ Write a production-quality Linux security audit script that a sysadmin could dro
 
 ### Part 1 - Audit Script (70 pts)
 
-Build `cyber-hw-02-audit.sh`. The script must perform all of the following checks and output a structured report:
+Build `hw-02-audit.sh`. The script must perform all of the following checks and output a structured report:
 
 **Account & Privilege Auditing:**
 - List all accounts with UID 0 (should be only root - flag any others as CRITICAL)
@@ -83,17 +83,18 @@ Answer in your write-up:
 
 1. Your script uses a hardcoded SUID whitelist. In a real enterprise environment managing 200 servers with different roles (web, database, build), how would you manage this whitelist at scale? Describe a practical approach.
 2. What category of attack would NOT be detected by your script? Describe one real attack technique (name a MITRE ATT&CK technique) that leaves no trace in the artifacts your script examines, and explain what additional data source would be needed to detect it.
+3. If you installed PostgreSQL or MySQL on a box this audit script runs against, why would you scope a database user to a single database rather than granting it superuser/root on the whole instance? Give one concrete consequence of getting this wrong.
 
 ---
 
 ## Deliverable(s)
 
 {: .callout }
-**Auto-grader:** When you open your PR, a GitHub Actions workflow will run `homework/assets/cyber-hw-02-audit.sh` against a test Ubuntu 22.04 environment with 3 known misconfigurations. Your script must flag all 3 as CRITICAL or WARNING and produce a valid JSON report. The auto-grader posts results as a PR comment. Re-push to fix issues.
+**Auto-grader:** When you open your PR, a GitHub Actions workflow will run `homework/assets/hw-02-audit.sh` against a test Ubuntu 22.04 environment with 3 known misconfigurations. Your script must flag all 3 as CRITICAL or WARNING and produce a valid JSON report. The auto-grader posts results as a PR comment. Re-push to fix issues.
 
 Commit to `homework/assets/` using exactly these filenames:
 
-- `cyber-hw-02-audit.sh` - your audit script
+- `hw-02-audit.sh` - your audit script
 - `cyber-hw-02-clean-output.txt` - output from clean VM
 - `cyber-hw-02-dirty-output.txt` - output from weakened VM  
 - `cyber-hw-02-dirty-report.json` - JSON report from weakened VM
@@ -129,7 +130,7 @@ Open a PR titled `CYBER HW 2 - Linux Security Audit Suite` and submit the PR lin
 
 **CVSS Environmental Scoring (15 pts)**
 
-Extend `cyber-hw-02-audit.sh` to calculate a **CVSS v3.1 Environmental Score** for each CRITICAL finding. For each finding, the JSON output must include a `cvss` object with:
+Extend `hw-02-audit.sh` to calculate a **CVSS v3.1 Environmental Score** for each CRITICAL finding. For each finding, the JSON output must include a `cvss` object with:
 
 ```json
 {

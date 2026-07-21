@@ -1,13 +1,13 @@
 ---
-title: "IT LAB 3 - Windows Server Infrastructure Roles"
+title: "IT LAB 3 - Windows Server Infrastructure Roles & Centralized AAA"
 parent: Labs
 nav_order: 103
 ---
 
-# IT LAB 3 - Windows Server Infrastructure Roles
+# IT LAB 3 - Windows Server Infrastructure Roles & Centralized AAA
 {: .no_toc }
 
-**Duration:** ~3 hours &nbsp;·&nbsp; **Week:** Week 3 &nbsp;·&nbsp; **Track:** IT
+**Duration:** ~5 hours &nbsp;·&nbsp; **Week:** Week 3 &nbsp;·&nbsp; **Track:** IT
 {: .fs-5 }
 
 <details open markdown="block">
@@ -26,15 +26,18 @@ nav_order: 103
 - Implement Windows Server Backup with a structured retention schedule
 - Configure Group Policy for audit logging and software restriction
 - Analyze patch compliance and produce a management-ready report
+- Write and test LDAP search filters against the domain, and deploy a minimal FreeRADIUS instance backed by it
 
 ---
 
 ## Tools Required
 
-- Windows Server 2022 VM (primary - DC + WSUS role)
+- Windows Server 2022 VM (primary - DC + WSUS role; **domain controller already promoted** on your template)
 - Windows Server 2022 VM (secondary - DFS replication target)
 - Windows 10/11 client VM joined to domain
 - PowerShell 5.1+, RSAT tools
+- A separate Linux VM to run FreeRADIUS (`freeradius` package)
+- `ldapsearch` (from `ldap-utils` / `openldap-clients`)
 
 ---
 
@@ -323,12 +326,55 @@ Document one real-world malware family that relies on executing from %TEMP% that
 
 ---
 
+### Part 5 - Centralized AAA: LDAP Queries & RADIUS
+
+Your domain isn't just used by desktop logons - network infrastructure (routers, switches, VPN concentrators) authenticates administrators against a central directory too, using RADIUS instead of Kerberos/NTLM. This part gives you hands-on time with the query language itself and a minimal RADIUS deployment backed by your domain.
+
+**LDAP filters (write and run against your domain with `ldapsearch`):**
+
+1. Find every user whose `sAMAccountName` belongs to a group called `NetworkAdmins` (create this group first and put 2 test users in it):
+   ```
+   ldapsearch -x -H ldap://<dc-host> -D "<bind-dn>" -W \
+     -b "<base-dn>" "(&(objectClass=person)(memberOf=cn=NetworkAdmins,...))"
+   ```
+2. Find every account that is **disabled** (bit 2 set in `userAccountControl` - use filter `(userAccountControl:1.2.840.113556.1.4.803:=2)`).
+3. Find every entry under an OU representing network devices (create an OU called `Switches` with 2 placeholder entries), returning only the `cn` and `description` attributes.
+
+For each query, write 1-2 sentences explaining **why** that filter syntax produces that result.
+
+**Minimal FreeRADIUS deployment:**
+
+On a separate Linux VM (do not run this on the domain controller itself), install and sanity-check FreeRADIUS with a local flat-file user first:
+
+```bash
+sudo apt install freeradius -y
+sudo systemctl stop freeradius   # so you can run it in debug mode
+
+echo 'testuser Cleartext-Password := "testpass123"' | sudo tee -a /etc/freeradius/3.0/users
+
+sudo freeradius -X   # run in foreground debug mode, leave this terminal open
+```
+
+In a second terminal, on the same host:
+
+```bash
+radtest testuser testpass123 localhost 0 testing123
+```
+
+Capture the full debug output showing the Access-Request coming in and the Access-Accept going out. Identify in your write-up: which line shows the shared secret being validated, and which line shows the final accept/reject decision.
+
+{: .note }
+Wiring FreeRADIUS to authenticate against your AD domain itself, plus standing up a second "network device" client VM, privilege mapping, and packet-level analysis, are covered in the Graduate Extension below.
+
+---
+
 ## Deliverables
 
 1. WSUS: PowerShell install transcript, computer group configuration, GPO registry values, client detection screenshot, patch compliance report
 2. DFS: Namespace and replication configuration commands + output, replication test file verification, failover test result
 3. Backup: Policy configuration, manual backup output, file restore verification with hash comparison
 4. GPO: Advanced audit subcategory table (configured) + Software Restriction policy description + malware example
+5. LDAP filters and outputs for all 3 Part 5 queries, with explanations, plus FreeRADIUS local flat-file debug output
 
 ---
 
@@ -336,10 +382,11 @@ Document one real-world malware family that relies on executing from %TEMP% that
 
 | Item | Points |
 |------|--------|
-| WSUS deployed, client detected, compliance report | 25 |
-| DFS Namespace + Replication with failover test | 25 |
-| Backup configured, executed, and restore tested | 25 |
-| GPO: audit policy + software restriction | 25 |
+| WSUS deployed, client detected, compliance report | 20 |
+| DFS Namespace + Replication with failover test | 20 |
+| Backup configured, executed, and restore tested | 20 |
+| GPO: audit policy + software restriction | 20 |
+| LDAP filters + FreeRADIUS local test | 20 |
 | **Total** | **100** |
 
 ---
@@ -370,5 +417,13 @@ Document one real-world malware family that relies on executing from %TEMP% that
 > 4. Extend the script to write a CSV log: `Timestamp, Group, Member, State, BacklogCount`.
 >
 > Submit both PowerShell scripts, the scheduled task configuration (XML export via `Export-ScheduledTask`), and a sample CSV log showing at least one Normal and one non-Normal state entry.
+>
+> ### Extension C - Full RADIUS/LDAP Backend Integration
+>
+> 1. **Point FreeRADIUS at the directory.** Configure the `ldap` module (`/etc/freeradius/3.0/mods-available/ldap`, symlinked into `mods-enabled`) to bind to your AD domain, switch the default `authorize`/`authenticate` sections to use `ldap`, and re-run `radtest` with a real directory account. Paste the debug output and identify the line where FreeRADIUS performs the LDAP bind.
+> 2. **Authenticate a "network device" logon via RADIUS.** On a second Linux VM, install `libpam-radius-auth`, configure `/etc/pam_radius_auth.conf` and `/etc/pam.d/sshd` to try RADIUS before local Unix auth, register the host in `clients.conf`, and SSH in using a directory account that doesn't exist as a local Linux user. Then lock the directory account and capture the rejection, explaining which component (FreeRADIUS, the directory, or PAM) made the reject decision.
+> 3. **Group-to-privilege mapping.** Return a `Filter-Id` based on `NetworkAdmins` group membership via an `unlang` `post-auth` policy, and prove two different outcomes for two different accounts.
+> 4. **Read the wire.** Capture one authentication attempt with `tcpdump`, identify 6+ RADIUS AVPs across the exchange, and explain 2 of them.
+> 5. **TACACS+ comparison.** Install `tac_plus` alongside FreeRADIUS with an equivalent two-tier policy, and write a 1-page comparison of transport, encryption scope, and command-level authorization versus RADIUS.
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

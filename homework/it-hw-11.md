@@ -81,6 +81,9 @@ Define SLOs for Valley Medical Group's EMR application:
 
 ## Deliverable(s)
 
+{: .callout }
+**Auto-grader:** When you open your PR, a GitHub Actions workflow runs `promtool check rules` against your `alerts.yml` (the same validation Prometheus itself would do before loading it) and confirms you have at least 10 rules total. It does not evaluate whether your PromQL expressions and thresholds are well-chosen for the failure categories asked for - that's graded by hand.
+
 Write your design document in `homework/it-hw-11.md`. Commit to `homework/assets/`:
 
 - `it-hw-11-alerts.yml` - your Prometheus alerting rules file

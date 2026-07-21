@@ -79,6 +79,9 @@ The script must handle errors gracefully - if any `aws` command fails, print the
 
 ## Deliverable(s)
 
+{: .callout }
+**Auto-grader:** When you open your PR, a GitHub Actions workflow validates your permission-boundary JSON (well-formed, and flags any Allow statement granting `Action: "*"` + `Resource: "*"`) and syntax-checks your remediation script. This is a narrow lint, not a full least-privilege analysis - it won't catch subtler over-broad grants. Re-push to fix issues.
+
 Write your full audit in `homework/it-hw-10.md`. Commit to `homework/assets/`:
 
 - `it-hw-10-corrected-policies/` - directory containing your corrected JSON policy files (one file per entity)

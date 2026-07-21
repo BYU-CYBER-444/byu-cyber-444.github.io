@@ -89,6 +89,9 @@ Calculate 1-year total cost for each option. Recommend an option for each worklo
 
 ## Deliverable(s)
 
+{: .callout }
+**Auto-grader:** When you open your PR, a GitHub Actions workflow runs `terraform validate` and `terraform fmt -check` against your submitted module. This only confirms your HCL parses and is internally consistent - it does not run `terraform apply` against a real account and says nothing about whether your network design is good. That part is graded by hand.
+
 Write your full plan in `homework/it-hw-09.md`. Commit your Terraform files to `homework/assets/it-hw-09-terraform/`:
 
 - `main.tf` - VPC/network resources

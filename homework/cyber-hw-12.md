@@ -86,6 +86,9 @@ Explain what legitimate use case might trigger each rule as a false positive and
 
 ## Deliverable(s)
 
+{: .callout }
+**Auto-grader:** When you open your PR, a GitHub Actions workflow checks your Dockerfile and Compose file for the specific hardening patterns Part 1/2 require (non-root user, pinned base image, HEALTHCHECK, cap_drop, resource limits, secrets handling, network segmentation) and syntax-checks your wrapper script and Falco rules. It does not `docker build` your image or run docker-bench/Falco for real - runtime behavior and the escape analysis are graded by hand.
+
 Write your full analysis in `homework/cyber-hw-12.md`. Commit to `homework/assets/`:
 
 - `cyber-hw-12-Dockerfile.hardened` - your corrected Dockerfile

@@ -114,6 +114,9 @@ Include a screenshot of a passing GitHub Actions run in your submission, or prov
 
 ## Deliverable(s)
 
+{: .callout }
+**Auto-grader:** When you open your PR, a GitHub Actions workflow runs `ansible-lint` and `ansible-playbook --syntax-check` against your role. It deliberately does not run your Molecule test suite in CI (too fragile to nest reliably on a hosted runner) - lint/syntax is a floor, not a substitute for your own Molecule results.
+
 Commit your full role structure to `homework/assets/cyber-hw-09-role/`. Write your analysis and instructions in `homework/cyber-hw-09.md`.
 
 Open a PR titled `CYBER HW 9 - Ansible Hardening Role` and submit the PR link on Learning Suite by the due date.

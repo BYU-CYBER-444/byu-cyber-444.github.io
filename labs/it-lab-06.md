@@ -1,13 +1,13 @@
 ---
-title: "IT LAB 6 - HAProxy & keepalived High Availability"
+title: "IT LAB 6 - HAProxy, keepalived High Availability & Centralized Logging"
 parent: Labs
 nav_order: 106
 ---
 
-# IT LAB 6 - HAProxy & keepalived High Availability
+# IT LAB 6 - HAProxy, keepalived High Availability & Centralized Logging
 {: .no_toc }
 
-**Duration:** ~3 hours &nbsp;·&nbsp; **Week:** Week 6 &nbsp;·&nbsp; **Track:** IT
+**Duration:** ~5.5 hours &nbsp;·&nbsp; **Week:** Week 6 &nbsp;·&nbsp; **Track:** IT
 {: .fs-5 }
 
 <details open markdown="block">
@@ -26,6 +26,7 @@ nav_order: 106
 - Implement layer-7 routing rules: path-based routing and header insertion
 - Test automatic failover, measure failover time, and validate session persistence
 - Tune HAProxy statistics and set up alerting for backend health
+- Centralize HAProxy, keepalived, and Nginx logs from all 4 hosts into Graylog and build an operational dashboard
 
 ---
 
@@ -38,6 +39,7 @@ nav_order: 106
   - `web02` (10.0.0.22) - Nginx backend 2
 - Virtual IP (VIP): 10.0.0.10
 - Packages: `haproxy`, `keepalived`, `nginx`, `curl`, `ab` (Apache Bench)
+- A 5th Ubuntu 22.04 VM for Graylog (Docker + Docker Compose pre-installed on the template)
 
 ---
 
@@ -386,6 +388,59 @@ Document the difference between `drain` (complete existing sessions) and `maint`
 
 ---
 
+### Part 6 - Centralized Logging with Graylog (~2.5 hours)
+
+A single load balancer failing over is only useful to know about if someone's watching - in a real NOC, HAProxy/keepalived/Nginx logs don't stay on their originating host, they're forwarded to a central platform so one dashboard shows fleet-wide health. This part builds that pipeline using Graylog, the same SIEM platform used in CYBER LAB 11.
+
+**Deploy Graylog** on the 5th VM:
+
+```bash
+docker compose -f docker-compose.graylog.yml up -d
+docker compose -f docker-compose.graylog.yml ps   # verify all containers healthy
+```
+
+Change the default credentials and create a Syslog UDP input (port 514, title `it-ops-syslog`).
+
+**Forward logs from all four hosts.** On `lb01` and `lb02`, point HAProxy's logging at rsyslog and forward to Graylog:
+
+```bash
+# Confirm haproxy.cfg still has: log /dev/log local0
+echo '*.* @<graylog-host>:514;RSYSLOG_SyslogProtocol23Format' | sudo tee /etc/rsyslog.d/99-graylog.conf
+sudo systemctl restart rsyslog
+```
+
+Also forward the VRRP transition log file on `lb01`/`lb02` (a flat file, so use rsyslog's file input module):
+
+```bash
+sudo tee /etc/rsyslog.d/98-vrrp-forward.conf << 'EOF'
+module(load="imfile")
+input(type="imfile"
+      File="/var/log/vrrp-transitions.log"
+      Tag="vrrp-transition"
+      Severity="notice"
+      Facility="local1")
+EOF
+sudo systemctl restart rsyslog
+```
+
+On `web01` and `web02`, forward Nginx access logs the same way (swap `Tag`/`Facility` for `nginx-access`/`local2`). Verify in the Graylog **Search** UI that messages tagged `vrrp-transition`, `nginx-access`, and HAProxy syslog entries are all arriving with the correct `source` field per host.
+
+**Pipeline: parse HAProxy and VRRP logs.** Build a Graylog **extractor** (System → Inputs → your input → Manage Extractors) using a regex to pull client IP, requested path, backend name, HTTP status code, and response time from a sample HAProxy log line. Then build a pipeline named `it-ops-enrichment` with 2 rules:
+
+1. Set `log_category = "load_balancer"` for any HAProxy-sourced message, and `is_error = true` if the extracted status code is >= 500.
+2. Set `log_category = "vrrp"` and `event_type = "failover"` for any message containing `became MASTER`.
+
+Connect the pipeline to the Default Stream and confirm `log_category:vrrp` and `is_error:true` filter correctly in Search.
+
+**Build a 3-panel dashboard** named "IT Ops - Load Balancer Fleet Health": total requests (single number, `log_category:load_balancer`), 5xx error rate over time (line chart, `is_error:true`), and VRRP failover events (data table, `log_category:vrrp`).
+
+**Configure one alert:** a VRRP Failover Alert that fires on any single event matching `event_type:failover` (Priority: High - a failover is always operationally significant). Trigger it by stopping HAProxy on `lb01` (as in Part 4.2) to force a VRRP failover, and screenshot the alert in **Triggered** state.
+
+{: .note }
+A second alert (5xx error-rate threshold), the ITSM ticket handoff, a third pipeline rule for Nginx logs, 2 more dashboard panels, and a false-positive analysis are covered in the Graduate Extension below.
+
+---
+
 ## Deliverables
 
 1. HAProxy configuration file (both frontends + 2 backends)
@@ -394,6 +449,7 @@ Document the difference between `drain` (complete existing sessions) and `maint`
 4. Load test results (ab output)
 5. HAProxy stats page screenshot after load test
 6. Backend failure test: DOWN state output + drain vs. maint explanation
+7. rsyslog forwarding configs from all 4 hosts, extractor + pipeline rule configs, 3-panel dashboard screenshot, and the triggered VRRP alert screenshot
 
 ---
 
@@ -401,11 +457,12 @@ Document the difference between `drain` (complete existing sessions) and `maint`
 
 | Item | Points |
 |------|--------|
-| HAProxy config: frontends, backends, health checks, SSL | 25 |
-| keepalived config: VRRP, health script, notifications | 20 |
-| Failover test with measured failover time | 25 |
-| Load test results and HAProxy stats analysis | 15 |
-| Backend failure simulation and graceful drain | 15 |
+| HAProxy config: frontends, backends, health checks, SSL | 20 |
+| keepalived config: VRRP, health script, notifications | 15 |
+| Failover test with measured failover time | 20 |
+| Load test results and HAProxy stats analysis | 10 |
+| Backend failure simulation and graceful drain | 10 |
+| Log forwarding, pipeline rules, dashboard, and VRRP alert | 25 |
 | **Total** | **100** |
 
 ---
@@ -460,5 +517,13 @@ Document the difference between `drain` (complete existing sessions) and `maint`
 > 4. Test each alert by simulating the condition and verifying the alert fires.
 >
 > Submit rate limiting configuration + ab test output showing 429 responses, and Prometheus scrape config + 3 alerting rule YAML files.
+>
+> ### Extension C - Full Observability Pipeline and ITSM Handoff
+>
+> 1. Add a third pipeline rule setting `log_category = "web_backend"` for Nginx-tagged messages, and extend your dashboard to 5 panels: add HTTP Status Code Distribution (pie chart) and Requests by Backend Server (bar chart).
+> 2. Configure a second alert - a 5xx Error Rate Alert firing when more than 10 `is_error:true` events occur within 5 minutes (mirroring the threshold-alerting pattern from CYBER LAB 11's grad extension, tuned for an availability signal instead of a security signal). Trigger it by stopping both Nginx backends to force HAProxy's sorry-server/5xx path.
+> 3. **The ITSM handoff:** open a ticket in your ITSM platform (same tool as IT LAB 14) documenting the VRRP failover alert as a P3 incident - alert timestamp, the Graylog search link/query, a one-paragraph initial assessment, and an on-call assignment.
+> 4. Write a 3-4 sentence analysis: which of the two alerts (VRRP failover vs. 5xx error rate) is more likely to produce false positives in production, and what would you change about its configuration to reduce that risk?
+> 5. Implement a Graylog **correlation** alert that fires only when a VRRP failover and a 5xx error spike (count > 5) both occur within the same 3-minute window, and demonstrate it staying quiet when only one condition fires. Write a 1-page analysis of why a correlated alert is lower-noise for an on-call engineer, and what failure mode it might miss that a single-condition alert would catch.
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

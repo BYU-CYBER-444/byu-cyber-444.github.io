@@ -88,6 +88,9 @@ Write a formal compensating control plan for each:
 
 ## Deliverable(s)
 
+{: .callout }
+**Auto-grader:** When you open your PR, a GitHub Actions workflow runs your `cyber-hw-08-verify.ps1` on a plain Windows Server runner and checks that it runs cleanly and produces a `hardening-audit-*.csv` with exactly 15 PASS/FAIL rows. Since you choose your own 15 controls, this can't verify they're the *right* controls or correctly implemented - that's graded from your hardened-VM screenshot and CSV.
+
 Write your full analysis in `homework/cyber-hw-08.md`. Commit to `homework/assets/`:
 
 - `cyber-hw-08-verify.ps1` - your verification script

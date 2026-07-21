@@ -7,7 +7,7 @@ nav_order: 102
 # IT LAB 2 - Linux Network Services
 {: .no_toc }
 
-**Duration:** ~3 hours &nbsp;·&nbsp; **Week:** Week 2 &nbsp;·&nbsp; **Track:** IT
+**Duration:** ~3.5 hours &nbsp;·&nbsp; **Week:** Week 2 &nbsp;·&nbsp; **Track:** IT
 {: .fs-5 }
 
 <details open markdown="block">
@@ -26,14 +26,16 @@ nav_order: 102
 - Export an NFS share with host-based access controls and verify mount options including `nosuid` and `noexec`
 - Deploy NTP with chrony as both a client and a stratum-2 server for the internal network
 - Validate each service with structured diagnostic commands and capture evidence
+- Build an LVM volume and use a snapshot to protect against a bad change
 
 ---
 
 ## Tools Required
 
 - Ubuntu 22.04 LTS VM (or instructor-provided environment)
-- Packages: `bind9`, `bind9utils`, `isc-dhcp-server`, `nfs-kernel-server`, `chrony`
+- Packages: `bind9`, `bind9utils`, `isc-dhcp-server`, `nfs-kernel-server`, `chrony`, `lvm2`
 - Client VM or namespace for service verification
+- **One additional 3 GB virtual disk attached to your VM** for Part 5 (shows up as `/dev/sdb` - confirm with `lsblk`)
 
 ---
 
@@ -348,7 +350,44 @@ Explain in your report why NTP accuracy matters for: (a) Kerberos authentication
 
 ---
 
-### Part 5 - End-to-End Integration Test (15 min)
+### Part 5 - Storage: LVM Basics (25 min)
+
+The exports and lease files you've been managing all live on plain disk space so far - in production, shared storage like an NFS export usually sits on an LVM volume specifically so it can be resized without downtime. Build one:
+
+```bash
+sudo apt install -y lvm2
+lsblk   # confirm your second disk, e.g. /dev/sdb
+
+sudo pvcreate /dev/sdb
+sudo vgcreate vg_shares /dev/sdb
+sudo lvcreate -L 1.5G -n lv_shares vg_shares
+sudo mkfs.ext4 /dev/vg_shares/lv_shares
+sudo mkdir -p /exports/lvm_shared
+sudo mount /dev/vg_shares/lv_shares /exports/lvm_shared
+df -h /exports/lvm_shared
+```
+
+Take a snapshot before making a risky change, then prove the snapshot protects you:
+
+```bash
+sudo lvcreate -L 300M -s -n lv_shares_snap /dev/vg_shares/lv_shares
+echo "known-good config" | sudo tee /exports/lvm_shared/config.txt
+
+# Simulate a bad change
+echo "corrupted!!" | sudo tee /exports/lvm_shared/config.txt
+
+# Roll back
+sudo umount /exports/lvm_shared
+sudo lvconvert --merge /dev/vg_shares/lv_shares_snap
+sudo mount /dev/vg_shares/lv_shares /exports/lvm_shared
+cat /exports/lvm_shared/config.txt   # should show "known-good config" again
+```
+
+Capture the `df -h` output before and after, and the final `cat` output confirming the rollback worked.
+
+---
+
+### Part 6 - End-to-End Integration Test (15 min)
 
 Write a shell script `verify_services.sh` that tests all four services and prints PASS/FAIL for each check:
 
@@ -400,7 +439,8 @@ Submit a single document with:
 4. `/etc/exports` content and output of both mount tests (write success + write failure)
 5. `chronyc tracking` and `chronyc sources -v` output
 6. NTP explanation paragraph (Kerberos, forensics, TLS)
-7. `verify_services.sh` script and its output showing all 8 PASSes
+7. `df -h` before/after the LVM resize and the post-rollback `cat` output confirming the snapshot restore worked
+8. `verify_services.sh` script and its output showing all 8 PASSes
 
 ---
 
@@ -408,12 +448,13 @@ Submit a single document with:
 
 | Item | Points |
 |------|--------|
-| BIND9 - forward zone with all record types | 20 |
-| BIND9 - reverse zone and broken-serial diagnosis | 10 |
-| DHCP - scopes, reservation, lease verification | 20 |
-| NFS - exports with security options, write/read-only test | 20 |
-| Chrony - configuration and synchronization evidence | 15 |
-| Integration test script passing all 8 checks | 15 |
+| BIND9 - forward zone with all record types | 18 |
+| BIND9 - reverse zone and broken-serial diagnosis | 9 |
+| DHCP - scopes, reservation, lease verification | 18 |
+| NFS - exports with security options, write/read-only test | 18 |
+| Chrony - configuration and synchronization evidence | 13 |
+| LVM volume, snapshot, and rollback demonstrated | 10 |
+| Integration test script passing all 8 checks | 14 |
 | **Total** | **100** |
 
 ---

@@ -58,6 +58,8 @@ For each service (DNS/BIND9, DHCP/ISC, NFS):
 
 Answer in 2-3 paragraphs: In a production environment with 500 clients, what are the operational risks of running DHCP and DNS on the same server as NFS? Propose a tiered service placement strategy that balances cost with resilience, and justify which service you would prioritize making redundant first.
 
+Also answer in 2-3 sentences: your NFS exports in Lab 2 sat on plain disk space. If you moved `/exports` onto an LVM volume instead, what specific operational problem does that solve that you'd eventually hit running this server for a year with growing data?
+
 ---
 
 ## Deliverable(s)

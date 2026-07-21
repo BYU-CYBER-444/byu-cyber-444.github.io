@@ -89,6 +89,9 @@ Include the output of `systemctl status cyber-hw-10-drift-monitor.timer` showing
 
 ## Deliverable(s)
 
+{: .callout }
+**Auto-grader:** When you open your PR, a GitHub Actions workflow runs `bash -n` and `shellcheck` against your drift-monitor script. This only confirms the script parses cleanly - it does not verify your script actually detects the 6 planted drift scenarios. That's graded from your submitted before/after output files.
+
 Write your full analysis in `homework/cyber-hw-10.md`. Commit to `homework/assets/`:
 
 - `cyber-hw-10-drift-monitor.sh` - your drift detection script

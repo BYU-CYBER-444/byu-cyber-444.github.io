@@ -33,7 +33,7 @@ Using the CIS-CAT Pro results from **Lab 5**, produce a gap analysis report that
 
 ### Part 1 - Scoring & Risk Prioritization (25 pts)
 
-For every failing control in your CIS-CAT report, document:
+Rank all failing controls in your CIS-CAT report by CIS severity/level, then document the **top 15** (if your scan found fewer than 15 failures, document all of them):
 
 | Control ID | Title | CIS Level | CIS Section | CVSS-equivalent Risk (1-10 - your assessment) | Rationale for Rating |
 |---|---|---|---|---|---|

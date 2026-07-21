@@ -7,7 +7,7 @@ nav_order: 2
 # CYBER LAB 2 - Linux Privilege Management & Audit Framework
 {: .no_toc }
 
-**Duration:** ~3 hours &nbsp;·&nbsp; **Week:** Week 2 &nbsp;·&nbsp; **Track:** Cyber
+**Duration:** ~3.75 hours &nbsp;·&nbsp; **Week:** Week 2 &nbsp;·&nbsp; **Track:** Cyber
 {: .fs-5 }
 
 <details open markdown="block">
@@ -26,6 +26,7 @@ nav_order: 2
 - Build a persistent, production-quality auditd rule set covering privilege escalation, file access, and session tracking
 - Verify that each access control works as intended by attempting unauthorized actions and confirming denial
 - Generate auditd summary reports and interpret the output
+- Build and resize an LVM volume, use an LVM snapshot, and build a software RAID1 array
 
 ---
 
@@ -35,9 +36,11 @@ nav_order: 2
 - `auditd`, `audispd-plugins`, `auditd-tools` (`auditctl`, `ausearch`, `aureport`)
 - `acl` package (`getfacl`, `setfacl`)
 - `sudo`, `visudo`
+- `lvm2`, `mdadm` (Part 7 - storage management)
+- **Two additional 5 GB virtual disks attached to your VM** (beyond your root disk) - add these in your hypervisor before starting Part 7; they show up as `/dev/sdb` and `/dev/sdc` (confirm with `lsblk`)
 
 ```bash
-sudo apt install auditd audispd-plugins acl -y
+sudo apt install auditd audispd-plugins acl lvm2 mdadm -y
 ```
 
 ---
@@ -262,6 +265,74 @@ sudo aureport --user --summary
 
 Screenshot the `aureport --summary` and `aureport --failed` outputs.
 
+### Part 7 - Storage Management: LVM & Software RAID
+
+Everything so far has run on your root filesystem. Real sysadmin work also means managing the storage underneath it - adding capacity, resizing volumes without downtime, and building redundancy. Confirm your two additional disks are visible first:
+
+```bash
+lsblk
+```
+
+**LVM: build a volume, grow it, snapshot it**
+
+```bash
+# Partition /dev/sdb as an LVM physical volume
+sudo parted /dev/sdb --script mklabel gpt mkpart primary 0% 100%
+sudo pvcreate /dev/sdb1
+
+# Build a volume group and a 2G logical volume inside it
+sudo vgcreate vg_lab2 /dev/sdb1
+sudo lvcreate -L 2G -n lv_data vg_lab2
+
+# Format and mount it
+sudo mkfs.ext4 /dev/vg_lab2/lv_data
+sudo mkdir -p /mnt/lv_data
+sudo mount /dev/vg_lab2/lv_data /mnt/lv_data
+df -h /mnt/lv_data
+```
+
+Write a test file, then grow the volume **live, with no unmount**:
+
+```bash
+echo "before resize" | sudo tee /mnt/lv_data/testfile.txt
+sudo lvextend -L +1G /dev/vg_lab2/lv_data
+sudo resize2fs /dev/vg_lab2/lv_data
+df -h /mnt/lv_data   # should now show ~3G
+```
+
+Take an LVM snapshot, then intentionally destroy data, then restore from the snapshot:
+
+```bash
+sudo lvcreate -L 500M -s -n lv_data_snap /dev/vg_lab2/lv_data
+echo "this file should NOT survive the restore" | sudo tee /mnt/lv_data/oops.txt
+sudo umount /mnt/lv_data
+sudo lvconvert --merge /dev/vg_lab2/lv_data_snap
+sudo mount /dev/vg_lab2/lv_data /mnt/lv_data
+ls /mnt/lv_data   # oops.txt should be gone, testfile.txt should be back to "before resize"
+```
+
+**Software RAID1**
+
+```bash
+# Build a mirrored array across sdc and a second partition on sdb (or a 3rd disk if you attached one)
+sudo mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdc /dev/sdb2
+sudo mkfs.ext4 /dev/md0
+sudo mkdir -p /mnt/raid1
+sudo mount /dev/md0 /mnt/raid1
+sudo mdadm --detail /dev/md0
+```
+
+Simulate a disk failure and confirm the array survives it in degraded mode:
+
+```bash
+sudo mdadm --manage /dev/md0 --fail /dev/sdc
+sudo mdadm --detail /dev/md0   # should show State: clean, degraded
+cat /mnt/raid1/*   # data is still readable
+```
+
+{: .note }
+LVM snapshots and RAID both protect against different failure modes than a backup does - a snapshot on the same disk doesn't survive a disk failure, and a RAID array doesn't protect against `rm -rf` or ransomware, since a bad write replicates to every mirror instantly. You'll come back to this distinction directly in Week 14's backup and DR work.
+
 ---
 
 ## Submission Requirements
@@ -274,6 +345,9 @@ Screenshot the `aureport --summary` and `aureport --failed` outputs.
 - `ausearch` output for each of the 4 event categories (priv_escalation, sudoers_change, user_mgmt, access_denied)
 - `aureport --summary` and `aureport --failed` screenshots
 - Written analysis (3-4 sentences): Looking at your aureport output, what would you investigate first if you were monitoring this system for malicious activity?
+- `lsblk` and `df -h` output showing the LVM volume before and after the resize
+- `mdadm --detail /dev/md0` output before and after the simulated disk failure
+- Written analysis (2-3 sentences): why doesn't the LVM snapshot you took count as a backup?
 
 ---
 
@@ -314,6 +388,12 @@ Screenshot the `aureport --summary` and `aureport --failed` outputs.
    }
    ```
    The script must use `ausearch` and `aureport` as data sources, parse their output with bash/awk/python, and write the JSON to `/var/log/audit-daily-report-$(date +%Y-%m-%d).json`. Create a cron job that runs it nightly at 23:55.
+
+### Storage: RAID5 and Per-User Quotas
+
+3. **RAID5 array:** Using 3 additional virtual disks (attach 3 more 5GB disks), build a RAID5 array (`mdadm --create /dev/md1 --level=5 --raid-devices=3 ...`). Fail one disk and confirm the array survives in degraded mode with data intact, then simulate replacing the failed disk (`mdadm --manage /dev/md1 --add /dev/sdX`) and confirm the array rebuilds. Document how long the rebuild took and what read/write performance looked like during the rebuild (`iostat` or `vmstat` output).
+
+4. **Per-user disk quotas:** Enable quota support on `/mnt/lv_data` (`quota`, `quotatool` packages, `usrquota` mount option), set a 100MB soft limit and 150MB hard limit for `bob`, and demonstrate that `bob` gets a warning past the soft limit and is blocked entirely past the hard limit. Explain in 2-3 sentences a real scenario where per-user quotas on a shared filesystem prevent an operational incident (e.g., a runaway log file filling a shared volume for every user on the box).
 
 ---
 

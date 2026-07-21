@@ -21,7 +21,7 @@ nav_order: 4
 
 ## Objectives
 
-- Configure `unattended-upgrades` with a production-realistic schedule and notification policy
+- Configure `dnf-automatic` with a production-realistic schedule and notification policy
 - Run a pre-patch vulnerability scan and categorize findings by CVSS severity
 - Apply patches and verify closure with a post-patch rescan
 - Write a formal patch rollback procedure that could be executed by a different engineer
@@ -32,11 +32,11 @@ nav_order: 4
 
 ## Tools Required
 
-- Ubuntu 22.04 LTS VM
-- `unattended-upgrades`, `apt-show-versions`
+- Rocky Linux 9 VM
+- `dnf-automatic`, `dnf-utils`
 - Nessus Essentials (free account at tenable.com) OR OpenVAS Community Edition
-- AIDE (`sudo apt install aide`)
-- `needrestart` (`sudo apt install needrestart`)
+- AIDE (`sudo dnf install epel-release -y && sudo dnf install aide -y`)
+- `needs-restarting` (part of `dnf-utils`)
 
 ---
 
@@ -48,18 +48,17 @@ Before touching any packages, take a full inventory of what's installed and what
 
 ```bash
 # List all installed packages with versions
-dpkg -l > /tmp/pre-patch-packages.txt
+rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE}\n' > /tmp/pre-patch-packages.txt
 
 # Show packages with available upgrades
-apt list --upgradable 2>/dev/null | tee /tmp/upgradable.txt
+sudo dnf check-update | tee /tmp/upgradable.txt
 
-# Install apt-show-versions for detailed version tracking
-sudo apt install apt-show-versions -y
-apt-show-versions | grep "upgradeable" > /tmp/upgradeable-versions.txt
+# Detailed version tracking for available upgrades
+dnf list --upgrades > /tmp/upgradeable-versions.txt
 ```
 
 Run a **Nessus Essentials** (or OpenVAS) scan against `192.168.56.10`:
-- Configure a Basic Network Scan targeting your Ubuntu VM
+- Configure a Basic Network Scan targeting your Rocky Linux VM
 - After the scan completes, export the results as a CSV and HTML report
 - Build a vulnerability table categorized by CVSS severity:
 
@@ -69,50 +68,50 @@ Run a **Nessus Essentials** (or OpenVAS) scan against `192.168.56.10`:
 
 Focus on packages with CVSS ≥ 7.0 - these are your patch priority.
 
-### Part 2 - Configure unattended-upgrades
+### Part 2 - Configure dnf-automatic
 
 Install and configure for production-realistic automated patching:
 
 ```bash
-sudo apt install unattended-upgrades apt-listchanges -y
-sudo dpkg-reconfigure --priority=low unattended-upgrades
+sudo dnf install dnf-automatic -y
 ```
 
-Edit `/etc/apt/apt.conf.d/50unattended-upgrades`:
+Edit `/etc/dnf/automatic.conf`:
 
-```
-Unattended-Upgrade::Allowed-Origins {
-    "${distro_id}:${distro_codename}-security";
-};
+```ini
+[commands]
+# Only download+apply security updates automatically:
+upgrade_type = security
+random_sleep = 0
+network_online_timeout = 60
+download_updates = yes
+apply_updates = yes
 
-// Do NOT auto-upgrade these (requires manual testing):
-Unattended-Upgrade::Package-Blacklist {
-    "nginx";
-    "mysql-server";
-};
+# Do NOT auto-upgrade these (requires manual testing):
+exclude_from = nginx,mariadb-server
 
-// Auto-reboot at 2 AM if kernel patch requires it:
-Unattended-Upgrade::Automatic-Reboot "true";
-Unattended-Upgrade::Automatic-Reboot-Time "02:00";
+[emitters]
+# Notify on errors:
+emit_via = email
+system_name = lab04-rocky
 
-// Notify on errors:
-Unattended-Upgrade::Mail "root";
-Unattended-Upgrade::MailReport "on-change";
+[email]
+email_from = root@localhost
+email_to = root
+email_host = localhost
 
-// Remove unused kernel versions:
-Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
-Unattended-Upgrade::Remove-Unused-Dependencies "true";
-```
-
-Edit `/etc/apt/apt.conf.d/20auto-upgrades`:
-```
-APT::Periodic::Update-Package-Lists "1";
-APT::Periodic::Download-Upgradeable-Packages "1";
-APT::Periodic::Unattended-Upgrade "1";
-APT::Periodic::AutocleanInterval "7";
+[base]
+debuglevel = 1
 ```
 
-Test a dry run: `sudo unattended-upgrade --dry-run --debug`
+Enable the timer that drives scheduled runs (Rocky/RHEL uses a systemd timer instead of a cron-style `/etc/apt/apt.conf.d/20auto-upgrades` file):
+
+```bash
+sudo systemctl enable --now dnf-automatic.timer
+systemctl list-timers dnf-automatic.timer
+```
+
+Test a dry run: `sudo dnf-automatic --timer /etc/dnf/automatic.conf 2>&1 | tee /tmp/dnf-automatic-dryrun.txt` (temporarily set `apply_updates = no` first to observe without applying)
 
 ### Part 3 - Initialize AIDE Before Patching
 
@@ -129,13 +128,13 @@ echo "AIDE baseline created: $(date)" | sudo tee /var/log/aide-baseline.log
 Apply all available security updates:
 
 ```bash
-sudo apt update
-sudo apt upgrade -y 2>&1 | tee /tmp/patch-output.txt
+sudo dnf check-update
+sudo dnf upgrade --security -y 2>&1 | tee /tmp/patch-output.txt
 ```
 
 Check if a reboot is required:
 ```bash
-sudo needrestart -b   # batch mode - shows what needs restart
+sudo needs-restarting -r   # exit 0 = no reboot needed, exit 1 = reboot required
 ```
 
 If a kernel update was applied, reboot and verify the system comes back up cleanly:
@@ -147,8 +146,8 @@ uname -r   # confirm running new kernel
 
 Take a post-patch package inventory:
 ```bash
-dpkg -l > /tmp/post-patch-packages.txt
-diff /tmp/pre-patch-packages.txt /tmp/post-patch-packages.txt | grep "^[<>]" > /tmp/patch-delta.txt
+rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE}\n' > /tmp/post-patch-packages.txt
+diff /tmp/pre-patch-packages.txt /tmp/post-patch-packages.txt > /tmp/patch-delta.txt
 ```
 
 ### Part 5 - Run AIDE Post-Patch Check
@@ -187,8 +186,8 @@ For any CVE that is still open after patching:
 
 Write a formal rollback procedure (`lab-04-rollback.md`) that a different engineer could follow if a patch causes a service outage. The procedure must cover:
 
-1. How to identify which packages were installed during the patch window (use `/var/log/apt/history.log`)
-2. How to downgrade a specific package: `sudo apt install package=<old-version>`
+1. How to identify which packages were installed during the patch window (use `/var/log/dnf.rpm.log` and `dnf history`)
+2. How to downgrade a specific package: `sudo dnf downgrade package` (or `sudo dnf history undo <transaction-id>` to revert the whole patch transaction)
 3. How to restore from the VM snapshot taken before patching (if package downgrade fails)
 4. Verification steps after rollback (service health checks, quick Nessus scan)
 5. Who must be notified and how the rollback is documented in the change management system
@@ -199,7 +198,7 @@ Write a formal rollback procedure (`lab-04-rollback.md`) that a different engine
 
 - Pre-patch Nessus/OpenVAS HTML report
 - Vulnerability prioritization table (CVSS-categorized, with fixed versions identified)
-- `/etc/apt/apt.conf.d/50unattended-upgrades` (annotated - explain every non-default setting)
+- `/etc/dnf/automatic.conf` (annotated - explain every non-default setting)
 - `patch-output.txt` - full patch run output
 - `patch-delta.txt` - diff of installed packages before/after
 - AIDE post-patch output with each finding classified (expected vs. unexpected)
@@ -220,9 +219,9 @@ Write a formal rollback procedure (`lab-04-rollback.md`) that a different engine
 Write `lab-04-patch-pipeline.sh` - a script that implements a fully automated patch assessment pipeline:
 
 1. **Pre-patch snapshot:** Use `VBoxManage snapshot` (or VMware equivalent) to programmatically take a pre-patch snapshot named `pre-patch-$(date +%Y%m%d)` before any changes are made
-2. **Vulnerability export:** Use the OpenVAS/Nessus API (or `apt-get --simulate upgrade` output) to enumerate packages with security fixes available and output structured JSON: `[{"package": "openssl", "installed": "3.0.2", "available": "3.0.2-1", "cve": ["CVE-2024-XXXX"], "cvss": 9.8}]`
+2. **Vulnerability export:** Use the OpenVAS/Nessus API (or `dnf check-update`/`dnf list --upgrades` output) to enumerate packages with security fixes available and output structured JSON: `[{"package": "openssl", "installed": "3.0.2", "available": "3.0.2-1", "cve": ["CVE-2024-XXXX"], "cvss": 9.8}]`
 3. **Patch prioritization:** Sort the JSON output by CVSS score descending and apply only packages with CVSS ≥ 7.0 in the first pass
-4. **AIDE pre/post comparison:** Run `aide --init` before, `apt upgrade` for the selected packages, then `aide --check` after, and parse the output to separate expected changes (updated package binaries) from unexpected changes (config files, new binaries not from the package)
+4. **AIDE pre/post comparison:** Run `aide --init` before, `dnf upgrade` for the selected packages, then `aide --check` after, and parse the output to separate expected changes (updated package binaries) from unexpected changes (config files, new binaries not from the package)
 5. **Report generation:** Write a JSON patch report to `/var/log/patch-pipeline/YYYY-MM-DD.json` with: packages patched, CVEs closed, AIDE unexpected findings, total duration
 
 The script must be idempotent - running it a second time the same day should detect there's nothing new to patch and exit cleanly. Submit the script and a screenshot of it running end-to-end.

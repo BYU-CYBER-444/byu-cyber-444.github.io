@@ -23,7 +23,7 @@ Both tracks complete these labs.
 | Lab | Title | Week |
 |---|---|---|
 | [LAB 1]({% link labs/lab-01.md %}) | Environment Setup & Access Verification | Week 1 |
-| [LAB 3]({% link labs/lab-03.md %}) | Active Directory & GPO Configuration | Week 3 |
+| [LAB 3]({% link labs/lab-03.md %}) | Active Directory, GPO & Centralized AAA | Week 3 |
 | [LAB 4]({% link labs/lab-04.md %}) | Patch Management Implementation | Week 4 |
 | [LAB 8]({% link labs/lab-08.md %}) | PKI & Certificate Management | Week 8 |
 
@@ -52,7 +52,7 @@ Both tracks complete these labs.
 |---|---|---|
 | [IT LAB 2]({% link labs/it-lab-02.md %}) | Linux Network Services | Week 2 |
 | [IT LAB 5]({% link labs/it-lab-05.md %}) | Data Center Site Survey Exercise | Week 5 |
-| [IT LAB 6]({% link labs/it-lab-06.md %}) | HAProxy & keepalived High Availability | Week 6 |
+| [IT LAB 6]({% link labs/it-lab-06.md %}) | HAProxy, keepalived High Availability & Centralized Logging | Week 6 |
 | [IT LAB 7]({% link labs/it-lab-07.md %}) | DNSSEC & Email Security Configuration | Week 7 |
 | [IT LAB 9]({% link labs/it-lab-09.md %}) | Cloud Infrastructure Provisioning | Week 9 |
 | [IT LAB 10]({% link labs/it-lab-10.md %}) | Cloud IAM & Security Configuration | Week 10 |

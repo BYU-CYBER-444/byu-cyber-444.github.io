@@ -7,7 +7,7 @@ nav_order: 105
 # IT LAB 5 - Data Center Site Survey Exercise
 {: .no_toc }
 
-**Duration:** ~3 hours &nbsp;·&nbsp; **Week:** Week 5 &nbsp;·&nbsp; **Track:** IT
+**Duration:** ~3.75 hours &nbsp;·&nbsp; **Week:** Week 5 &nbsp;·&nbsp; **Track:** IT
 {: .fs-5 }
 
 <details open markdown="block">
@@ -26,6 +26,7 @@ nav_order: 105
 - Assess cooling infrastructure using PUE calculations and hot/cold aisle containment
 - Identify physical security control gaps and propose remediations
 - Produce a formal site assessment report with tier classification and upgrade roadmap
+- Assess the security posture of an out-of-band management interface (IPMI/iDRAC/iLO) and, optionally, operate one directly
 
 ---
 
@@ -34,6 +35,10 @@ nav_order: 105
 - Provided data center design documents (see scenario below)
 - Calculator or spreadsheet for PUE and power calculations
 - Word processor or Markdown for assessment report
+- Part 6 (optional hands-on path): `ipmitool`, and either QEMU with `-device ipmi-bmc-sim` or a containerized OpenBMC image
+
+{: .note }
+Real out-of-band management hardware (an actual iDRAC/iLO card) isn't something most students have access to. Part 6 is written so the security-assessment half works from the provided configuration excerpt regardless of hardware access, with a hands-on option for students who want to actually drive a simulated BMC.
 
 ---
 
@@ -218,6 +223,44 @@ Estimated Investment to Reach Tier III: $[range]
 
 ---
 
+### Part 6 - Out-of-Band Management Assessment (30 min + optional hands-on)
+
+Every server in Meridian's rack has an IPMI/iDRAC/iLO card - a small independent computer with its own network port, CPU, and power supply that lets an administrator manage the server (power on/off, remote console, sensor readings) even when the OS is unresponsive or the server is powered down. It's also one of the most under-hardened parts of a real data center, because it's easy to forget it's there.
+
+**Security assessment (required, no hardware needed):**
+
+You are given the following excerpt from Meridian's iDRAC configuration export:
+
+```
+iDRAC Network Settings:
+  IP Address: 10.0.0.50 (same VLAN as production application servers)
+  IPMI over LAN: Enabled
+  Web interface: HTTPS, self-signed certificate (never replaced since factory install)
+  Local users:
+    root / calvin          <- factory default account, still active
+    svc-monitor / Monitor123
+  SNMP: v1 enabled, community string "public"
+  Firmware version: 2.10.10.10 (released 4 years ago; current is 6.10.30.20)
+```
+
+Write a findings table (same format as Part 4) identifying at least 4 distinct issues, and for each: what an attacker could do with it, and the specific remediation. At minimum your findings must cover: the factory-default credential, the management-plane network placement, and firmware currency.
+
+**Optional hands-on:** stand up a simulated BMC and drive it with `ipmitool`:
+
+```bash
+# Using QEMU's built-in IPMI BMC simulator (attach to any VM definition)
+# -device ipmi-bmc-sim,id=bmc0 -device isa-ipmi-kcs,bmc=bmc0
+
+ipmitool -I open sensor list
+ipmitool -I open chassis power status
+ipmitool -I open chassis power cycle
+ipmitool -I open sel list      # system event log - what a real BMC records independent of the OS
+```
+
+If you try this, capture the `sensor list` and `sel list` output and note one way this out-of-band view differs from what a compromised or powered-off host OS could tell you.
+
+---
+
 ## Deliverables
 
 1. Completed Tier Classification Table with current tier determination and justification
@@ -225,6 +268,7 @@ Estimated Investment to Reach Tier III: $[range]
 3. PUE calculation, industry benchmark comparison, and cooling remediation cost analysis
 4. Five physical security findings in structured format
 5. Complete Site Assessment Report with Executive Summary and Upgrade Roadmap
+6. Out-of-band management findings table (4+ issues) and, if attempted, the hands-on BMC output
 
 ---
 
@@ -232,11 +276,12 @@ Estimated Investment to Reach Tier III: $[range]
 
 | Item | Points |
 |------|--------|
-| Tier classification table + current tier determination | 20 |
-| Power architecture calculations (correct math required) | 25 |
-| PUE analysis + cooling remediation | 20 |
-| Physical security findings (5, structured) | 20 |
-| Site Assessment Report with Executive Summary | 15 |
+| Tier classification table + current tier determination | 18 |
+| Power architecture calculations (correct math required) | 22 |
+| PUE analysis + cooling remediation | 18 |
+| Physical security findings (5, structured) | 17 |
+| Site Assessment Report with Executive Summary | 13 |
+| Out-of-band management findings (4+, structured) | 12 |
 | **Total** | **100** |
 
 ---
@@ -276,5 +321,9 @@ Estimated Investment to Reach Tier III: $[range]
 > 3. Identify which gaps would constitute a Material Weakness under SOX Section 404 if Meridian were a public company.
 >
 > Submit your Monte Carlo Python script with output plot and the FFIEC compliance mapping table.
+>
+> ### Extension C - Out-of-Band Management Network Design
+>
+> Meridian's iDRAC interfaces currently share a VLAN with production traffic. Design a proper out-of-band management network: a dedicated physical or VLAN-isolated management network, jump-host/bastion access pattern (no direct internet exposure to any BMC), and a credential-rotation policy for the shared local accounts every BMC ships with. Diagram the proposed network (management VLAN, jump host, firewall rules permitting only bastion→BMC traffic) and write a 1-page justification citing what specific attack this isolation prevents (lateral movement from a compromised production host to every server's BMC in one hop).
 
 [← Back to Labs]({{ site.baseurl }}/labs/)
