@@ -290,6 +290,7 @@ Wiring FreeRADIUS to authenticate against your AD domain itself (rather than the
 ### Extension B - Full RADIUS/LDAP Backend Integration
 
 4. **Point FreeRADIUS at the directory.** Configure the `ldap` module (`/etc/freeradius/3.0/mods-available/ldap`, symlinked into `mods-enabled`) to bind to your AD domain:
+{% raw %}
    ```
    ldap {
        server = '<dc-host>'
@@ -306,6 +307,8 @@ Wiring FreeRADIUS to authenticate against your AD domain itself (rather than the
        }
    }
    ```
+{% endraw %}
+
    Switch the default `authorize` and `authenticate` sections in `/etc/freeradius/3.0/sites-available/default` to use `ldap`. Restart in debug mode and re-run `radtest` with a **real directory account**. Paste the debug output and identify the specific line where FreeRADIUS performs the LDAP bind.
 
    {: .tip }
