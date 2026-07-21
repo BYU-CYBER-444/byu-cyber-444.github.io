@@ -64,7 +64,7 @@ The final project has both a Cyber-track and IT-track version; you may pick eith
 
 ### Midterm and final project
 
-The midterm exam and lecture material are the same for both tracks. Midterm questions are drawn from material every student is responsible for (the shared lectures and readings), not from track-specific lab content. You are not at a disadvantage on the midterm because of which track you chose.
+The midterm and lecture material are the same for both tracks. Rather than a written exam, the midterm is a single shared incident-response tabletop scenario: every student works through the same scenario individually, adjudicated by the course's AI Dungeon Master, drawing on material every student is responsible for (the shared lectures and readings), not track-specific lab content. You are not at a disadvantage on the midterm because of which track you chose.
 
 
 ## Student Learning Outcomes
@@ -108,7 +108,7 @@ Students completing the IT Track will additionally be able to:
 |---|---|---|
 | Weekly Labs (14) | 55% | Started in lab session; report due within one week. Most weeks offer a Cyber and an IT version - pick one. |
 | Homework (14) | 30% | Written, scripted, and analysis assignments. Most weeks offer a Cyber and an IT version - pick one. |
-| Midterm Exam | 5% | Week 8, closed-book, 90 min (shared, both tracks) |
+| Midterm Exam | 5% | Week 8, individual tabletop exercise (shared scenario, both tracks) |
 | Final Project | 10% | Weeks 8-15 (Cyber or IT version) |
 
 ### Drop-lowest policy for track assignments
@@ -160,7 +160,7 @@ See the Schedule in Learning Suite for specific due dates and the [Lab index]({%
 Homework assignments are written, scripted, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable such as a gap analysis, a hardening checklist, a policy document, or an Ansible playbook (Cyber Track), or an architecture design, an ITSM workflow, a risk assessment, or a cloud audit (IT Track). Homework follows the same GitHub PR workflow as labs: commit any supporting files, open a pull request, and submit the PR link on Learning Suite. Assignments are due on Tuesdays at 11:59 PM. See the Schedule in Learning Suite for specific due dates and the [Homework index]({% link homework/index.md %}) for which weeks are shared vs. split by track.
 ### Midterm Exam
 
-The midterm is held in class during Week 8 (Tuesday, Oct 20) and covers all material from Weeks 1-7. It is closed-book and closed-note, 90 minutes, and consists of multiple-choice and short scenario-analysis questions. No make-up midterms are given except for university-approved absences arranged in advance.
+The midterm is administered during Week 8 as an individual, AI-adjudicated incident response tabletop exercise covering material from Weeks 1-7 (see [Midterm Exam - Incident Response Tabletop]({% link labs/cyber-lab-tabletop.md %})). Each student works through the same branching scenario alone, making decisions under uncertainty and rolling against posted difficulty checks; the course's AI Dungeon Master narrates encounters and adjudicates outcomes in place of a live proctor. No make-up midterms are given except for university-approved absences arranged in advance.
 
 ### Final Project
 

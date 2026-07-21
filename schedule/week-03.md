@@ -34,9 +34,8 @@ nav_order: 3
 
 | Track | Lab |
 |---|---|
-| **IT Track** | [IT LAB 3 - Windows Server Infrastructure Roles]({% link labs/it-lab-03.md %}) |
-| **Cyber Track** | [LAB 3 - Active Directory & GPO Configuration]({% link labs/lab-03.md %}) |
-| **Both Tracks** | [LAB 3B - Centralized AAA: RADIUS, FreeIPA & Active Directory]({% link labs/lab-radius-aaa.md %}) |
+| **IT Track** | [IT LAB 3 - Windows Server Infrastructure Roles & Centralized AAA]({% link labs/it-lab-03.md %}) |
+| **Cyber Track** | [LAB 3 - Active Directory, GPO & Centralized AAA]({% link labs/lab-03.md %}) |
 
 ---
 
@@ -44,8 +43,8 @@ nav_order: 3
 
 | Track | Assignment |
 |---|---|
-| **Both Tracks** | [HW 3 - Inactive AD Account PowerShell Script]({% link homework/hw-03.md %}) |
-| **Both Tracks** | [HW 3B - RADIUS & LDAP Query Syntax and Log Analysis]({% link homework/hw-radius-ldap-queries.md %}) (due Week 4) |
+| **Cyber Track** | [CYBER HW 3 - Inactive AD Account PowerShell Script & LDAP Filters]({% link homework/hw-03.md %}) |
+| **IT Track** | [IT HW 3 - Windows Infrastructure Governance: Patch Policy, DFS Resilience & Backup Verification]({% link homework/it-hw-03.md %}) |
 
 ---
 

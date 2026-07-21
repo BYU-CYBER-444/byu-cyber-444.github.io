@@ -18,6 +18,8 @@ nav_order: 2
 
 ## Progress Check 1 - Automation
 
+**Due:** End of Week 10
+
 Submit the current state of your Final Project Ansible playbook or Terraform configuration for **one server** in your infrastructure. This checkpoint verifies that your automation is functional and moving toward compliance before you attempt to scan all three servers.
 
 ### Requirements
@@ -50,7 +52,7 @@ Run a CIS-CAT or STIG scan on your target server and include the report. Briefly
 
 ### Submission
 
-Commit your automation directory, README, and scan report to your portfolio site and open a PR titled `Progress Check 1: Automation`. Submit the PR link on Learning Suite.
+Commit your automation directory, README, and scan report to your portfolio site and open a PR titled `Progress Check 1: Automation`. Submit the PR link on Learning Suite by the end of Week 10.
 
 ### Grading Rubric
 
@@ -65,6 +67,8 @@ Commit your automation directory, README, and scan report to your portfolio site
 ---
 
 ## Progress Check 2: Compliance Scans {#progress-check-2}
+
+**Due:** End of Week 12
 
 Submit CIS-CAT and STIG scan reports for **all three servers** in your final project environment. This checkpoint verifies that all servers are actively being hardened and that you are on track to meet compliance targets before the final deadline.
 
@@ -88,7 +92,7 @@ Include a one-page written narrative that covers:
 
 ### Submission
 
-Commit all six scan reports and your progress narrative to your portfolio site and open a PR titled `Progress Check 2 - Compliance Scans`. Submit the PR link on Learning Suite.
+Commit all six scan reports and your progress narrative to your portfolio site and open a PR titled `Progress Check 2 - Compliance Scans`. Submit the PR link on Learning Suite by the end of Week 12.
 
 ### Grading Rubric
 
