@@ -41,7 +41,7 @@ defaults:
 heading_anchors: true
 
 # Footer links
-footer_content: "CYBER 444 · Advanced System Administration &amp; Hardening · <a href='https://github.com/[your-username]/cyb4400'>View on GitHub</a>"
+#footer_content: "CYBER 444 · Advanced System Administration &amp; Hardening · <a href='https://github.com/[your-username]/cyb4400'>View on GitHub</a>"
 
 # Back to top link
 back_to_top: true

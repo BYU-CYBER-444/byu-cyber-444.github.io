@@ -27,6 +27,7 @@ nav_order: 106
 - Test automatic failover, measure failover time, and validate session persistence
 - Tune HAProxy statistics and set up alerting for backend health
 - Centralize HAProxy, keepalived, and Nginx logs from all 4 hosts into Graylog and build an operational dashboard
+- Restrict host exposure with a host-level `nftables` firewall so only required ports are reachable
 
 ---
 
@@ -193,6 +194,31 @@ sudo systemctl enable --now haproxy
 ```
 
 Verify the stats page: `curl -u admin:changeme123 http://10.0.0.11:8404/stats`
+
+**Restrict host exposure.** Right now every port on `lb01`/`lb02` is reachable from anywhere. Lock it down with a host firewall so only the ports HAProxy actually needs are exposed - the stats page in particular has no business being open to the whole network:
+
+```bash
+sudo apt install -y nftables
+sudo tee /etc/nftables.conf << 'EOF'
+#!/usr/sbin/nft -f
+flush ruleset
+table inet filter {
+    chain input {
+        type filter hook input priority 0; policy drop;
+        iif lo accept
+        ct state established,related accept
+        tcp dport { 80, 443 } accept
+        tcp dport 8404 ip saddr 10.0.0.0/24 accept   # stats page: admin subnet only
+        ip protocol vrrp accept                       # keepalived VRRP traffic between lb01/lb02
+        tcp dport 22 ip saddr 10.0.0.0/24 accept
+    }
+}
+EOF
+sudo nft -f /etc/nftables.conf
+sudo systemctl enable nftables
+```
+
+Verify the stats page is no longer reachable from outside the admin subnet, and that HAProxy itself still works normally on 80/443.
 
 ---
 
@@ -450,6 +476,7 @@ A second alert (5xx error-rate threshold), the ITSM ticket handoff, a third pipe
 5. HAProxy stats page screenshot after load test
 6. Backend failure test: DOWN state output + drain vs. maint explanation
 7. rsyslog forwarding configs from all 4 hosts, extractor + pipeline rule configs, 3-panel dashboard screenshot, and the triggered VRRP alert screenshot
+8. `nft list ruleset` from `lb01`/`lb02` and confirmation the stats page is blocked from outside the admin subnet
 
 ---
 
@@ -462,7 +489,8 @@ A second alert (5xx error-rate threshold), the ITSM ticket handoff, a third pipe
 | Failover test with measured failover time | 20 |
 | Load test results and HAProxy stats analysis | 10 |
 | Backend failure simulation and graceful drain | 10 |
-| Log forwarding, pipeline rules, dashboard, and VRRP alert | 25 |
+| Log forwarding, pipeline rules, dashboard, and VRRP alert | 20 |
+| Host firewall restricting stats/SSH exposure | 5 |
 | **Total** | **100** |
 
 ---

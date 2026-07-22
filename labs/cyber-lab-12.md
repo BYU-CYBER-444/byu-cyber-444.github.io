@@ -7,7 +7,7 @@ nav_order: 12
 # CYBER LAB 12 - Docker & Container Security Hardening
 {: .no_toc }
 
-**Duration:** ~3 hours &nbsp;·&nbsp; **Week:** Week 12 &nbsp;·&nbsp; **Track:** Cyber
+**Duration:** ~3.75 hours &nbsp;·&nbsp; **Week:** Week 12 &nbsp;·&nbsp; **Track:** Cyber
 {: .fs-5 }
 
 <details open markdown="block">
@@ -27,6 +27,7 @@ nav_order: 12
 - Configure Docker daemon hardening via `daemon.json`
 - Apply a seccomp profile and verify it restricts syscalls
 - Verify container security posture using `docker inspect`
+- Apply a CIS-style hardening baseline to the hypervisor layer itself and verify VM isolation controls
 
 ---
 
@@ -36,6 +37,7 @@ nav_order: 12
 - docker-bench-security
 - Trivy (`https://github.com/aquasecurity/trivy`)
 - Grype (`https://github.com/anchore/grype`)
+- Administrative access to your course's Proxmox (or equivalent KVM-based) hypervisor node for Part 7
 
 ```bash
 # Install Trivy
@@ -194,6 +196,36 @@ diff ~/lab12-bench-baseline.txt ~/lab12-bench-hardened.txt | grep "^[<>]" | grep
 
 Count how many WARN items moved to PASS. Any remaining WARNs - document why they cannot be remediated in this environment.
 
+### Part 7 - Hypervisor Hardening: Type 1 vs. Type 2 and VM Isolation
+
+Everything you've hardened so far runs *inside* a VM - but the hypervisor underneath it is itself an attack surface, and a VM escape defeats every container control you just applied. This part applies a CIS-style hardening baseline to the hypervisor layer.
+
+**1. Type 1 vs. Type 2 classification and why it matters here.** Your lab environment runs on Proxmox (KVM/QEMU, Type 1 - runs directly on hardware, no host OS in the way). Explain in 3-4 sentences why a Type 1 hypervisor has a smaller attack surface than a Type 2 hypervisor (VirtualBox, VMware Workstation) running as a process on top of a general-purpose host OS, and what that means for the VM-escape blast radius in each case.
+
+**2. Reduce virtual hardware attack surface.** Every unnecessary virtual device (serial port, parallel port, unused USB controller, virtual sound card) is one more thing a compromised guest could try to exploit for an escape. Audit one of your lab VMs' hardware configuration and remove anything not in active use:
+
+```bash
+# Proxmox example - list configured hardware for a VM
+qm config <vmid>
+
+# Remove an unused device, e.g. a serial port
+qm set <vmid> --delete serial0
+```
+
+Document what you removed and why each removed device was unnecessary for that VM's role.
+
+**3. Verify VM isolation at the filesystem level.** A VM's disk image should not be readable by other users on the hypervisor host - if it is, one compromised management account can read every VM's disk offline, bypassing every in-guest control entirely.
+
+```bash
+ls -la /var/lib/vz/images/<vmid>/   # or your storage backend's equivalent path
+```
+
+Confirm the disk image is owned by `root` with no group/other read access, and explain what regular filesystem permissions have to do with hypervisor security.
+
+**4. Harden the hypervisor's own management interface.** Confirm the Proxmox web UI enforces TLS 1.2+ (no legacy SSL/TLS versions), and that access to the management port (8006) is restricted at the network level to the admin subnet - tying directly back to Week 5's out-of-band management hardening and Week 6's network segmentation work, since the hypervisor management plane deserves exactly the same isolation as a server's IPMI card.
+
+**5. Map to a real benchmark.** Pick 3 controls from the CIS VMware ESXi Benchmark (or CIS Microsoft Hyper-V Benchmark) and map each to its closest KVM/Proxmox equivalent - name the control, describe what it requires, and describe the equivalent setting/command in your actual environment (some controls won't have an exact 1:1 equivalent; note that explicitly where true, rather than forcing a false mapping).
+
 ---
 
 ## Submission Requirements
@@ -206,6 +238,7 @@ Count how many WARN items moved to PASS. Any remaining WARNs - document why they
 - Trivy + Grype comparison table for both images
 - Post-hardening docker-bench output and WARN → PASS delta count
 - Written reflection (3-4 sentences): Trivy and Grype reported different CVEs for the same image. What explains this difference, and what are the implications for a real security team's vulnerability management program?
+- Type 1 vs. Type 2 explanation, `qm config` before/after showing removed virtual hardware, disk image permission verification, and the 3-control CIS benchmark mapping table
 
 ---
 
@@ -258,6 +291,13 @@ sudo journalctl -u falco --since "5 minutes ago" | grep -E "WARNING|ERROR"
 ```
 
 For each Falco alert generated: identify the MITRE ATT&CK technique, explain what real attack the rule would detect, and assess the false positive rate (what legitimate action might trigger this rule?).
+
+### Hypervisor Hardening: CIS Benchmark Automation and Escape Research
+
+1. **Automate the CIS mapping.** Take the CIS VMware/Hyper-V benchmark control mapping from Part 7 and extend it to at least 10 controls (instead of 3). For each, write a shell command or script snippet that checks the KVM/Proxmox host's actual current state against that control (pass/fail), producing a structured compliance report similar in spirit to the CIS-CAT work from Week 5 - but for the hypervisor layer instead of the guest OS.
+2. **Research a real VM escape.** Research one publicly documented QEMU/KVM VM escape vulnerability (e.g., VENOM/CVE-2015-3456, or a more recent QEMU CVE). Write a technical analysis covering: what component was vulnerable, what capability the attacker needed inside the guest to trigger it, what they gained on the host, and which of your Part 7 hardening controls (or a control you'd need to add) would have mitigated or detected the exploitation attempt.
+
+Submit your extended compliance-check script with output, and your VM escape research write-up.
 
 ---
 
