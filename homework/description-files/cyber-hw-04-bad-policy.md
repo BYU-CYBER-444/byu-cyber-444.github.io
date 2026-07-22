@@ -10,11 +10,11 @@ nav_exclude: true
 {: .note }
 This is the intentionally flawed draft policy referenced in [CYBER HW 4]({% link homework/cyber-hw-04.md %}) Part 1. Critique it yourself before looking anywhere else - the point of the exercise is to find the gaps independently.
 
-**Document ID:** ACME-SEC-POL-014
-**Version:** 2.3
-**Effective Date:** March 1, 2022
-**Compliance Framework:** PCI-DSS v3.2.1
-**Owner:** IT Department
+**Document ID:** ACME-SEC-POL-014  
+**Version:** 2.3  
+**Effective Date:** March 1, 2022  
+**Compliance Framework:** PCI-DSS v3.2.1  
+**Owner:** IT Department  
 
 ---
 
