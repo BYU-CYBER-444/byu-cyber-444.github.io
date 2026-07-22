@@ -22,7 +22,7 @@ Both tracks complete these labs.
 
 | Lab | Title | Week |
 |---|---|---|
-| [LAB 1]({% link labs/lab-01.md %}) | Environment Setup & Access Verification | Week 1 |
+| [LAB 1]({% link labs/lab-01.md %}) | ITSM Ticketing Orientation | Week 1 |
 | [LAB 3]({% link labs/lab-03.md %}) | Active Directory, GPO & Centralized AAA | Week 3 |
 | [LAB 4]({% link labs/lab-04.md %}) | Patch Management Implementation | Week 4 |
 | [LAB 8]({% link labs/lab-08.md %}) | PKI & Certificate Management | Week 8 |
