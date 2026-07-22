@@ -79,6 +79,6 @@
 table {
   width: 100%;
   font-size: .9rem;
-  thead tr { background-color: #1F3864; color: #fff; }
-  tbody tr:nth-child(even) { background-color: #f2f6fc; }
+  thead th { background-color: #1F3864 !important; color: #fff !important; }
+  tbody tr:nth-child(even) td { background-color: #f2f6fc; }
 }
