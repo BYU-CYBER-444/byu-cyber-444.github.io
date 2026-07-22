@@ -43,9 +43,7 @@ nav_order: 7
 
 | Track | Assignment |
 |---|---|
-| **Cyber Track** | [CYBER HW 7 - Midterm Practice Exam]({% link homework/cyber-hw-07.md %}) (Ungraded) |
-| **IT Track** | [IT HW 7 - IT Track Midterm Practice Exam]({% link homework/it-hw-07.md %}) (Ungraded) |
-
+| **Both Tracks** | [HW 7 - Midterm Practice Exam]({% link homework/hw-07.md %}) (Ungraded) |
 ---
 
 ## Assessments
