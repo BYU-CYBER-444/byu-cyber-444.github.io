@@ -32,8 +32,7 @@ nav_order: 1
 
 | Track | Lab |
 |---|---|
-| **IT Track** | [IT LAB 1 - ITSM Ticketing Orientation]({% link labs/it-lab-01.md %}) |
-| **Cyber Track** | [LAB 1 - Environment Setup & Access Verification]({% link labs/lab-01.md %}) |
+| **Both Tracks** | [LAB 1 - ITSM Ticketing Orientation]({% link labs/lab-01.md %}) |
 
 ---
 
