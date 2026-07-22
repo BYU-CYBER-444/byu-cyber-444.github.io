@@ -95,6 +95,10 @@ Define the emergency break-glass procedure for when MFA is unavailable (authenti
 3. **Post-incident review** - after any break-glass use, what must be reviewed and remediated? Define a 5-item checklist.
 4. **Testing** - how often is the break-glass procedure tested, who conducts the test, and what is documented afterward?
 
+### Part 5 - Zero Trust Mapping (10 pts)
+
+Everything you just built (SSH CA, PAM+MFA, break-glass) is Zero Trust Architecture in practice, even though nothing in Parts 1-4 named it that way. Map each of the 5 ZTA pillars (identity, device, network, application, data) to a specific mechanism from this assignment - for pillars your design doesn't yet cover, say so explicitly and propose what would close the gap. Then answer in 2-3 sentences: which pillar is weakest in what you built, and what's the smallest concrete change that would strengthen it?
+
 ---
 
 ## Deliverable(s)
@@ -114,11 +118,12 @@ Open a PR titled `CYBER HW 13 - SSH CA & MFA` and submit the PR link on Learning
 
 | Criterion | Points |
 |---|---|
-| SSH CA architecture - key storage, TTL justification, revocation gap | 20 |
+| SSH CA architecture - key storage, TTL justification, revocation gap | 17 |
 | SSH CA commands - all 5 commands correct with flags explained | 20 |
-| MFA comparison table - all cells substantive, NIST 800-63B cited | 20 |
-| PAM configuration - publickey+TOTP, service account bypass, sshd_config | 25 |
+| MFA comparison table - all cells substantive, NIST 800-63B cited | 17 |
+| PAM configuration - publickey+TOTP, service account bypass, sshd_config | 21 |
 | Break-glass procedure - auditd rules, checklist, test plan | 15 |
+| Zero Trust pillar mapping - all 5 pillars addressed, gaps identified honestly | 10 |
 
 ---
 

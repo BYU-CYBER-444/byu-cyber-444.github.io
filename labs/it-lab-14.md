@@ -7,7 +7,7 @@ nav_order: 114
 # IT LAB 14 - Major Incident Tabletop Exercise
 {: .no_toc }
 
-**Duration:** ~3 hours &nbsp;·&nbsp; **Week:** Week 14 &nbsp;·&nbsp; **Track:** IT
+**Duration:** ~3.75 hours &nbsp;·&nbsp; **Week:** Week 14 &nbsp;·&nbsp; **Track:** IT
 {: .fs-5 }
 
 <details open markdown="block">
@@ -26,6 +26,7 @@ nav_order: 114
 - Produce real-time incident documentation: timeline, stakeholder communications, and decision log
 - Conduct a Post-Incident Review (PIR) with root cause analysis and corrective action plan
 - Identify gaps in current IR processes and propose measurable improvements
+- Implement and test a real backup/restore procedure for the database at the center of this incident
 
 ---
 
@@ -34,6 +35,7 @@ nav_order: 114
 - ITSM platform (Jira Service Management or instructor-provided)
 - Word processor for documentation
 - Communication tool (Teams/Slack simulation for exercise)
+- A PostgreSQL instance (can be minimal/local) for Part 6
 
 ---
 
@@ -233,8 +235,9 @@ ACTION ITEMS:
   A3  | Require load testing before deploy  | IT Ops       | +14 days | High
   A4  | Document PgBouncer restart runbook  | DB Team      | +7 days  | High
   A5  | [Add 3 more action items]           |              |          |
+  A9  | [Backup/restore procedure - added in Part 6] |    |          |
 
-  [Write full descriptions for all 8 action items - each should be specific,
+  [Write full descriptions for all 9 action items - each should be specific,
   measurable, and address a specific gap identified in "What Went Poorly"]
 
 METRICS:
@@ -298,14 +301,45 @@ Write a 150-word analysis comparing your metrics to industry benchmarks. Referen
 
 ---
 
+### Part 6 - Technical Follow-Through: Database Backup & Restore (30 min)
+
+This whole exercise has been process and communication - the tabletop never actually touched the database. One of your PIR action items should be preventing a *worse* version of this incident (actual data loss, not just a connection pool exhaustion), so implement it for real:
+
+```bash
+# Install PostgreSQL if not already present
+sudo apt install -y postgresql postgresql-contrib
+
+# Create a test database standing in for the core banking DB
+sudo -u postgres createdb bankingdb
+sudo -u postgres psql bankingdb -c "CREATE TABLE accounts (id serial PRIMARY KEY, balance numeric);"
+sudo -u postgres psql bankingdb -c "INSERT INTO accounts (balance) VALUES (1000), (2500), (750);"
+
+# Take a real backup
+sudo -u postgres pg_dump bankingdb > /tmp/bankingdb-backup.sql
+
+# Simulate the "worse" incident: data loss, not just unavailability
+sudo -u postgres psql bankingdb -c "DROP TABLE accounts;"
+
+# Restore and verify
+sudo -u postgres psql bankingdb < /tmp/bankingdb-backup.sql
+sudo -u postgres psql bankingdb -c "SELECT * FROM accounts;"
+```
+
+Time the full restore from the moment data loss is detected to verified-restored data, and compare it against the RTO/RPO targets you'd propose for a real core banking database (this should be much stricter than a typical application server - justify a specific number). Add a 9th action item to your PIR specifically covering this backup procedure, with an owner and due date, matching the style of A1-A8.
+
+Capture the backup file creation, the simulated data loss, the restore output, and your timed RTO/RPO comparison.
+
+---
+
 ## Deliverables
 
 1. P1 incident ticket (screenshot or formatted text)
 2. Bridge opening script + War Room Log (10+ entries with timestamps)
 3. Stakeholder Communication - Update 1 + Resolution Notice
-4. Complete PIR (all sections, 5 Whys reaching systemic root cause, 8 action items)
+4. Complete PIR (all sections, 5 Whys reaching systemic root cause, 9 action items including the backup follow-through)
 5. Three process gap analyses in structured format
 6. IR Metrics Summary table + 150-word analysis
+7. Database backup/restore command output and timed RTO/RPO comparison
 
 ---
 
@@ -313,12 +347,13 @@ Write a 150-word analysis comparing your metrics to industry benchmarks. Referen
 
 | Item | Points |
 |------|--------|
-| Incident declaration + bridge protocol | 15 |
-| War room log (10+ entries) + decision recording | 15 |
-| Stakeholder communications (Update + Resolution) | 15 |
-| PIR - timeline, 5 Whys, contributing factors, action items | 35 |
-| Process gap analyses (3) | 15 |
+| Incident declaration + bridge protocol | 13 |
+| War room log (10+ entries) + decision recording | 13 |
+| Stakeholder communications (Update + Resolution) | 13 |
+| PIR - timeline, 5 Whys, contributing factors, action items | 30 |
+| Process gap analyses (3) | 13 |
 | Metrics summary | 5 |
+| Database backup/restore implementation + RTO/RPO analysis | 13 |
 | **Total** | **100** |
 
 ---
@@ -354,5 +389,15 @@ Write a 150-word analysis comparing your metrics to industry benchmarks. Referen
 > 3. Write a 300-word analysis of why financial institutions face asymmetric regulatory exposure from IT outages vs. security breaches, and how the IR process must accommodate regulatory timelines (some regulators require notification within 36 hours).
 >
 > Submit the Chaos Engineering Test Plan + Policy, and the regulatory analysis + notification draft.
+>
+> ### Extension C - Point-in-Time Recovery and Immutable Backup Design
+>
+> A single `pg_dump` snapshot only recovers to the moment it was taken - a real banking database needs point-in-time recovery to any second, not just the last nightly backup.
+>
+> 1. Configure PostgreSQL WAL archiving (`archive_mode = on`, `archive_command`) and take a base backup with `pg_basebackup`. Demonstrate a point-in-time recovery to a specific timestamp between two transactions, proving you can recover to a moment *before* a bad transaction rather than only to the last full backup.
+> 2. Design (documented, not necessarily implemented) an immutable backup storage tier - object-lock-enabled S3 or equivalent - and explain what specific failure mode it protects against that a normal backup target doesn't (an attacker or a mistaken admin with valid credentials deleting the backups themselves).
+> 3. Write a 1-page cost/RTO tradeoff analysis: point-in-time recovery granularity vs. WAL storage cost vs. recovery complexity - what granularity would you actually recommend for Meridian's core banking database, and why not "recover to any second" as a default for every system?
+>
+> Submit your PITR demonstration output, the immutable storage design, and the tradeoff analysis.
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

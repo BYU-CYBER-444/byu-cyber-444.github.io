@@ -7,7 +7,7 @@ nav_order: 14
 # CYBER LAB 14 - Incident Response Scenario
 {: .no_toc }
 
-**Duration:** ~3 hours &nbsp;&middot;&nbsp; **Week:** Week 14 &nbsp;&middot;&nbsp; **Track:** Cyber
+**Duration:** ~3.75 hours &nbsp;&middot;&nbsp; **Week:** Week 14 &nbsp;&middot;&nbsp; **Track:** Cyber
 {: .fs-5 }
 
 <details open markdown="block">
@@ -26,6 +26,7 @@ nav_order: 14
 - Identify all IOCs using systematic triage commands and map them to MITRE ATT&CK techniques
 - Produce a formal post-incident report with a timestamped attack timeline
 - Verify system integrity after recovery using AIDE
+- Design and test a proper 3-2-1 backup scheme - distinct from the forensic evidence preservation in Phase 5
 
 ---
 
@@ -223,6 +224,33 @@ Write a formal post-incident report using NIST SP 800-61 sections:
 6. **Containment and Eradication Actions** - what you did and when
 7. **Lessons Learned** - 3 specific improvements to prevent recurrence
 
+### Phase 7 - Backup Strategy Design & Recovery Test
+
+Phase 5 used `restic` to preserve forensic evidence - a one-time, incident-driven backup. This phase is different: design and test the **standing backup scheme** this system should have had running the whole time, so a future incident doesn't depend on a clean VM snapshot existing by luck.
+
+**Design a 3-2-1-compliant scheme** for this VM: at minimum 3 copies of the data, on 2 different storage types, with 1 copy offsite/isolated from the live system (so a compromise of the live host can't also destroy the backups - directly relevant given what you just investigated). Document your choice of backup type (full/incremental/differential) and retention schedule, and justify RTO/RPO targets for this specific system given what it does.
+
+**Implement and test it:**
+
+```bash
+# Initialize a backup repository separate from the Phase 5 evidence repo
+restic init --repo /mnt/backup-repo
+
+# Take a real backup of a live application directory (not the evidence you already collected)
+restic -r /mnt/backup-repo backup /var/www /etc
+
+# Simulate data loss
+sudo rm -rf /var/www/html/*
+
+# Restore and verify
+restic -r /mnt/backup-repo restore latest --target /tmp/restore-test
+diff -r /tmp/restore-test/var/www/html /path/to/known-good-copy
+```
+
+Capture the backup creation output, the simulated deletion, and the restore + diff output proving the restore was clean.
+
+Write 2-3 sentences: why is a RAID array or an LVM snapshot (Week 2) not a substitute for this backup scheme, specifically in the context of the ransomware/destructive-attack scenario this course keeps returning to?
+
 ---
 
 ## Submission Requirements
@@ -236,6 +264,7 @@ Write a formal post-incident report using NIST SP 800-61 sections:
 - AIDE post-restore output showing clean system
 - Restic snapshot verification screenshot
 - Formal Post-Incident Report (NIST SP 800-61 structure)
+- Phase 7: 3-2-1 backup design justification, backup/restore/diff command output, and the RAID/snapshot-vs-backup reflection
 
 ---
 
@@ -256,6 +285,16 @@ Write a formal post-incident report using NIST SP 800-61 sections:
    Each rule must include: title, status, description, logsource, detection (selection + condition), falsepositives, level, and MITRE ATT&CK tags. The rules must be specific enough to detect THIS attack, not just generic rules that catch everything.
 
 3. **Test your rules:** Use `sigma convert` to translate your rules to a format compatible with your Graylog SIEM from Lab 11 and verify they would have produced an alert if they had been running during the attack.
+
+### Immutable Backups and Ransomware Resilience
+
+A standard backup repository can itself be encrypted or deleted by an attacker who gains the credentials used to write to it - which is exactly what modern ransomware targets first. Harden your Phase 7 backup scheme against this:
+
+1. Configure your restic repository (or an equivalent object-storage-backed repo) with **retention locking / object lock** so that backups within the retention window cannot be deleted or overwritten, even by someone with valid write credentials (e.g., S3 Object Lock in compliance mode, or restic's `--retry-lock`/append-only REST server mode).
+2. Demonstrate the protection: attempt to delete or modify a locked backup and show it's refused.
+3. Write a 1-page analysis: given the incident you just investigated, what would have happened to a *non-immutable* backup repository if the attacker had pivoted to it before you contained the incident? What's the operational cost of immutability (storage cost, inability to fix a genuine mistake quickly), and how do you decide the retention window?
+
+Submit your locked-repository configuration, the refused-deletion proof, and your analysis.
 
 ---
 

@@ -4,15 +4,13 @@ nav_order: 4
 has_children: true
 permalink: /homework/
 ---
-
+TODO: check over it
 # Homework Assignments
 {: .no_toc }
 
-20% of course grade · Due dates listed in each assignment page and on the [Schedule]({% link schedule/index.md %}).
-{: .fs-5 .fw-300 }
 
 {: .important }
-All homework assignments are submitted through a **GitHub pull request** on your portfolio site. Write your response in the file path listed in the assignment, commit any supporting files to `homework/assets/`, open a PR, and paste the PR link into Learning Suite by the due date.
+All homework assignments are submitted through a **GitHub pull request** on your repo site. Commit any supporting files to `homework/assets/`, open a PR, and paste the PR link into Learning Suite by the due date.
 
 ---
 
@@ -23,7 +21,7 @@ Both tracks complete these assignments.
 | # | Title | Due | Points |
 |---|---|---|---|
 | [HW 1]({% link homework/hw-01.md %}) | Syllabus Quiz | Week 2 | 100 |
-
+| [HW 7]({% link homework/hw-07.md %}) | Midterm Practice Exam | Week 8 | Ungraded |
 
 ---
 
@@ -36,7 +34,6 @@ Both tracks complete these assignments.
 | [CYBER HW 4]({% link homework/cyber-hw-04.md %}) | Patch Management & Vulnerability Policy | Week 5 | 100 |
 | [CYBER HW 5]({% link homework/cyber-hw-05.md %}) | CIS Benchmark Gap Analysis & Remediation Plan | Week 6 | 100 |
 | [CYBER HW 6]({% link homework/cyber-hw-06.md %}) | STIG Assessment, POAM & Automated Remediation | Week 7 | 100 |
-| [CYBER HW 7]({% link homework/cyber-hw-07.md %}) | Midterm Practice Exam | Week 8 | Ungraded |
 | [CYBER HW 8]({% link homework/cyber-hw-08.md %}) | Windows Hardening Deep Dive | Week 9 | 100 |
 | [CYBER HW 9]({% link homework/cyber-hw-09.md %}) | Ansible Hardening Playbook: Advanced Features & Testing| Week 10 | 100 |
 | [CYBER HW 10]({% link homework/cyber-hw-10.md %}) | Configuration Drift: Detection, Threat Modeling & Monitoring | Week 11 | 100 |
@@ -56,7 +53,6 @@ Both tracks complete these assignments.
 | [IT HW 4]({% link homework/it-hw-04.md %}) | RFC Writing & Change Risk Analysis | Week 5 | 100 |
 | [IT HW 5]({% link homework/it-hw-05.md %}) | Data Center Risk Assessment & Remediation Roadmap | Week 6 | 100 |
 | [IT HW 6]({% link homework/it-hw-06.md %}) | HA Infrastructure Design with Failure Analysis | Week 7 | 100 |
-| [IT HW 7]({% link homework/it-hw-07.md %}) | IT Track Midterm Practice Exam | Week 8 | Ungraded |
 | [IT HW 8]({% link homework/it-hw-08.md %}) | Windows Server Infrastructure Design | Week 9 | 100 |
 | [IT HW 9]({% link homework/it-hw-09.md %}) | Cloud Migration Plan with IaC | Week 10 | 100 |
 | [IT HW 10]({% link homework/it-hw-10.md %}) | IAM Audit & Least-Privilege Remediation | Week 11 | 100 |

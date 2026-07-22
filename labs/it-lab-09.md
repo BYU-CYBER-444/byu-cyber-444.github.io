@@ -7,7 +7,7 @@ nav_order: 109
 # IT LAB 9 - Cloud Infrastructure Provisioning with Terraform
 {: .no_toc }
 
-**Duration:** ~3 hours &nbsp;·&nbsp; **Week:** Week 9 &nbsp;·&nbsp; **Track:** IT
+**Duration:** ~3.75 hours &nbsp;·&nbsp; **Week:** Week 9 &nbsp;·&nbsp; **Track:** IT
 {: .fs-5 }
 
 <details open markdown="block">
@@ -21,6 +21,7 @@ nav_order: 109
 
 ## Objectives
 
+- Create, clone, snapshot, and resize a VM on a Type 1 hypervisor - the on-prem operations skill Terraform automates for you in the cloud
 - Deploy a multi-tier AWS architecture using Terraform (VPC, subnets, security groups, EC2, RDS)
 - Implement remote state with S3 backend and state locking with DynamoDB
 - Use Terraform modules to enforce reusable, consistent infrastructure patterns
@@ -31,6 +32,7 @@ nav_order: 109
 
 ## Tools Required
 
+- Access to your course's Proxmox (or equivalent) hypervisor environment (Part 1)
 - AWS Academy Learner Lab or equivalent AWS sandbox account
 - Terraform v1.5+ (`terraform --version`)
 - AWS CLI v2 configured with sandbox credentials
@@ -48,7 +50,53 @@ This lab treats IaC as a production discipline: remote state prevents concurrent
 
 ## Procedure
 
-### Part 1 - Terraform Project Structure and Remote State (30 min)
+### Part 1 - On-Prem Virtualization: VM Lifecycle Operations (35 min)
+
+Before Terraform automates infrastructure in the cloud, it's worth spending real time on the on-prem equivalent - because most organizations still run a hypervisor fleet, and "spin up a VM" is a core IT-ops skill regardless of where it runs.
+
+**Create a VM from a template:**
+
+```bash
+# Proxmox example - adjust for your hypervisor
+qm clone 9000 201 --name it-lab9-vm --full
+qm set 201 --memory 2048 --cores 2
+qm start 201
+```
+
+Confirm the VM boots and is reachable (console or SSH).
+
+**Take a snapshot before a risky change, make the change, then decide whether to keep it or roll back:**
+
+```bash
+qm snapshot 201 pre-change-snapshot --description "before installing test package"
+# ...make a change inside the VM (install a package, edit a config)...
+qm listsnapshot 201
+# To roll back:
+qm rollback 201 pre-change-snapshot
+```
+
+**Resize the VM live (or with a brief restart if your hypervisor doesn't support hot-resize):**
+
+```bash
+qm set 201 --memory 4096 --cores 4
+qm reboot 201   # only if the resize isn't hot-applied
+```
+
+Confirm the new resources are visible inside the guest OS (`free -h`, `nproc`).
+
+**Live migration (if your lab environment has 2+ hypervisor hosts):**
+
+```bash
+qm migrate 201 <target-node> --online
+```
+
+If only one hypervisor host is available in your environment, document the command and explain what happens during a live migration instead (memory state transfer, brief network blip, no reboot) - this is explicitly optional depending on what your lab environment provides.
+
+Capture: the clone/create command and confirmation the VM booted, the snapshot/rollback sequence with before-and-after state, the resize confirmation from inside the guest, and either live migration evidence or your written explanation of the process.
+
+---
+
+### Part 2 - Terraform Project Structure and Remote State (30 min)
 
 **1.1 Create project directory structure**
 
@@ -115,7 +163,7 @@ terraform {
 
 ---
 
-### Part 2 - VPC Module (40 min)
+### Part 3 - VPC Module (40 min)
 
 **`modules/vpc/variables.tf`**
 
@@ -224,7 +272,7 @@ output "private_subnet_ids" { value = aws_subnet.private[*].id }
 
 ---
 
-### Part 3 - Web Server Module and Main Configuration (50 min)
+### Part 4 - Web Server Module and Main Configuration (50 min)
 
 **`modules/webserver/main.tf`**
 
@@ -376,7 +424,7 @@ admin_cidr           = "0.0.0.0/0"  # Restrict in production
 
 ---
 
-### Part 4 - Plan, Apply, and Verify (30 min)
+### Part 5 - Plan, Apply, and Verify (30 min)
 
 ```bash
 cd cloud-lab
@@ -415,7 +463,7 @@ done
 
 ---
 
-### Part 5 - Change Management: Plan Output for CAB (30 min)
+### Part 6 - Change Management: Plan Output for CAB (30 min)
 
 A change request to add a third web server and change instance type from `t3.micro` to `t3.small` needs CAB approval. Modify `terraform.tfvars`:
 
@@ -441,7 +489,7 @@ Write a **CAB Submission** that interprets the Terraform plan for non-technical 
 
 ---
 
-### Part 6 - Cleanup
+### Part 7 - Cleanup
 
 ```bash
 terraform destroy -auto-approve
@@ -453,12 +501,13 @@ Verify all resources are removed: `terraform state list` should return empty.
 
 ## Deliverables
 
-1. Complete Terraform project (all `.tf` files - paste into submission)
-2. `terraform plan` output from initial deployment
-3. `terraform state list` output after successful apply
-4. AWS console screenshots or CLI output showing running instances with correct tags
-5. Proposed change `terraform plan` output for the third-instance change
-6. CAB Submission document interpreting the plan for non-technical reviewers
+1. VM lifecycle evidence: clone/create, snapshot/rollback sequence, resize confirmation, and live migration output or written explanation
+2. Complete Terraform project (all `.tf` files - paste into submission)
+3. `terraform plan` output from initial deployment
+4. `terraform state list` output after successful apply
+5. AWS console screenshots or CLI output showing running instances with correct tags
+6. Proposed change `terraform plan` output for the third-instance change
+7. CAB Submission document interpreting the plan for non-technical reviewers
 
 ---
 
@@ -466,10 +515,11 @@ Verify all resources are removed: `terraform state list` should return empty.
 
 | Item | Points |
 |------|--------|
-| VPC module with all components (IGW, NAT, subnets, route tables) | 25 |
-| Web server module with IMDSv2, encrypted volumes, tagging | 25 |
-| Remote state with S3 + DynamoDB backend | 15 |
-| Successful apply with verification evidence | 20 |
+| VM lifecycle operations: clone, snapshot/rollback, resize, migration | 12 |
+| VPC module with all components (IGW, NAT, subnets, route tables) | 21 |
+| Web server module with IMDSv2, encrypted volumes, tagging | 21 |
+| Remote state with S3 + DynamoDB backend | 13 |
+| Successful apply with verification evidence | 18 |
 | CAB Submission document for proposed change | 15 |
 | **Total** | **100** |
 
@@ -507,5 +557,11 @@ Verify all resources are removed: `terraform state list` should return empty.
 >    - Estimate the savings from each optimization
 >
 > Submit OPA policy files with test outputs and the Infracost report with 300-word optimization analysis.
+>
+> ### Extension C - Resource Pools and Storage Migration
+>
+> 1. Create a resource pool on your hypervisor with defined CPU/memory limits and reservations, place 2+ VMs in it, and demonstrate that a VM inside the pool cannot exceed the pool's ceiling even when the host has spare capacity. Document the commands and the observed enforcement.
+> 2. If your hypervisor environment supports it, perform a storage migration (moving a VM's disk to different underlying storage while it keeps running) and document the process; if not available, write a detailed explanation of how storage vMotion/live storage migration works (mirrored writes during copy, cutover) and what workloads are riskiest to migrate this way (high-write-rate databases).
+> 3. Compare resource pool design to Kubernetes resource requests/limits (Week 12) in a half-page analysis - what's structurally the same, and what's different about the failure mode when you get the numbers wrong in each system?
 
 [← Back to Labs]({{ site.baseurl }}/labs/)
