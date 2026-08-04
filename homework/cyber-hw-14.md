@@ -1,10 +1,9 @@
 ---
-title: "CYBER HW 14 - Incident Response Report & HIPAA Breach Analysis"
+title: "CYBER HW 14 - Container Security Audit & Hardened Deployment"
 parent: Homework
 nav_order: 14
 ---
-
-# CYBER HW 14 - Incident Response Report & HIPAA Breach Analysis
+# CYBER HW 14 - Container Security Audit & Hardened Deployment
 {: .no_toc }
 
 <details open markdown="block">
@@ -16,98 +15,75 @@ nav_order: 14
 
 ---
 
-## Overview
-
-| | |
-|---|---|
-| **Assignment** | CYBER HW 14 |
-| **Points** | 100 |
-| **Due** | Week 15 |
-| **Track** | Cyber |
-
----
-
 ## Description
 
-Using the compromised Ubuntu server from **Lab 14**, produce the full incident response package that a security team would deliver after a confirmed breach of a HIPAA-regulated system.
+### Part 1 - Dockerfile Audit (30 pts)
 
-### Part 1 - Formal Post-Incident Report (35 pts)
+A vulnerable Dockerfile is provided: [Acme Widgets Co. - Vulnerable Dockerfile]({% link homework/description-files/cyber-hw-14-dockerfile.md %}). Identify and fix every security issue.
 
-Following NIST SP 800-61 Rev. 2 structure:
+For each issue found, document:
 
-1. **Incident header** - incident ID, dates/times (detection, containment, eradication, recovery), duration, severity, affected systems with asset classification (does this system store/process/transmit PHI?)
-
-2. **Executive summary** - 2 paragraphs maximum, non-technical, written for a hospital CISO who will also send this to legal counsel. Must state what happened, what data was at risk, and what was done. Do not minimize - be accurate.
-
-3. **Detailed timeline** - every action from "attacker first touched the system" through "system restored to production" with timestamps, actor, and source (which log file or artifact you found this in). Mark each event's confidence: **Confirmed** (in logs), **Probable** (inferred from evidence), or **Possible** (hypothesized).
-
-4. **Root cause analysis** - use the 5 Whys method. The final cause must be systemic.
-
-5. **Forensic evidence summary** - list every artifact you collected during Lab 14 and its evidentiary value:
-
-| Artifact | Collection Method | Hash (MD5/SHA256) | Evidentiary Value |
-|---|---|---|---|
-
-For at least 3 artifacts, explain the chain of custody: who collected it, how it was stored, and how you verified it was not modified after collection.
-
-6. **Impact assessment** - was PHI accessed, exfiltrated, or modified? For each answer: what is your evidence (or lack thereof)? This matters for HIPAA breach determination.
-
-7. **What went well** - at least 3 specific items
-
-8. **Improvement recommendations** - at least 5, each owned, dated, and measurable
-
-### Part 2 - IOC List & Threat Intelligence (20 pts)
-
-Extract and document all Indicators of Compromise from your Lab 14 investigation:
-
-| IOC Type | Value | First Seen | Last Seen | Confidence | MITRE ATT&CK |
+| Issue # | Line # | Issue Type | Risk Description | MITRE ATT&CK Technique | Corrected Dockerfile Line |
 |---|---|---|---|---|---|
+| Ex. | *(illustrative only - not one of the issues in your provided Dockerfile; find your own 8+)* | Private key copied into image (`COPY id_rsa /root/.ssh/id_rsa`) | SSH private key becomes permanently recoverable from any pulled copy of the image via `docker history`/`docker save`, even if a later layer deletes the file | T1552.004 - Unsecured Credentials: Private Keys | Line removed entirely; key never enters the image - mounted at runtime via a secret store instead |
 
-Minimum IOCs to document: the initial access vector, the persistence mechanism, any lateral movement or privilege escalation artifacts, and any data staging or exfiltration indicators.
+Issue types to look for: running as root, unpinned base image (floating tag), secrets in environment variables or build args, world-readable sensitive files, unnecessary packages installed, no HEALTHCHECK defined, missing `--no-install-recommends`, exposed unnecessary ports, missing `.dockerignore` patterns.
 
-For **2 IOCs** (at least one IP address or domain), perform OSINT lookups using VirusTotal, AbuseIPDB, or Shodan. Report your findings and how they affect your attribution confidence.
+You must find **at least 8 issues**. Provide the full corrected Dockerfile as a deliverable.
 
-Write a **threat actor profile** (1 paragraph): based on the TTPs observed, what type of attacker is this? (Opportunistic/targeted, skill level, likely motivation.) What is your confidence level and what evidence supports vs. undermines your assessment?
+### Part 2 - Docker Compose Security Audit (30 pts)
 
-### Part 3 - HIPAA Breach Determination (25 pts)
+A Docker Compose file is provided: [Acme Widgets Co. - Vulnerable Docker Compose Stack]({% link homework/description-files/cyber-hw-14-docker-compose.md %}). It defines a 3-service stack: web (Nginx), app (Python), and database (PostgreSQL). For each of the **10 security improvements** you identify, document:
 
-Apply the HIPAA Breach Notification Rule (45 CFR §164.400-414) to your incident:
+| CIS Docker Benchmark Control # | Title | Current State | Risk | Remediated Compose Snippet | Priority |
+|---|---|---|---|---|---|
+| Secrets management (CIS/NIST guidance) | No plaintext passwords in environment variables | *Illustrative example only - not one of your 10; your provided stack doesn't have a `cache` service.* A hypothetical `cache` service setting `REDIS_PASSWORD=cachepass123` directly in `environment:` | Any principal who can read the Compose file or run `docker inspect` has the credential in cleartext | `secrets:` top-level block (file-backed), consumed via `REDIS_PASSWORD_FILE` pointing at `/run/secrets/redis_password` | P1 |
 
-**Step 1 - Was PHI involved?** Based on your forensic evidence, state whether the compromised system stored, processed, or transmitted PHI. If you cannot determine this from the evidence, state what additional investigation would be needed.
+Your 10 improvements must include:
+- At minimum 2 that address privilege escalation (user mapping, capabilities)
+- At minimum 2 that address secret management (no plaintext passwords in environment variables - implement Docker secrets or a `.env` file with proper permissions)
+- At minimum 1 that addresses network segmentation (don't put all services on the same network)
+- At minimum 2 that address resource limits (CPU, memory, and pids limits)
+- At minimum 1 read-only filesystem mount
 
-**Step 2 - Was there a "disclosure"?** Apply the 4-factor risk assessment from the Breach Notification Rule (45 CFR §164.402):
-1. Nature and extent of PHI involved (type of information, likelihood of re-identification)
-2. Who accessed or could have accessed the PHI
-3. Whether PHI was actually acquired or viewed
-4. Extent to which the risk has been mitigated
+Provide the full remediated `docker-compose.yml` as a deliverable.
 
-**Step 3 - Notification determination:** Based on your risk assessment, state whether this constitutes a reportable breach. If yes:
-- Who must be notified and by when? (Affected individuals, HHS, media if >500 individuals)
-- Draft the notification letter to affected individuals (use HHS's required content elements)
+### Part 3 - Container Escape Scenario Analysis (25 pts)
 
-**Step 4 - Notification exemptions:** Does the incident qualify for any exemption from notification (e.g., encrypted data, good-faith access by authorized user)? Apply the exemption criteria and state your conclusion.
+Research the following container escape technique: **cgroup v1 release_agent escape** (CVE-2022-0492 or the classic Felix Wilhelm technique). Write a technical analysis covering:
 
-### Part 4 - Hardening Recommendations (20 pts)
+1. **How it works** - step-by-step technical explanation of the escape mechanism (what kernel feature is abused, what the attacker does inside the container, what they gain on the host)
+2. **Preconditions** - what must be true for this escape to work? (Specific capabilities, mount permissions, cgroup version, etc.)
+3. **Which of your Docker Compose hardening controls prevent this** - for each relevant control from Part 2, explain precisely why it blocks this specific escape path
+4. **Detection** - what host-level log entries or kernel events would indicate this escape was attempted? Write a specific `auditd` rule that would detect the key syscall in this escape
+5. **Residual risk** - if ALL your Part 2 controls are applied, is this escape completely prevented? If any residual risk remains, what additional control addresses it?
 
-Provide **6 specific hardening recommendations** that would have prevented or limited this breach. For each:
+### Part 4 - Runtime Security Monitoring (15 pts)
 
-1. What it prevents (specific attack step from your timeline)
-2. Implementation: specific tool, configuration, or control
-3. Effort estimate: Low (<4 hrs), Medium (1-5 days), High (>1 week)
-4. Priority: P1 (implement before returning system to production), P2 (implement within 30 days), P3 (implement within 90 days)
+Write a `docker-bench-security.sh` wrapper script that:
 
-At minimum: one recommendation must address backup and recovery (include specific RTO/RPO targets and backup strategy for this system type), and one must address detection/monitoring (specific alert rule or SIEM query that would have detected this attack earlier).
+1. Runs the official CIS Docker Benchmark tool (`docker/docker-bench-security`) against your hardened Compose stack
+2. Parses the output and counts WARN vs. PASS results
+3. Prints a summary and exits with code 1 if more than 5 WARNs remain
+
+Then write a Falco rule (`cyber-hw-12-falco-rules.yml`) that detects the following runtime behavior in any running container:
+- A shell spawned inside a container that is not during a `docker exec` debug session (detect: `container.id != "" and proc.name in (bash, sh, zsh) and not proc.pname in (docker, sshd)`)
+- A container writing to `/etc/` (detect filesystem writes outside of expected paths)
+
+Explain what legitimate use case might trigger each rule as a false positive and how you would tune the rule to reduce that noise.
 
 ---
 
 ## Deliverable(s)
 
-Write your full submission in `homework/cyber-hw-14.md`. Commit to `homework/assets/`:
+Write your full analysis in `homework/cyber-hw-14.md`. Commit to `homework/assets/` using exactly these filenames (the autograder workflow triggers on these exact paths):
 
-- `cyber-hw-14-iocs.csv` - your IOC list
-- `cyber-hw-14-hipaa-notification.md` - your draft breach notification letter (if applicable)
+- `cyber-hw-12-Dockerfile.hardened` - your corrected Dockerfile
+- `cyber-hw-12-docker-compose.hardened.yml` - your remediated Compose file
+- `cyber-hw-12-docker-bench-wrapper.sh` - your benchmark wrapper
+- `cyber-hw-12-falco-rules.yml` - your Falco detection rules
 
-Open a PR titled `CYBER HW 14 - Incident Response Report` and submit the PR link on Learning Suite by the due date.
+Open a PR titled `CYBER HW 14 - Container Security` and submit the PR link on Learning Suite by the due date.
 
 ---
 
@@ -115,17 +91,17 @@ Open a PR titled `CYBER HW 14 - Incident Response Report` and submit the PR link
 
 | Criterion | Points |
 |---|---|
-| Post-incident report - timeline with confidence ratings, 5 Whys, forensic evidence table | 35 |
-| IOC list + OSINT lookups + threat actor profile | 20 |
-| HIPAA breach determination - 4-factor assessment, notification decision | 25 |
-| Hardening recommendations - all 6 specific, prioritized, P1 justified | 20 |
+| Dockerfile audit - 8+ issues, corrected file provided | 30 |
+| Compose audit - 10 controls, all required categories covered | 30 |
+| Container escape analysis - mechanism explained, controls mapped | 25 |
+| Docker Bench wrapper script + Falco rules | 15 |
 
 ---
 
 ## Tip
 
 {: .tip }
-HHS provides a free HIPAA Security Risk Assessment tool and breach notification guidance at hhs.gov/hipaa. The 4-factor risk assessment from 45 CFR §164.402 is what you apply to determine if the incident is a "breach" - not whether PHI exists, but whether the disclosure poses significant risk of harm.
+The CIS Docker Benchmark is free to download from cisecurity.org. Section 4 covers container image hardening (your Dockerfile audit) and Section 5 covers container runtime (your Compose audit). Reference the specific control numbers.
 
 ---
 
@@ -134,38 +110,34 @@ HHS provides a free HIPAA Security Risk Assessment tool and breach notification 
 ##  Graduate Extension - Graduate Students Only
 
 {: .callout-grad }
-> **Required for students enrolled in the graduate section (CS 544 / IT 544). Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
+> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
 
-### Part 5 - Tabletop Exercise Design & Financial Breach Quantification (30 pts)
+### Part 5 - SBOM Pipeline & Container Security Policy (30 pts)
 
-**Tabletop Exercise Facilitator Guide (20 pts)**
+**Software Bill of Materials Pipeline (15 pts)**
 
-Design a full **Tabletop Exercise** based on the ransomware-with-PHI-exfiltration scenario from this assignment. Your facilitator guide (`cyber-hw-14-tabletop.md`) must include:
+Implement a complete SBOM generation and vulnerability scanning pipeline:
 
-1. **Scenario Overview** - 1-page narrative briefing provided to participants before the exercise begins. Do not reveal the full attack chain upfront; provide only the initial symptom (e.g., "at 09:14 Monday, the EHR application team reports the database is unavailable and response times are anomalous").
+1. Use **Syft** (`syft <image> -o spdx-json > sbom.spdx.json`) to generate an SPDX 2.3 SBOM for your hardened image
+2. Feed the SBOM into **Grype** (`grype sbom:sbom.spdx.json -o json > vulns.json`) and produce a vulnerability report
+3. Write a Python script (`cyber-hw-12-sbom-gate.py`) that reads `vulns.json` and:
+   - Fails with exit code 1 if any CRITICAL severity vulnerability exists with a fix available
+   - Prints a formatted summary: total packages, total CVEs by severity, list of CRITICAL CVEs with CVE ID, package, version, and fix version
+   - Exits 0 (pass) if all criticals are either fixed in your image or have no fix available (with a warning)
+4. Integrate this gate as a step in your CI/CD pipeline (GitHub Actions) that runs after the image build and blocks the push if it fails
 
-2. **Inject Schedule** - 5 escalating injects, each with: inject text (what participants are told), inject timing (how many minutes into the exercise), facilitator notes (what a realistic organization should do at this point), and discussion questions (3 per inject).
+Submit your SBOM file, vulnerability report, and a screenshot of the gate passing on your hardened image.
 
-   Injects should progress: initial anomaly → confirmed ransomware → PHI exfiltration confirmed → threat actor contact → HIPAA breach determination deadline.
+**Container Security Policy Document (15 pts)**
 
-3. **Expected Outcomes** - for each inject, document what decisions a mature IR team should make and what common failure modes (wrong decisions) to watch for.
+Write a formal **Container Security Policy** (`cyber-hw-12-security-policy.md`) suitable for adoption by a DevSecOps team. The policy must cover:
 
-4. **Debrief Template** - structured hot-wash questions covering: what went well, what failed, which playbook steps were missing or unclear, and what one process change the team commits to before the next exercise.
-
-**Breach Cost Quantification (10 pts)**
-
-Using the **Ponemon Institute Cost of a Data Breach** methodology, quantify the total financial impact of the incident you analyzed:
-
-| Cost Component | Methodology | Estimated Cost |
-|---|---|---|
-| Detection & Escalation | IR team hours × loaded labor rate + tools/forensics vendor | $ |
-| Notification | Per-record notification cost × affected records | $ |
-| Post-Breach Response | Credit monitoring, call center, legal counsel | $ |
-| Lost Business | Downtime hours × revenue/hour + customer churn estimate | $ |
-| Regulatory Fines | HIPAA fine range for willful neglect (cite 45 CFR §160.404) | $ |
-| **Total** | | $ |
-
-Compare the total breach cost against the estimated cost of implementing the 6 hardening recommendations from Part 4. Calculate the **Return on Security Investment (ROSI)** for each recommendation and rank them by ROSI.
+1. **Approved Base Images** - list of approved base image registries and tags, process for adding new base images, and mandatory review cadence
+2. **SBOM Requirements** - when an SBOM must be generated, where it must be stored, and how long it must be retained
+3. **Image Signing** - requirement for Cosign/Sigstore signing before images are promoted to production, including who holds signing keys and how keys are rotated
+4. **Runtime Security Requirements** - minimum required Falco rules, mandatory seccomp profiles, disallowed capabilities, and required read-only filesystem configuration
+5. **Incident Response** - procedure for a container compromise: isolation steps, forensic artifact collection from a running container (`docker export`, `kubectl debug`), and escalation path
+6. **Supply Chain Threat Model** - a brief STRIDE analysis of your container build pipeline (from developer commit to production deployment) identifying the top 3 threats and mitigations
 
 
 [← Back to Homework]({{ site.baseurl }}/homework/)
