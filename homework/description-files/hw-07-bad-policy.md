@@ -1,5 +1,5 @@
 ---
-title: "CYBER HW 7 - Bad Policy (Critique Exercise)"
+title: "HW 7 - Bad Policy (Critique Exercise)"
 parent: Homework
 nav_exclude: true
 ---
@@ -8,7 +8,7 @@ nav_exclude: true
 {: .no_toc }
 
 {: .note }
-This is the intentionally flawed draft policy referenced in [CYBER HW 4]({% link homework/hw-07.md %}) Part 1. Critique it yourself before looking anywhere else - the point of the exercise is to find the gaps independently.
+This is the intentionally flawed draft policy referenced in [HW 7]({% link homework/hw-07.md %}) Part 1. Critique it yourself before looking anywhere else - the point of the exercise is to find the gaps independently.
 
 **Document ID:** ACME-SEC-POL-014  
 **Version:** 2.3  

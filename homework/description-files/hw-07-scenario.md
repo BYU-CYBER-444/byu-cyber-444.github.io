@@ -1,5 +1,5 @@
 ---
-title: "CYBER HW 7 - Acme Financial Corp Environment Profile"
+title: "HW 7 - Acme Financial Corp Environment Profile"
 parent: Homework
 nav_exclude: true
 ---
@@ -8,7 +8,7 @@ nav_exclude: true
 {: .no_toc }
 
 {: .note }
-This is the reference scenario for [CYBER HW 4]({% link homework/hw-07.md %}) Part 2. It gives you the specific facts about Acme's infrastructure, staffing, and existing tooling your Vulnerability Management Policy needs to be written against. Don't invent facts that contradict this document, and don't leave obvious gaps unaddressed just because the profile doesn't spell out every detail - a real policy author would ask follow-up questions or make (and state) a reasonable assumption.
+This is the reference scenario for [HW 7]({% link homework/hw-07.md %}) Part 2. It gives you the specific facts about Acme's infrastructure, staffing, and existing tooling your Vulnerability Management Policy needs to be written against. Don't invent facts that contradict this document, and don't leave obvious gaps unaddressed just because the profile doesn't spell out every detail - a real policy author would ask follow-up questions or make (and state) a reasonable assumption.
 
 ---
 
@@ -63,4 +63,4 @@ Your policy must resolve all three of these, not merely acknowledge them.
 
 ---
 
-[← Back to CYBER HW 4]({% link homework/hw-07.md %})
+[← Back to HW 7]({% link homework/hw-07.md %})
