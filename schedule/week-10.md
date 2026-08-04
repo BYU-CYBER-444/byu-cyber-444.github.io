@@ -4,28 +4,28 @@ parent: Schedule
 nav_order: 10
 ---
 
-# Week 10 - Automated Hardening & Cloud Security
+# Week 10 - Configuration Management & Cloud Fundamentals
 {: .no_toc }
 
 ---
 
 ## Topics
 
-- Ansible Galaxy and reusable roles; CIS hardening roles (dev-sec.io)
-- Drift detection with `ansible --check`; CI/CD pipeline integration for compliance-as-code
-- Terraform state security (remote backends, state encryption); HashiCorp Vault for secrets
-- Cloud IAM: roles, policies, least privilege, role chaining, service accounts
-- Security groups vs. NACLs; CloudTrail / Azure Monitor audit logging and retention
-- Cloud cost management: tagging strategies, budgets, and alerts
-- Cloud patching strategies: golden AMIs, immutable infrastructure
-- AWS Well-Architected Framework: security pillar overview
-- Docker Compose for multi-service stacks: service definitions, port binding security, image update policies
+- On-prem virtualization administration: VM lifecycle (create/clone from template), snapshots, live resize, live migration - the operational skill IaC automates in the cloud
+- Infrastructure-as-Code (IaC) concepts and security implications
+- Ansible architecture (inventory, playbooks, roles, vault); idempotency and configuration drift detection
+- Terraform basics (providers, state, plan/apply); secrets management in IaC
+- Cloud computing service models: IaaS, PaaS, SaaS, FaaS
+- AWS and Azure core services: VPCs, subnets, route tables, IGW, NAT gateways, EC2/Azure VM lifecycle
+- Cloud storage: S3/Blob, EFS/Azure Files; shared responsibility model
+- AWS CLI and Azure CLI: authentication, core EC2/VPC commands, EBS management, JMESPath output formatting
+- Containers and Docker: images, layers, registries, namespaces, cgroups; essential Docker commands; volumes and networking; Docker Compose
 
 ---
 
 ## Slides
 
-[Week10_Automated_Hardening_and_Cloud_Security.pptx]({{ site.baseurl }}/lectures/Week10_Automated_Hardening_and_Cloud_Security.pptx)
+[Configuration Management & Cloud Fundamentals]({{ site.baseurl }}/lectures/CYBER444_Week09_Configuration_Management_and_Cloud_Fundamentals.pptx)
 
 ---
 
@@ -33,8 +33,7 @@ nav_order: 10
 
 | Track | Lab |
 |---|---|
-| **IT Track** | [IT LAB 10 - Cloud IAM & Security Configuration]({% link labs/it-lab-10.md %}) |
-| **Cyber Track** | [CYBER LAB 10 - Ansible Galaxy Hardening Role]({% link labs/cyber-lab-10.md %}) |
+| **Both Tracks** | [LAB 10 - Ansible Hardening Playbook]({% link labs/lab-10.md %}) |
 
 ---
 
@@ -42,14 +41,7 @@ nav_order: 10
 
 | Track | Assignment |
 |---|---|
-| **Cyber Track** | [CYBER HW 10 - Configuration Drift: Detection, Threat Modeling & Monitoring]({% link homework/cyber-hw-10.md %}) |
-| **IT Track** | [IT HW 10 - IAM Audit & Least-Privilege Remediation]({% link homework/it-hw-10.md %}) |
-
----
-
-## Assessments
-
-None this week.
+| **Both Tracks** | [HW 10 - Ansible Hardening Playbook: Advanced Features & Testing]({% link homework/hw-10.md %}) |
 
 ---
 

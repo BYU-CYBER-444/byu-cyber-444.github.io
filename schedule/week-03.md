@@ -26,7 +26,7 @@ nav_order: 3
 
 ## Slides
 
-[Week03_Windows_Server_Administration.pptx]({{ site.baseurl }}/lectures/Week03_Windows_Server_Administration.pptx)
+[Windows Server Administration]({{ site.baseurl }}/lectures/CYBER444_Week03_Windows_Server_Administration.pptx)
 
 ---
 
@@ -34,8 +34,7 @@ nav_order: 3
 
 | Track | Lab |
 |---|---|
-| **IT Track** | [IT LAB 3 - Windows Server Infrastructure Roles & Centralized AAA]({% link labs/it-lab-03.md %}) |
-| **Cyber Track** | [LAB 3 - Active Directory, GPO & Centralized AAA]({% link labs/lab-03.md %}) |
+| **Both Tracks** | [LAB 3 - Windows Server Infrastructure Roles & Centralized AAA]({% link labs/lab-03.md %}) |
 
 ---
 
@@ -43,14 +42,7 @@ nav_order: 3
 
 | Track | Assignment |
 |---|---|
-| **Cyber Track** | [CYBER HW 3 - Inactive AD Account PowerShell Script & LDAP Filters]({% link homework/hw-03.md %}) |
-| **IT Track** | [IT HW 3 - Windows Infrastructure Governance: Patch Policy, DFS Resilience & Backup Verification]({% link homework/it-hw-03.md %}) |
-
----
-
-## Assessments
-
-None this week.
+| **Both Tracks** | [HW 3 - Inactive AD Account PowerShell Script & LDAP Filters]({% link homework/hw-03.md %}) |
 
 ---
 

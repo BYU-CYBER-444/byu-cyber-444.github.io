@@ -4,28 +4,28 @@ parent: Schedule
 nav_order: 12
 ---
 
-# Week 12 - Container Security & AI Infrastructure
+# Week 12 - Logging, Monitoring & Audit Architecture
 {: .no_toc }
 
 ---
 
 ## Topics
 
-- Hypervisor security: Type 1 vs. Type 2 hardening, VM isolation, CIS VMware/Hyper-V benchmarks
-- Docker security model: namespaces, cgroups, capabilities; CIS Docker Benchmark
-- Kubernetes security basics: RBAC, Network Policies, Pod Security Standards
-- Container image scanning with Trivy; runtime threat detection with Falco
-- AI infrastructure hardware: GPU servers (NVIDIA A100/H100, PCIe vs. NVLink), CUDA driver management
-- AI model serving: Ollama, vLLM, Text Generation Inference (TGI)
-- Resource quotas and isolation for AI workloads (systemd cgroups, NVIDIA MIG)
-- Securing AI systems: model access control, data pipeline security, preventing model exfiltration
-- AI governance: acceptable use policies, data retention, audit logging for model queries
+- Linux `auditd` rule writing (syscall, file watch, key-based); Windows Event Log forwarding (WEF/WEC)
+- Syslog-ng and rsyslog pipelines; centralized log aggregation with Graylog or Elastic
+- Log retention policies and NIST SP 800-92 log management
+- MITRE ATT&CK for log analysis: mapping auditd and Windows Event Log entries to ATT&CK techniques, using ATT&CK Navigator, building detection rules
+- Prometheus data model: metric types, labels, scrape intervals; PromQL instant vectors, range queries, aggregations
+- Grafana dashboard design: panels, variables, thresholds, annotations
+- node_exporter and custom exporters; SNMP for network device monitoring (MIBs, SNMPv3)
+- Alerting rule design: severity levels, routing, avoiding alert fatigue; PagerDuty/OpsGenie integration
+- Capacity planning methodology: trending, forecasting, headroom analysis
 
 ---
 
 ## Slides
 
-[Week12_Container_Security_and_AI_Infrastructure.pptx]({{ site.baseurl }}/lectures/Week12_Container_Security_and_AI_Infrastructure.pptx)
+[Logging, Monitoring & Audit Architecture]({{ site.baseurl }}/lectures/CYBER444_Week12_Logging_Audit_and_Audit_Architecture.pptx)
 
 ---
 
@@ -33,8 +33,9 @@ nav_order: 12
 
 | Track | Lab |
 |---|---|
-| **IT Track** | [IT LAB 12 - AI Inference Server Setup]({% link labs/it-lab-12.md %}) |
-| **Cyber Track** | [CYBER LAB 12 - Docker Security Hardening]({% link labs/cyber-lab-12.md %}) |
+| **Cyber Track** | [CYBER LAB 12 - Centralized Logging with auditd & Graylog]({% link labs/cyber-lab-12.md %}) |
+| **IT Track** | [IT LAB 12 - Prometheus & Grafana Monitoring Stack]({% link labs/it-lab-12.md %}) |
+
 
 ---
 
@@ -42,16 +43,10 @@ nav_order: 12
 
 | Track | Assignment |
 |---|---|
-| **Cyber Track** | [CYBER HW 12 - Container Security Audit & Hardened Deployment]({% link homework/cyber-hw-12.md %}) |
-| **IT Track** | [IT HW 12 - On-Premises AI Inference Server Proposal]({% link homework/it-hw-12.md %}) |
+| **Cyber Track** | [CYBER HW 12 - Audit Log Analysis & Attack Reconstruction]({% link homework/cyber-hw-12.md %}) |
+| **IT Track** | [IT HW 12 - Monitoring Architecture with Alerting Rules & Runbooks]({% link homework/it-hw-12.md %}) |
 
 ---
 
-## Assessments
-
-None this week.
-
----
-
-[← Previous Week]({{ site.baseurl }}/schedule/week-11/)&nbsp;&nbsp;&nbsp;[Next Week →]({{ site.baseurl }}/schedule/week-13/)
+[← Previous Week]({{ site.baseurl }}/schedule/week-11/)&nbsp;&nbsp;&nbsp;[Next Week →]({{ site.baseurl }}/schedule/week-14/)
 {: .text-right }

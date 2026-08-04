@@ -3,6 +3,7 @@ title: Schedule
 nav_order: 3
 has_children: true
 permalink: /schedule/
+has_toc: false
 ---
 
 # Fall 2026 Course Schedule
@@ -17,7 +18,7 @@ permalink: /schedule/
 | [1]({% link schedule/week-01.md %}) | Sept 3 | Introduction & Environment Setup | 
 | [2]({% link schedule/week-02.md %}) | Sept 8 & 10 | Linux Administration Fundamentals | 
 | [3]({% link schedule/week-03.md %}) | Sept 15 & 17 | Windows Server Administration | 
-| [4]({% link schedule/week-04.md %}) | Sept 22 & 24 |  Windows Hardening & Email Security | 
+| [4]({% link schedule/week-04.md %}) | Sept 22 & 24 |  Windows Hardening & DNS/Email Security | 
 | [5]({% link schedule/week-05.md %}) | Sept 29 & Oct 1 | PKI & Certificate Management | 
 | [6]({% link schedule/week-06.md %}) | Oct 6 & 8 | SSH CA, PAM MFA & Enterprise Policy | 
 | [7]({% link schedule/week-07.md %}) | Oct 13 & 15 | Patch Management  | 

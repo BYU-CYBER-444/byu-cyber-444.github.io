@@ -4,28 +4,30 @@ parent: Schedule
 nav_order: 5
 ---
 
-# Week 5 - CIS Benchmarks & Data Center Fundamentals
+# Week 5 - PKI & Certificate Management
+
 {: .no_toc }
 
 ---
 
 ## Topics
 
-- CIS Controls v8 overview; CIS Benchmark Level 1 vs. Level 2
-- Automated assessment with CIS-CAT Pro; remediation prioritization
-- Building an organizational baseline profile; documenting exceptions with risk acceptance rationale
-- Filesystem Integrity Monitoring (FIM): AIDE and Tripwire for detecting unauthorized changes
-- Data center physical security: access control, mantrap design, CCTV placement, tailgating detection
-- Environmental monitoring: temperature/humidity thresholds, hot/cold aisle containment, DCIM tools
-- Power architecture: UPS types, PDU redundancy, generator sizing, 2N+1 design
-- Data center tiers deep dive: SLA implications per tier (Uptime Institute I-IV)
-- Rack management, structured cabling standards (TIA-568), and colocation agreements
+- PKI fundamentals: asymmetric cryptography recap, public/private key pairs, and how digital signatures establish trust without a shared secret
+- X.509 certificate structure and critical extensions: `basicConstraints`, `keyUsage`, `extendedKeyUsage`, and Subject Alternative Names (SANs) - why modern browsers reject certificates without them
+- CA hierarchy design: two-tier (offline Root CA → online Intermediate CA) vs. a single-tier CA, and why keeping the Root CA offline limits the blast radius if the Intermediate is ever compromised
+- Certificate lifecycle: CSR generation, issuance, expiration/renewal windows, and why shorter validity periods reduce the exposure window from an undetected key compromise
+- Certificate revocation: CRL vs. OCSP mechanics, and the staleness/privacy/availability trade-offs between them; OCSP stapling as the practical middle ground
+- TLS handshake mechanics and protocol hardening: TLS 1.2/1.3 only, forward-secrecy cipher suites, and HSTS enforcement
+- Certificate Transparency (CT) logs and real-world CA misissuance incidents (DigiNotar, mis-issued Symantec certs) - why browsers now require CT for publicly-trusted certificates
+- Public CA (Let's Encrypt, DigiCert) vs. private/internal CA: when each is appropriate, and why an internal CA is the right call for internal service-to-service TLS
+- Key management practicalities: private key storage/permissions, passphrase-protected CA keys, and the operational role of Hardware Security Modules (HSMs) in production PKI
+- PKI lab: building a two-tier internal CA, issuing server certificates, configuring CRL/OCSP, validating with `testssl.sh`
 
 ---
 
 ## Slides
 
-[Week05_CIS_Benchmarks_and_Data_Center_Fundamentals.pptx]({{ site.baseurl }}/lectures/Week05_CIS_Benchmarks_and_Data_Center_Fundamentals.pptx)
+[PKI & Certificate Management]({{ site.baseurl }}/lectures/CYBER444_Week05_PKI_and_Certificate_Management.pptx) 
 
 ---
 
@@ -33,25 +35,16 @@ nav_order: 5
 
 | Track | Lab |
 |---|---|
-| **IT Track** | [IT LAB 5 - Data Center Site Survey Exercise]({% link labs/it-lab-05.md %}) |
-| **Cyber Track** | [CYBER LAB 5 - CIS-CAT Pro Benchmark Assessment]({% link labs/cyber-lab-05.md %}) |
+| **Both Tracks** | [LAB 5 - PKI & Certificate Management]({% link labs/lab-05.md %}) |
 
 ---
 
 ## Homework
 
-| Track | Assignment |
-|---|---|
-| **Cyber Track** | [CYBER HW 5 - CIS Benchmark Gap Analysis & Remediation Plan]({% link homework/cyber-hw-05.md %}) |
-| **IT Track** | [IT HW 5 - Data Center Risk Assessment & Remediation Roadmap]({% link homework/it-hw-05.md %}) |
-
----
-
-## Assessments
-
 None this week.
 
 ---
+
 
 [← Previous Week]({{ site.baseurl }}/schedule/week-04/)&nbsp;&nbsp;&nbsp;[Next Week →]({{ site.baseurl }}/schedule/week-06/)
 {: .text-right }

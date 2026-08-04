@@ -4,27 +4,26 @@ parent: Schedule
 nav_order: 4
 ---
 
-# Week 4 - Patch Management & Change Control
+# Week 4 - Windows Hardening & DNS/Email Security
 {: .no_toc }
 
 ---
 
 ## Topics
 
-- Vulnerability lifecycle (CVE, NVD, CVSS v3.1 scoring) and patch priority frameworks
-- Linux patching (`apt`/`dnf` unattended-upgrades) and Windows patching (WSUS)
-- Testing patches in staging, rollback strategies, and patch SLA definitions
-- ITIL change management: Normal, Standard, and Emergency change types
-- Change Advisory Board (CAB): structure, meeting cadence, decision criteria
-- RFC lifecycle, change scheduling, conflict detection, and change calendar management
-- Post-implementation review (PIR) documentation
-- Change metrics and KPIs (success rate, failed changes, emergency change ratio)
+- Windows Security Baseline (Microsoft SCT): AppLocker, WDAC, Credential Guard, BitLocker
+- Windows Firewall with Advanced Security; disabling legacy protocols (SMBv1, NTLMv1)
+- Attack surface reduction rules
+- DNS security: DNSSEC zone signing, trust anchors, validation chain
+- DNS attack types (cache poisoning, amplification, hijacking) and mitigations (RPZ, rate limiting)
+- Email authentication: SPF record structure, DKIM key generation and DNS publishing, DMARC policy modes and reporting
+- Mail server hardening: relay restrictions, TLS enforcement, anti-spam
 
 ---
 
 ## Slides
 
-[Week04_Patch_Management_and_Change_Control.pptx]({{ site.baseurl }}/lectures/Week04_Patch_Management_and_Change_Control.pptx)
+[Windows Hardening and DNS/Email Security.pptx]({{ site.baseurl }}/lectures/CYBER_444_Week04_Windows_Hardening_and_DNS_Email_Security.pptx)
 
 ---
 
@@ -32,8 +31,9 @@ nav_order: 4
 
 | Track | Lab |
 |---|---|
-| **IT Track** | [IT LAB 4 - ITSM Change Management Workflow]({% link labs/it-lab-04.md %}) |
-| **Cyber Track** | [LAB 4 - Patch Management Implementation]({% link labs/lab-04.md %}) |
+| **Cyber Track** | [CYBER LAB 4 - Windows Server 2022 Hardening]({% link labs/cyber-lab-04.md %}) |
+| **IT Track** | [IT LAB 4 - DNSSEC & Email Security Configuration]({% link labs/it-lab-04.md %}) |
+
 
 ---
 
@@ -41,14 +41,9 @@ nav_order: 4
 
 | Track | Assignment |
 |---|---|
-| **Cyber Track** | [CYBER HW 4 - Patch Management & Vulnerability Policy]({% link homework/cyber-hw-04.md %}) |
-| **IT Track** | [IT HW 4 - RFC Writing & Change Risk Analysis]({% link homework/it-hw-04.md %}) |
+| **Cyber Track** | [CYBER HW 4 - Windows Hardening Deep Dive]({% link homework/cyber-hw-04.md %}) |
+| **IT Track** | [IT HW 4 - Windows Server Infrastructure Design]({% link homework/it-hw-04.md %}) |
 
----
-
-## Assessments
-
-None this week.
 
 ---
 

@@ -4,30 +4,28 @@ parent: Schedule
 nav_order: 14
 ---
 
-# Week 14 - Incident Response & Major Incident Management
+# Week 14 - Container Security & AI Infrastructure
 {: .no_toc }
 
 ---
 
 ## Topics
 
-- NIST SP 800-61 IR lifecycle: Prepare, Detect, Contain, Eradicate, Recover, Post-Incident
-- Evidence preservation: live forensics, memory acquisition (LiME), chain of custody
-- System restoration and hardening post-compromise; lessons learned documentation
-- P1/P2 major incident classification criteria and impact assessment
-- War room and bridge call procedures: incident commander, scribe, and technical lead roles
-- SLA breach escalation workflows and stakeholder communication templates
-- Problem management vs. incident management: root cause vs. workaround; Known Error Database (KEDB)
-- Vendor escalation procedures and escalation matrices
-- Backup strategy: 3-2-1 rule, backup types (full/incremental/differential), RTO/RPO, backup encryption
-- Cloud backup services: AWS Backup, Azure Backup, S3 cross-region replication; restore verification
-- DR plan structure: runbook format, communication tree, activation criteria, and role assignments
+- Hypervisor security: Type 1 vs. Type 2 hardening, VM isolation, CIS VMware/Hyper-V benchmarks
+- Docker security model: namespaces, cgroups, capabilities; CIS Docker Benchmark
+- Kubernetes security basics: RBAC, Network Policies, Pod Security Standards
+- Container image scanning with Trivy; runtime threat detection with Falco
+- AI infrastructure hardware: GPU servers (NVIDIA A100/H100, PCIe vs. NVLink), CUDA driver management
+- AI model serving: Ollama, vLLM, Text Generation Inference (TGI)
+- Resource quotas and isolation for AI workloads (systemd cgroups, NVIDIA MIG)
+- Securing AI systems: model access control, data pipeline security, preventing model exfiltration
+- AI governance: acceptable use policies, data retention, audit logging for model queries
 
 ---
 
 ## Slides
 
-[Week14_Incident_Response_and_Major_Incident_Management.pptx]({{ site.baseurl }}/lectures/Week14_Incident_Response_and_Major_Incident_Management.pptx)
+[Container Security & AI Infrastructure]({{ site.baseurl }}/lectures/CYBER444_Week14_Container_Security_and_AI_Infrastructure.pptx)
 
 ---
 
@@ -35,8 +33,9 @@ nav_order: 14
 
 | Track | Lab |
 |---|---|
-| **IT Track** | [IT LAB 14 - Major Incident Tabletop Exercise]({% link labs/it-lab-14.md %}) |
-| **Cyber Track** | [CYBER LAB 14 - Incident Response Scenario]({% link labs/cyber-lab-14.md %}) |
+| **Cyber Track** | [CYBER LAB 14 - Docker & Container Security Hardening]({% link labs/cyber-lab-14.md %}) |
+| **IT Track** | [IT LAB 14 - AI Inference Server Setup and Governance]({% link labs/it-lab-14.md %}) |
+
 
 ---
 
@@ -44,16 +43,10 @@ nav_order: 14
 
 | Track | Assignment |
 |---|---|
-| **Cyber Track** | [CYBER HW 14 - Incident Response Report & HIPAA Breach Analysis]({% link homework/cyber-hw-14.md %}) |
-| **IT Track** | [IT HW 14 - Post-Incident Review & Problem Management]({% link homework/it-hw-14.md %}) |
+| **Cyber Track** | [CYBER HW 14 - Container Security Audit & Hardened Deployment]({% link homework/cyber-hw-14.md %}) |
+| **IT Track** | [IT HW 14 - On-Premises AI Inference Server Proposal]({% link homework/it-hw-14.md %}) |
 
 ---
 
-## Assessments
-
-None this week.
-
----
-
-[← Previous Week]({{ site.baseurl }}/schedule/week-13/)&nbsp;&nbsp;&nbsp;[Next Week →]({{ site.baseurl }}/schedule/week-15/)
+[← Previous Week]({{ site.baseurl }}/schedule/week-12/)&nbsp;&nbsp;&nbsp;[Next Week →]({{ site.baseurl }}/schedule/week-15/)
 {: .text-right }
