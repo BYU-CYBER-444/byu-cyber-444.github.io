@@ -12,13 +12,7 @@ nav_order: 1
 ## Topics
 
 - Course overview and SysAdmin/IT admin roles and responsibilities
-- NICE IO work roles and career frameworks
-- Intro to CIS Controls v8 and DISA STIG framework
-- Toolchain overview (Ansible, Nessus, STIG Viewer)
-- ITIL 4 framework introduction (service management practices)
-- Data center tiers overview (Uptime Institute Tier I-IV)
-- ITSM concepts and tooling overview (ServiceNow, Jira Service Management)
-- IT governance frameworks overview (COBIT, ISO 20000)
+- Proxmox refresher and overview
 
 ---
 
@@ -32,7 +26,7 @@ nav_order: 1
 
 | Track | Lab |
 |---|---|
-| **Both Tracks** | [LAB 1 - ITSM Ticketing Orientation]({% link labs/lab-01.md %}) |
+| **Both Tracks** | [LAB 1 - Proxmox Setup]({% link labs/lab-01.md %}) |
 
 ---
 
@@ -42,11 +36,6 @@ nav_order: 1
 |---|---|
 | **Both Tracks** | [HW 1 - Syllabus Quiz]({% link homework/hw-01.md %}) |
 
----
-
-## Assessments
-
-None this week.
 
 ---
 
