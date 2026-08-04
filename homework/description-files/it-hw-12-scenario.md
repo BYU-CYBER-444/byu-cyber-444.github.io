@@ -19,7 +19,7 @@ This is the reference scenario for [IT HW 12]({% link homework/it-hw-12.md %}). 
 | `medflow-web01`, `medflow-web02` | MedFlow EMR web/app tier - Nginx reverse proxy + Django/Gunicorn | Active-active behind the internal load balancer; VLAN 40 (Server/Infrastructure) |
 | `medflow-db01` | PostgreSQL 15 - MedFlow's primary database | VLAN 40; holds the practice's live EMR data, so its metrics are business-critical |
 | `infra01` | Internal DNS, DHCP, and NTP for the practice's network | VLAN 40; if this goes down, every other host's name resolution degrades, so it's a high-priority target for "node down" alerting |
-| `backup01` | Nightly backup target for MedFlow DB dumps and file shares | VLAN 40; also runs the organization's log-collection host |
+| `backup01` | Nightly backup target for MedFlow DB dumps and file shares, plus a warm-standby PostgreSQL streaming replica of `medflow-db01` | VLAN 40; also runs the organization's log-collection host - this is the replica your PostgreSQL replication-lag alert should reference |
 
 ## Windows Server (1)
 
