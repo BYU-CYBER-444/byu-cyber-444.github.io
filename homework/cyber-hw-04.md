@@ -1,10 +1,9 @@
 ---
-title: "CYBER HW 4 - Patch Management & Vulnerability Policy"
+title: "CYBER HW 4 - Windows Hardening Deep Dive"
 parent: Homework
 nav_order: 4
 ---
-
-# CYBER HW 4 - Patch Management & Vulnerability Policy
+# CYBER HW 4 - Windows Hardening Deep Dive
 {: .no_toc }
 
 <details open markdown="block">
@@ -16,65 +15,64 @@ nav_order: 4
 
 ---
 
-## Overview
-
-| | |
-|---|---|
-| **Assignment** | CYBER HW 4 |
-| **Points** | 100 |
-| **Due** | Week 5 |
-| **Track** | Cyber |
-
----
-
 ## Description
 
-### Part 1 - Policy Critique (20 pts)
+This is a theoretical, written exercise - no VM, script, or lab environment required. You are given a [Windows Server 2022 Configuration Snapshot]({% link homework/description-files/cyber-hw-04-server-config.md %}): 20 findings from a config review of a production file/application server in its current, unhardened state. You will choose 15 of them, document the hardening for each, and analyze how those controls hold up against two real attack techniques.
 
-A draft Patch Management Policy for Acme Financial Corp is linked below. It has multiple deficiencies that would cause it to fail a PCI-DSS audit. Write a structured critique identifying every gap:
+### Part 1 - Hardening Controls Documentation (75 pts)
 
-[Read the draft policy: Acme Financial Corp Patch Management Policy]({% link homework/description-files/cyber-hw-04-bad-policy.md %})
+Choose **15 of the 20 findings** from the [Configuration Snapshot]({% link homework/description-files/cyber-hw-04-server-config.md %}) and document each as a complete hardening control record:
 
-For each deficiency: section it appears in, what is wrong or missing, which PCI-DSS requirement it would fail (cite the specific requirement number from PCI-DSS v4.0), and what the corrected language should say. You must identify **at least 6 deficiencies**.
+| Control # | CIS ID | DISA STIG Rule ID | Control Name | Default State | Hardened State | Implementation Method | Registry Path / GPO Path | How to Verify | Security Impact | Operational Impact |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Ex. | CIS 2.3.7.1 *(example only - not one of the 20 findings; illustrates the expected format)* | WN22-SO-000200 | Interactive logon: Do not display last signed-in | Disabled (logon screen shows the last user's name) | Enabled (last signed-in username is hidden) | GPO: Computer Configuration > Windows Settings > Security Settings > Local Policies > Security Options > "Interactive logon: Do not display last signed-in" | `HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayLastUserName = 1` | Read the registry value and confirm it equals `1` | Confidentiality - prevents username harvesting via shoulder-surfing or a photographed logon screen (T1589 - Gather Victim Identity Information) | Minor - users who rely on a pre-filled username at the logon screen must now type it themselves |
 
-### Part 2 - Full Vulnerability Management Policy (65 pts)
+**Default State** for each control comes directly from the Configuration Snapshot - use the stated current value, don't invent a different one.
 
-Write a complete, production-quality Vulnerability Management Policy for Acme Financial Corp (200 seats, SOX and PCI-DSS regulated, running mixed Linux and Windows infrastructure). Use the [Acme Financial Corp Environment Profile]({% link homework/description-files/cyber-hw-04-scenario.md %}) for the specific infrastructure, staffing, and tooling details your policy needs to reference - a policy that ignores the scenario's actual constraints (e.g., assuming a dedicated scanning tool the company doesn't have, or a security team headcount the company can't staff) will lose points for not being grounded in the assigned environment.
+**Implementation method** must be one of: GPO (with the exact policy path), Registry key edit (with the key path and value), or Group Policy Preference.
 
-1. **Policy statement and governance (10 pts)** - purpose, authority, what happens if this policy is not followed, and roles and responsibilities (CISO, Security Team, System Owners - specific obligations for each, not just titles, matching the roles defined in the Environment Profile)
+**How to Verify** - describe precisely how you'd confirm the control is actually applied (e.g., the specific registry value and path to check, or the specific `Get-*`/`auditpol`/`gpresult` command and what output confirms compliance). Written description is fine - you are not submitting a script.
 
-2. **CVSS-based severity classification & remediation SLA matrix (25 pts)** - define your remediation SLA by CVSS score, but go beyond a simple table. For each severity tier, specify:
-   - CVSS score range
-   - Remediation SLA from vendor disclosure (not from your scan finding it - explain the difference)
-   - Remediation SLA from scan discovery
-   - Business approval required for the fix to proceed (who signs off?)
-   - Include at least 3 real CVEs from the last 2 years as examples and classify them using your matrix (cite CVE ID and CVSS score from NVD)
+**Security Impact** must use CIA Triad framing: which of Confidentiality, Integrity, or Availability does this control protect, and against what specific attack technique (cite MITRE ATT&CK technique ID)?
 
-3. **Vulnerability identification & scanning program (25 pts)** - define:
-   - How new vulnerabilities are identified (vendor mailing lists, NVD feeds, CISA KEV - specify all sources; must be reputable outside sources with a documented risk-ranking process)
-   - Scan frequency by asset type (external-facing vs. internal) and how it satisfies PCI-DSS's quarterly-minimum requirement
-   - Tool(s) used and credentialed vs. uncredentialed scanning (reference what's actually available per the Environment Profile)
-   - Segregation of duties between the person remediating a finding and the person who scans/verifies it
-   - What constitutes a scan "finding" vs. a confirmed "vulnerability," how false positives are handled, and the requirement to rescan until a passing result (or approved exception) is achieved
+**Operational Impact** - what breaks or changes for users when this control is applied? Who needs to be notified?
 
-4. **Exception and risk acceptance process (15 pts)** - for vulnerabilities that cannot be remediated within SLA:
-   - Who can grant an exception (by risk level)
-   - Maximum exception duration
-   - Required compensating controls
-   - How exceptions are tracked and reviewed
-   - What triggers mandatory escalation to the CISO
+Your 15 controls must include at minimum: 3 credential protections, 3 network protections, 3 audit/logging controls, 2 application controls, and 2 attack surface reduction controls (the Configuration Snapshot's findings are grouped so you can identify which is which).
 
-5. **KPIs and compliance metrics (5 pts)** - define at least 5 measurable KPIs the security team will report monthly:
-   - Metric name, formula, and target value
-   - How it maps to PCI-DSS or SOX reporting requirements
+### Part 2 - Attack Scenario Analysis (15 pts)
+
+For the following two attack techniques, analyze how your hardened controls would detect or prevent each:
+
+**Technique 1: Pass-the-Hash (T1550.002)**
+An attacker has dumped NTLM hashes from a workstation using Mimikatz and is attempting lateral movement to your Windows Server.
+
+- Which of your 15 controls specifically prevent or detect this technique?
+- What would the attacker see differently on a hardened system vs. an unprotected system?
+- What Windows Security event IDs would be generated and what would they show?
+
+**Technique 2: Scheduled Task Persistence (T1053.005)**
+An attacker who has gained SYSTEM on one server is creating scheduled tasks to maintain persistence after reboots.
+
+- Which of your controls prevent or detect this?
+- How would you distinguish a malicious scheduled task from a legitimate administrative one in your audit logs?
+
+### Part 3 - Compensating Controls (10 pts)
+
+Two of your 15 hardening controls cannot be applied to a specific server because they break a legacy application that the vendor refuses to update. The controls are: SMBv1 disable and NTLM restriction.
+
+Write a formal compensating control plan for each:
+- What compensating control(s) replace the original control's security intent?
+- Is the compensating control equivalent, stronger, or weaker? Justify.
+- What additional monitoring do you implement to detect exploitation of the known-weak configuration?
+- What is your remediation timeline and who accepts the residual risk?
 
 ---
 
 ## Deliverable(s)
 
-Write your full submission in `homework/cyber-hw-04.md`.
+Write your full analysis in `homework/cyber-hw-04.md`.
 
-Open a PR titled `CYBER HW 4 - Patch Management Policy` and submit the PR link on Learning Suite by the due date.
+Open a PR titled `CYBER HW 4 - Windows Hardening` and submit the PR link on Learning Suite by the due date.
 
 ---
 
@@ -82,19 +80,16 @@ Open a PR titled `CYBER HW 4 - Patch Management Policy` and submit the PR link o
 
 | Criterion | Points |
 |---|---|
-| Policy critique - 6+ deficiencies with PCI-DSS citations | 20 |
-| Policy statement and governance - roles grounded in the Environment Profile | 10 |
-| CVSS matrix - real CVE examples classified | 25 |
-| Scanning program - identification sources, segregation of duties, rescan requirement | 25 |
-| Exception process - approval chain, tracking, escalation | 15 |
-| KPIs - 5 metrics with formulas and targets | 5 |
+| 15 controls - CIS ID, STIG ID, registry/GPO path, ATT&CK mapping | 75 |
+| Attack scenario analysis - specific event IDs, control mapping | 15 |
+| Compensating controls - equivalent intent, monitoring added | 10 |
 
 ---
 
 ## Tip
 
 {: .tip }
-PCI-DSS v4.0 Requirement 6.3.3 requires all software components to be protected from known vulnerabilities. Requirement 11.3.1 specifies internal vulnerability scan frequency. Know those sections before writing your policy.
+When writing your "How to Verify" column, favor a specific registry value or a named `Get-*`/`auditpol` command over "check in the GUI" - it's more precise, and it's exactly the kind of detail a real audit checklist needs even without an actual script attached.
 
 ---
 
@@ -105,25 +100,22 @@ PCI-DSS v4.0 Requirement 6.3.3 requires all software components to be protected 
 {: .callout-grad }
 > **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
 
-### Part 3 - Quantitative Risk Analysis & Federal Alignment (30 pts)
+### Part 4 - Assume-Breach Detection Layer (30 pts)
 
-**Annual Loss Expectancy Calculation (15 pts)**
+Your hardening controls reduce attack surface but assume prevention is sufficient. Graduate students must design a complementary **detection layer** assuming an attacker has already obtained valid credentials. This is a design exercise - describe the detection logic in prose/tables, not as executable rule syntax.
 
-For each of the 3 CVEs you classified in your CVSS matrix (Part 2), calculate **Annual Loss Expectancy (ALE)** using the formula `ALE = ARO × SLE`:
+**Detection Approach Design (30 pts)**
 
-- **ARO (Annual Rate of Occurrence):** Derive from the CVE's CVSS exploitability metrics and publicly available exploit-in-the-wild data (NVD, CISA KEV, VulnCheck, etc.). Justify your estimate.
-- **SLE (Single Loss Expectancy):** Use the IBM/Ponemon Cost of a Data Breach Report current year figures as your baseline breach cost, then adjust for asset value and scope. Show your calculation.
-- **ALE:** Calculate and compare against your vulnerability policy's implementation cost for each CVE to produce a **Return on Security Investment (ROSI)** figure.
+Choose **2 of the following 5** post-exploitation TTPs and design a detection approach for each:
 
-Present results in a table and write 2-3 paragraphs interpreting the numbers - which CVE gives the best ROSI, and does your policy's timeline appropriately reflect the financial risk?
+1. **Lateral Movement** - Pass-the-Hash or Overpass-the-Hash (NTLM authentication from an unusual source process)
+2. **Credential Access** - LSASS memory access (Mimikatz pattern: a process opening LSASS with `PROCESS_VM_READ`)
+3. **Persistence** - a new scheduled task created by a non-SYSTEM, non-admin process
+4. **Defense Evasion** - PowerShell with a Base64-encoded command longer than 500 characters
+5. **Discovery** - `net user /domain`, `net group "Domain Admins"`, or an equivalent LDAP enumeration burst (5+ queries in 60 seconds from one host)
 
-**CISA BOD 22-01 Federal Alignment Analysis (15 pts)**
+For each of your 2 chosen TTPs, document: the specific log source and event ID(s) you'd query, the exact condition/pattern that indicates this technique, why that condition would **not** also match ordinary administrative activity, the MITRE ATT&CK technique ID, and at least one realistic false-positive scenario.
 
-Research CISA Binding Operational Directive 22-01 (the Known Exploited Vulnerabilities catalog requirement) and write a 2-page analysis addressing:
-
-1. If your organization were a federal civilian executive branch (FCEB) agency, which of your policy's timelines would be out of compliance with BOD 22-01's mandated remediation windows (14 days for critical/high KEV entries)?
-2. Identify 3 specific CVEs currently on the KEV catalog that fall within your policy's severity categories. For each, note the KEV-mandated deadline and compare to your policy's timeline.
-3. Propose specific amendments to your vulnerability policy that would bring it into BOD 22-01 alignment without being operationally unrealistic for a non-federal organization - and justify why a private organization might voluntarily adopt federal timelines.
 
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

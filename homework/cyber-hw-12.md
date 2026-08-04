@@ -1,10 +1,9 @@
 ---
-title: "CYBER HW 12 - Container Security Audit & Hardened Deployment"
+title: "CYBER HW 12 - Audit Log Analysis & Attack Reconstruction"
 parent: Homework
 nav_order: 12
 ---
-
-# CYBER HW 12 - Container Security Audit & Hardened Deployment
+# CYBER HW 12 - Audit Log Analysis & Attack Reconstruction
 {: .no_toc }
 
 <details open markdown="block">
@@ -16,87 +15,58 @@ nav_order: 12
 
 ---
 
-## Overview
-
-| | |
-|---|---|
-| **Assignment** | CYBER HW 12 |
-| **Points** | 100 |
-| **Due** | Week 13 |
-| **Track** | Cyber |
-
----
-
 ## Description
 
-### Part 1 - Dockerfile Audit (30 pts)
+Analyze the provided [auditd log excerpt]({% link homework/description-files/cyber-hw-12-audit-log.md %}) from `prod-web-03` and reconstruct a complete attack narrative, as you would in a real incident investigation. Not every record in the excerpt is security-relevant - part of the exercise is separating routine background activity from what actually matters.
 
-A vulnerable Dockerfile is provided on Learning Suite (`CYBER_HW12_Dockerfile`). Identify and fix every security issue.
+### Part 1 - Event Triage & Classification (25 pts)
 
-For each issue found, document:
+Parse the log file and produce an event triage table. For every event you identify as security-relevant (not just routine activity), document:
 
-| Issue # | Line # | Issue Type | Risk Description | MITRE ATT&CK Technique | Corrected Dockerfile Line |
+| Timestamp | UID/EUID | Command / Syscall | Key Label | Raw Log Line (abbreviated) | Classification |
 |---|---|---|---|---|---|
+| 2024-03-14 02:17:03 *(example only - not from your log)* | 1001/0 | execve /usr/bin/sudo | priv_esc | `type=SYSCALL ... uid=1001 euid=0 comm="sudo" exe="/usr/bin/sudo" key="priv_esc"` | Suspicious |
 
-Issue types to look for: running as root, unpinned base image (floating tag), secrets in environment variables or build args, world-readable sensitive files, unnecessary packages installed, no HEALTHCHECK defined, missing `--no-install-recommends`, exposed unnecessary ports, missing `.dockerignore` patterns.
+**Classification options:** Normal Admin Activity / Suspicious / Likely Malicious / Confirmed Malicious
 
-You must find **at least 8 issues**. Provide the full corrected Dockerfile as a deliverable.
+You must identify **at least 12 security-relevant events**. For each event classified as Suspicious or worse, provide a 1-sentence justification.
 
-### Part 2 - Docker Compose Security Audit (30 pts)
+### Part 2 - Attack Chain Reconstruction (35 pts)
 
-A Docker Compose file is provided on Learning Suite (`CYBER_HW12_docker-compose.yml`). It defines a 3-service stack: web (Nginx), app (Python), and database (PostgreSQL). For each of the **10 security improvements** you identify, document:
+Using your triaged events, reconstruct the full attack chain. Present your analysis as:
 
-| CIS Docker Benchmark Control # | Title | Current State | Risk | Remediated Compose Snippet | Priority |
-|---|---|---|---|---|---|
+**A. Chronological attack timeline** - a table showing each attacker action in sequence with timestamp, action description, and confidence level (High/Medium/Low - based on how directly the log supports your conclusion)
 
-Your 10 improvements must include:
-- At minimum 2 that address privilege escalation (user mapping, capabilities)
-- At minimum 2 that address secret management (no plaintext passwords in environment variables - implement Docker secrets or a `.env` file with proper permissions)
-- At minimum 1 that addresses network segmentation (don't put all services on the same network)
-- At minimum 2 that address resource limits (CPU, memory, and pids limits)
-- At minimum 1 read-only filesystem mount
+**B. MITRE ATT&CK mapping** - for each distinct attacker action, map to the most specific ATT&CK technique ID and name (not just the tactic). Explain briefly why this specific technique ID fits, not a more general one.
 
-Provide the full remediated `docker-compose.yml` as a deliverable.
+**C. Attack narrative** - 3-4 paragraphs telling the story of the attack from initial access to final objective. Written for a CISO briefing - technical but readable. It must be grounded in specific log evidence (cite timestamps).
 
-### Part 3 - Container Escape Scenario Analysis (25 pts)
+**D. Objective assessment** - based on the log evidence, what was the attacker's most likely objective? State your confidence level and what evidence supports or undermines your conclusion.
 
-Research the following container escape technique: **cgroup v1 release_agent escape** (CVE-2022-0492 or the classic Felix Wilhelm technique). Write a technical analysis covering:
+### Part 3 - IOC Extraction & Threat Intelligence (40 pts)
 
-1. **How it works** - step-by-step technical explanation of the escape mechanism (what kernel feature is abused, what the attacker does inside the container, what they gain on the host)
-2. **Preconditions** - what must be true for this escape to work? (Specific capabilities, mount permissions, cgroup version, etc.)
-3. **Which of your Docker Compose hardening controls prevent this** - for each relevant control from Part 2, explain precisely why it blocks this specific escape path
-4. **Detection** - what host-level log entries or kernel events would indicate this escape was attempted? Write a specific `auditd` rule that would detect the key syscall in this escape
-5. **Residual risk** - if ALL your Part 2 controls are applied, is this escape completely prevented? If any residual risk remains, what additional control addresses it?
+Extract all Indicators of Compromise (IOCs) from the logs:
 
-### Part 4 - Runtime Security Monitoring (15 pts)
+| IOC Type | Value | Context | Confidence |
+|---|---|---|---|
+| Network destination (IP) *(example only - not from your log)* | 203.0.113.77 | Outbound connection immediately following the privilege-escalation event, timed to match a likely exfiltration attempt | Medium |
 
-Write a `docker-bench-security.sh` wrapper script that:
+IOC types to look for: suspicious usernames, unusual binary paths, unexpected file paths written to, network destinations (IP/domain) if present, unusual timestamps (off-hours activity).
 
-1. Runs the official CIS Docker Benchmark tool (`docker/docker-bench-security`) against your hardened Compose stack
-2. Parses the output and counts WARN vs. PASS results
-3. Prints a summary and exits with code 1 if more than 5 WARNs remain
-
-Then write a Falco rule (`cyber-hw-12-falco.yml`) that detects the following runtime behavior in any running container:
-- A shell spawned inside a container that is not during a `docker exec` debug session (detect: `container.id != "" and proc.name in (bash, sh, zsh) and not proc.pname in (docker, sshd)`)
-- A container writing to `/etc/` (detect filesystem writes outside of expected paths)
-
-Explain what legitimate use case might trigger each rule as a false positive and how you would tune the rule to reduce that noise.
+For **at least 2 IOCs**, perform a brief open-source threat intelligence lookup:
+- Search the IP/hash/filename in VirusTotal, Shodan, or AbuseIPDB
+- Report what you found (or did not find)
+- Does the OSINT evidence raise or lower your confidence that this is malicious?
 
 ---
 
 ## Deliverable(s)
 
-{: .callout }
-**Auto-grader:** When you open your PR, a GitHub Actions workflow checks your Dockerfile and Compose file for the specific hardening patterns Part 1/2 require (non-root user, pinned base image, HEALTHCHECK, cap_drop, resource limits, secrets handling, network segmentation) and syntax-checks your wrapper script and Falco rules. It does not `docker build` your image or run docker-bench/Falco for real - runtime behavior and the escape analysis are graded by hand.
-
 Write your full analysis in `homework/cyber-hw-12.md`. Commit to `homework/assets/`:
 
-- `cyber-hw-12-Dockerfile.hardened` - your corrected Dockerfile
-- `cyber-hw-12-docker-compose.hardened.yml` - your remediated Compose file
-- `cyber-hw-12-docker-bench-wrapper.sh` - your benchmark wrapper
-- `cyber-hw-12-falco-rules.yml` - your Falco detection rules
+- `cyber-hw-12-iocs.csv` - your IOC table as a CSV
 
-Open a PR titled `CYBER HW 12 - Container Security` and submit the PR link on Learning Suite by the due date.
+Open a PR titled `CYBER HW 12 - Audit Log Analysis` and submit the PR link on Learning Suite by the due date.
 
 ---
 
@@ -104,17 +74,16 @@ Open a PR titled `CYBER HW 12 - Container Security` and submit the PR link on Le
 
 | Criterion | Points |
 |---|---|
-| Dockerfile audit - 8+ issues, corrected file provided | 30 |
-| Compose audit - 10 controls, all required categories covered | 30 |
-| Container escape analysis - mechanism explained, controls mapped | 25 |
-| Docker Bench wrapper script + Falco rules | 15 |
+| Event triage - 12+ relevant events, classification justified | 25 |
+| Attack chain - timeline, ATT&CK mapping, narrative, objective assessment | 35 |
+| IOC extraction + OSINT lookup for 2 IOCs | 40 |
 
 ---
 
 ## Tip
 
 {: .tip }
-The CIS Docker Benchmark is free to download from cisecurity.org. Section 4 covers container image hardening (your Dockerfile audit) and Section 5 covers container runtime (your Compose audit). Reference the specific control numbers.
+Save the excerpt to a file on your lab VM (e.g. `AuditLog_Exercise.txt`), then `ausearch -i -f AuditLog_Exercise.txt` can help parse the records. The `-i` flag translates numeric UIDs and syscall numbers to human-readable names.
 
 ---
 
@@ -123,34 +92,19 @@ The CIS Docker Benchmark is free to download from cisecurity.org. Section 4 cove
 ##  Graduate Extension - Graduate Students Only
 
 {: .callout-grad }
-> **Required for students enrolled in the graduate section (CS 544 / IT 544). Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
+> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
 
-### Part 5 - SBOM Pipeline & Container Security Policy (30 pts)
+### Part 5 - STIX 2.1 Threat Intelligence Report (30 pts)
 
-**Software Bill of Materials Pipeline (15 pts)**
+Using the attack chain you reconstructed in Part 2, produce a formal **STIX 2.1 Bundle** (`cyber-hw-12-stix-bundle.json`) containing the following STIX Domain Objects:
 
-Implement a complete SBOM generation and vulnerability scanning pipeline:
+- `threat-actor` - the attributed or suspected actor (use "Unknown" with appropriate confidence level if attribution is uncertain; document your reasoning)
+- `campaign` - the overall intrusion campaign with first/last seen timestamps from your log analysis
+- `attack-pattern` - one object per MITRE ATT&CK technique in your reconstruction (use STIX's `external_references` to link to ATT&CK technique IDs)
+- `indicator` - one object per IOC you extracted (IP, domain, file hash), with `valid_from`, `pattern` (STIX patterning language), and `confidence` score
+- `relationship` objects linking the above (e.g., `threat-actor` → `uses` → `attack-pattern`, `indicator` → `indicates` → `campaign`)
 
-1. Use **Syft** (`syft <image> -o spdx-json > sbom.spdx.json`) to generate an SPDX 2.3 SBOM for your hardened image
-2. Feed the SBOM into **Grype** (`grype sbom:sbom.spdx.json -o json > vulns.json`) and produce a vulnerability report
-3. Write a Python script (`cyber-hw-12-sbom-gate.py`) that reads `vulns.json` and:
-   - Fails with exit code 1 if any CRITICAL severity vulnerability exists with a fix available
-   - Prints a formatted summary: total packages, total CVEs by severity, list of CRITICAL CVEs with CVE ID, package, version, and fix version
-   - Exits 0 (pass) if all criticals are either fixed in your image or have no fix available (with a warning)
-4. Integrate this gate as a step in your CI/CD pipeline (GitHub Actions) that runs after the image build and blocks the push if it fails
-
-Submit your SBOM file, vulnerability report, and a screenshot of the gate passing on your hardened image.
-
-**Container Security Policy Document (15 pts)**
-
-Write a formal **Container Security Policy** (`cyber-hw-12-security-policy.md`) suitable for adoption by a DevSecOps team. The policy must cover:
-
-1. **Approved Base Images** - list of approved base image registries and tags, process for adding new base images, and mandatory review cadence
-2. **SBOM Requirements** - when an SBOM must be generated, where it must be stored, and how long it must be retained
-3. **Image Signing** - requirement for Cosign/Sigstore signing before images are promoted to production, including who holds signing keys and how keys are rotated
-4. **Runtime Security Requirements** - minimum required Falco rules, mandatory seccomp profiles, disallowed capabilities, and required read-only filesystem configuration
-5. **Incident Response** - procedure for a container compromise: isolation steps, forensic artifact collection from a running container (`docker export`, `kubectl debug`), and escalation path
-6. **Supply Chain Threat Model** - a brief STRIDE analysis of your container build pipeline (from developer commit to production deployment) identifying the top 3 threats and mitigations
+Validate your bundle using the `stix2-validator` Python package (`pip install stix2-validator`). Submit a screenshot of a clean validation run.
 
 
 [← Back to Homework]({{ site.baseurl }}/homework/)
