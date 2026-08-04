@@ -20,7 +20,7 @@ Slide decks are provided as PowerPoint (.pptx) files.
 | [2]({% link schedule/week-02.md %}) | [Linux Administration Fundamentals]({{ site.baseurl }}/lectures/CYBER444_Week02_Linux_Administration_and_Security.pptx) | 
 | [3]({% link schedule/week-03.md %}) | [Windows Server Administration]({{ site.baseurl }}/lectures/CYBER444_Week03_Windows_Server_Administration.pptx) | 
 | [4]({% link schedule/week-04.md %}) | [Windows Hardening & Email Security]({{ site.baseurl }}/lectures/CYBER444_Week04_Windows_Hardening_and_email_security.pptx) | 
-| [5]({% link schedule/week-05.md %}) | [PKI & Certificate Management]({{ site.baseurl }}/lectures/CYBER444_Week05_PKI_and_Certificate_mMnagement.pptx)  | 
+| [5]({% link schedule/week-05.md %}) | [PKI & Certificate Management]({{ site.baseurl }}/lectures/CYBER444_Week05_PKI_and_Certificate_Mnagement.pptx)  | 
 | [6]({% link schedule/week-06.md %}) | [SSH CA, PAM MFA & Enterprise Policy]({{ site.baseurl }}/lectures/CYBER444_Week06_SSH_CA_PAM_MFA_and_Enterprise_Policy.pptx) | 
 | [7]({% link schedule/week-07.md %}) | [Patch Management]({{ site.baseurl }}/lectures/CYBER444_Week07_Patch_Management.pptx)  | 
 | [8]({% link schedule/week-08.md %}) | [CIS & STIG Benchmarks & Data Center Fundamentals]({{ site.baseurl }}/lectures/CYBER444_Week08_CIS_and_STIG_Benchmarks_and_Data_Center_Fundamentals.pptx) | 
