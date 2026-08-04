@@ -3,7 +3,7 @@ title: "IT HW 2 - Linux Network Services: Design, Audit & Failure Analysis"
 parent: Homework
 nav_order: 2
 ---
-TODO: check over it
+
 # IT HW 2 - Linux Network Services: Design, Audit & Failure Analysis
 {: .no_toc }
 
