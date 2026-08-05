@@ -20,12 +20,11 @@ All homework assignments are submitted through a **GitHub pull request** on your
 Both tracks complete these assignments.
 
 | # | Title |
-|---|---|---|---|
+|---|---|
 | [HW 1]({% link homework/hw-01.md %}) | Syllabus Quiz |
-| [HW 7]({% link homework/hw-03.md %}) | Patch Management &  Inactive AD Account PowerShell Script & LDAP Filters |
+| [HW 3]({% link homework/hw-03.md %}) | Inactive AD Account PowerShell Script & LDAP Filters |
 | [HW 7]({% link homework/hw-07.md %}) | Patch Management & Vulnerability Policy |
-| [HW 9]({% link homework/hw-09.md %}) | Midterm Practice Exam |
-| [HW 10]({% link homework/hw-10.md %}) | Ansible Hardening Playbook: Advanced Features & Testing |
+| [HW 9]({% link homework/hw-09.md %}) | Midterm Practice Exam (ungraded) |
 | [HW 11]({% link homework/hw-11.md %}) | Configuration Drift: Detection, Threat Modeling & Monitoring |
 
 ---

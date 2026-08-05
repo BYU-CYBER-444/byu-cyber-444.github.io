@@ -39,9 +39,7 @@ nav_order: 10
 
 ## Homework
 
-| Track | Assignment |
-|---|---|
-| **Both Tracks** | [HW 10 - Ansible Hardening Playbook: Advanced Features & Testing]({% link homework/hw-10.md %}) |
+None this week.
 
 ---
 
