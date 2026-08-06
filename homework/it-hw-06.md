@@ -96,9 +96,6 @@ Read one real AUP from a public institution (BYU's or your previous employer's) 
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
 ### Part 5 - Policy Governance Framework & Regulatory Mapping (30 pts)
 
 Map your three policies (AUP, Data Classification, Vendor Access) against **ISO/IEC 27001:2022 Annex A** controls. For each Annex A control domain:

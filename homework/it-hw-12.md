@@ -90,9 +90,6 @@ Open a PR titled `IT HW 12 - Monitoring Architecture` and submit the PR link on 
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
 ### Part 5 - Decision-Tree Runbook Library (30 pts)
 
 Extend each of your 3 runbooks with a **diagnostic decision tree** that guides an on-call engineer who has never seen this system before. Each decision tree must:

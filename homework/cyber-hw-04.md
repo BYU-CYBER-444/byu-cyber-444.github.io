@@ -97,9 +97,6 @@ When writing your "How to Verify" column, favor a specific registry value or a n
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
 ### Part 4 - Assume-Breach Detection Layer (30 pts)
 
 Your hardening controls reduce attack surface but assume prevention is sufficient. Graduate students must design a complementary **detection layer** assuming an attacker has already obtained valid credentials. This is a design exercise - describe the detection logic in prose/tables, not as executable rule syntax.

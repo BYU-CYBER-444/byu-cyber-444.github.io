@@ -91,9 +91,6 @@ Save the excerpt to a file on your lab VM (e.g. `AuditLog_Exercise.txt`), then `
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
 ### Part 5 - STIX 2.1 Threat Intelligence Report (30 pts)
 
 Using the attack chain you reconstructed in Part 2, produce a formal **STIX 2.1 Bundle** (`cyber-hw-12-stix-bundle.json`) containing the following STIX Domain Objects:

@@ -108,9 +108,6 @@ Open a PR titled `IT HW 14 - AI Inference Server Proposal` and submit the PR lin
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
 ### Part 7 - NIST AI RMF Assessment & AI System Card (30 pts)
 
 **NIST AI Risk Management Framework Assessment (15 pts)**

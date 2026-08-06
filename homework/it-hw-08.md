@@ -100,9 +100,6 @@ The Uptime Institute publishes tier availability targets (Tier I = 99.671%, Tier
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
 ### Part 6 - Monte Carlo Downtime Simulation (30 pts)
 
 Using the failure probabilities and MTTR values from your risk register, implement a **Monte Carlo simulation** of annual downtime for your data center. Submit `it-hw-08-montecarlo.py`:

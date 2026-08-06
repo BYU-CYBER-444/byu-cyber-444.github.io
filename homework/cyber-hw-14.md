@@ -109,9 +109,6 @@ The CIS Docker Benchmark is free to download from cisecurity.org. Section 4 cove
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
 ### Part 5 - SBOM Pipeline & Container Security Policy (30 pts)
 
 **Software Bill of Materials Pipeline (15 pts)**

@@ -108,9 +108,6 @@ Open a PR titled `IT HW 4 - Windows Server Infrastructure Design` and submit the
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
 ### Part 7 - FERPA Compliance Assessment Report (30 pts)
 
 Write a 3-4 page **FERPA Compliance Assessment Report** (`it-hw-04-ferpa-report.md`) written as if presenting to the district's School Board and legal counsel:

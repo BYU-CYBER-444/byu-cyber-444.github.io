@@ -83,9 +83,6 @@ Open a PR titled `IT HW 2 - Linux Network Services` and submit the PR link on Le
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
 ### Part 4 - DNS High-Availability Architecture & ADR (30 pts)
 
 **HA Architecture Design (15 pts)**
