@@ -83,7 +83,7 @@ Write your full analysis in `homework/cyber-hw-14.md`. Commit to `homework/asset
 - `cyber-hw-12-docker-bench-wrapper.sh` - your benchmark wrapper
 - `cyber-hw-12-falco-rules.yml` - your Falco detection rules
 
-Open a PR titled `CYBER HW 14 - Container Security` and submit the PR link on Learning Suite by the due date.
+Open a PR titled `CYBER HW 14 - Container Security` and submit your repo link on Learning Suite by the due date.
 
 ---
 

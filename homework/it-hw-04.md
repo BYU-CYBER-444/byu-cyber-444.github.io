@@ -80,7 +80,7 @@ List the 5 most important Windows infrastructure controls that directly protect 
 
 Write your full design in `homework/it-hw-04.md`.
 
-Open a PR titled `IT HW 4 - Windows Server Infrastructure Design` and submit the PR link on Learning Suite by the due date.
+Open a PR titled `IT HW 4 - Windows Server Infrastructure Design` and submit your repo link on Learning Suite by the due date.
 
 ---
 

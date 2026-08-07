@@ -89,7 +89,7 @@ Produce a 3-year total cost of ownership:
 
 Write your full proposal in `homework/it-hw-14.md`.
 
-Open a PR titled `IT HW 14 - AI Inference Server Proposal` and submit the PR link on Learning Suite by the due date.
+Open a PR titled `IT HW 14 - AI Inference Server Proposal` and submit your repo link on Learning Suite by the due date.
 
 ---
 

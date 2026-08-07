@@ -66,7 +66,7 @@ Write your full analysis in `homework/cyber-hw-12.md`. Commit to `homework/asset
 
 - `cyber-hw-12-iocs.csv` - your IOC table as a CSV
 
-Open a PR titled `CYBER HW 12 - Audit Log Analysis` and submit the PR link on Learning Suite by the due date.
+Open a PR titled `CYBER HW 12 - Audit Log Analysis` and submit your repo link on Learning Suite by the due date.
 
 ---
 
