@@ -28,6 +28,7 @@ For each file (`named.conf`, `dhcpd.conf`, `exports`), produce an audit table wi
 
 | File | Line # | Issue Type | What is wrong | Correct configuration | Severity (Critical/High/Medium) |
 |---|---|---|---|---|---|
+| named.conf | 14 | Security misconfiguration | `allow-transfer { any; }` permits zone transfers to any host, leaking the full zone to attackers | `allow-transfer { 10.0.0.2; };` (restrict to the actual secondary) | High |
 
 You must find **at least 8 issues total** across the three files. For each Critical or High issue, explain what would happen in production if the misconfiguration were left in place.
 
@@ -62,7 +63,7 @@ Write your full report in `homework/it-hw-02.md`. Commit your working (corrected
 - `it-hw-02-exports` - corrected NFS exports file
 - `it-hw-02-audit.md` - your config audit table (Part 1)
 
-Open a PR titled `IT HW 2 - Linux Network Services` and submit the PR link on Learning Suite by the due date.
+Open a PR titled `IT HW 2 - Linux Network Services` and submit your repo link on Learning Suite by the due date.
 
 ---
 
