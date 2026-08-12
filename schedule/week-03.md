@@ -34,7 +34,7 @@ nav_order: 3
 
 | Track | Lab |
 |---|---|
-| **Both Tracks** | [LAB 3 - Windows Server Infrastructure Roles & Centralized AAA]({% link labs/lab-03.md %}) |
+| **Both Tracks** | [LAB 3 - Active Directory, GPO & Centralized AAA]({% link labs/lab-03.md %}) |
 
 ---
 
