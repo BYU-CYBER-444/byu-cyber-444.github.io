@@ -12,7 +12,7 @@ This is the reference report for [CYBER HW 8]({% link homework/cyber-hw-08.md %}
 
 The report below is a CIS Ubuntu Linux 22.04 LTS Benchmark v2.0.0 (Level 1 - Server profile) assessment against a fictional host, `cyber-hw08-sample01`. It contains 48 controls (21 FAIL, 27 PASS) across all 7 benchmark sections, formatted the same way a real CIS-CAT Pro HTML report is: overall score, per-section score table, and a detailed results table with control ID, title, level, and result.
 
-This data is synthetic - built to look and score like a real assessment, not copied from an actual CIS-CAT Pro run. The control IDs and titles correspond to real CIS Ubuntu 22.04 Benchmark recommendations, so your remediation research (Part 2) and any commands you write (Part 3) should reflect the actual, correct fix for that control on a real Ubuntu 22.04 system.
+This data is synthetic - built to look and score like a real assessment, not copied from an actual CIS-CAT Pro run. The control IDs and titles correspond to real CIS Ubuntu 22.04 Benchmark recommendations, so your remediation research and commands in Part 2 should reflect the actual, correct fix for that control on a real Ubuntu 22.04 system.
 
 ---
 
