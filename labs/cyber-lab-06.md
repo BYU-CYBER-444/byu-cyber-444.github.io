@@ -1,13 +1,13 @@
 ---
-title: "CYBER LAB 6 - OpenSCAP & DISA STIG Assessment"
+title: "CYBER LAB 6 - SSH Certificate Authority & PAM MFA"
 parent: Labs
 nav_order: 6
 ---
 
-# CYBER LAB 6 - OpenSCAP & DISA STIG Assessment
+# CYBER LAB 6 - SSH Certificate Authority & PAM MFA
 {: .no_toc }
 
-**Duration:** ~3.75 hours &nbsp;·&nbsp; **Week:** Week 6 &nbsp;·&nbsp; **Track:** Cyber
+**Duration:** ~3 hours &nbsp;·&nbsp; **Week:** Week 6 &nbsp;·&nbsp; **Track:** Cyber
 {: .fs-5 }
 
 <details open markdown="block">
@@ -21,274 +21,246 @@ nav_order: 6
 
 ## Objectives
 
-- Run a full OpenSCAP STIG scan and interpret findings by severity category
-- Remediate all CAT I (HIGH) findings with verified, documented commands
-- Create an OpenSCAP tailoring file to suppress operationally-inapplicable rules
-- Import results into STIG Viewer and export a properly completed checklist (`.ckl`)
-- Verify remediations do not break the running system by testing affected services post-remediation
-- Design and implement a zoned `nftables` firewall ruleset enforcing network segmentation beyond a flat default-deny policy
+- Build a functional SSH Certificate Authority with both user and host certificate signing
+- Issue certificates with principals to restrict which hosts each certificate can access
+- Implement the full revocation workflow using a Key Revocation List (KRL)
+- Configure Google Authenticator TOTP MFA via PAM with proper `sshd_config` settings
+- Implement a `ForceCommand` restriction for a limited-access user
 
 ---
 
 ## Tools Required
 
-- Ubuntu 22.04 LTS VM
-- OpenSCAP (`openscap-scanner`, `ssg-debderived`)
-- SCAP Security Guide (SSG)
-- STIG Viewer 2.x (download from public.cyber.mil)
-- `scap-workbench` (optional, for tailoring file creation GUI)
-- `nftables` (Part 6)
-
-```bash
-sudo apt install openscap-scanner ssg-debderived nftables -y
-```
+- Ubuntu 22.04 VM (SSH server)
+- Second Ubuntu VM or container (SSH client)
+- `openssh-server`, `ssh-keygen`
+- `libpam-google-authenticator`
 
 ---
 
 ## Procedure
 
-### Part 1 - Initial STIG Scan
-
-Run the scan with the STIG profile and save results in multiple formats:
+### Part 1 - Create the SSH Certificate Authority
 
 ```bash
-oscap xccdf eval \
-  --profile xccdf_org.ssgproject.content_profile_stig \
-  --results lab6-results.xml \
-  --results-arf lab6-arf.xml \
-  --report lab6-report.html \
-  /usr/share/xml/scap/ssg/content/ssg-ubuntu2204-ds.xml
+# Create CA directory (in production, this would be an air-gapped machine)
+sudo mkdir -p /etc/ssh/ca/{user,host}
+sudo chmod 700 /etc/ssh/ca
 
-echo "Scan complete. Exit code: $?"
+# Generate User CA key (signs user certificates)
+sudo ssh-keygen -t ed25519 -f /etc/ssh/ca/user_ca_key   -C "Lab13 User CA - $(date +%Y)" -N ""
+
+# Generate Host CA key (signs host certificates - prevents TOFU attacks)
+sudo ssh-keygen -t ed25519 -f /etc/ssh/ca/host_ca_key   -C "Lab13 Host CA - $(date +%Y)" -N ""
+
+# Protect CA keys
+sudo chmod 400 /etc/ssh/ca/user_ca_key /etc/ssh/ca/host_ca_key
+sudo chown root:root /etc/ssh/ca/user_ca_key /etc/ssh/ca/host_ca_key
 ```
 
-The exit code will be non-zero (2 = findings present, 1 = error). Open `lab6-report.html` and record:
-- Total rules evaluated
-- Number of PASS / FAIL / NOT APPLICABLE / ERROR
-- Count of HIGH (CAT I), MEDIUM (CAT II), LOW (CAT III) failures
+### Part 2 - Configure sshd to Trust the User CA
 
-List all HIGH severity failures - these become your mandatory remediation list.
-
-### Part 2 - CAT I Remediation
-
-For EACH CAT I finding:
-
-1. Read the full rule description in the HTML report (or STIG Viewer)
-2. Apply the specific remediation command(s) - document exactly what you ran
-3. Test that the service or system function is still working after each remediation
-
-Common CAT I findings and remediation approach (check your actual results - they vary):
-
-**SSH Protocol 2 enforcement:**
 ```bash
-grep -q "^Protocol" /etc/ssh/sshd_config || echo "Protocol 2" | sudo tee -a /etc/ssh/sshd_config
-sudo systemctl reload sshd && ssh -o StrictHostKeyChecking=no localhost 'echo SSH OK'
+sudo tee -a /etc/ssh/sshd_config << 'EOF'
+
+# SSH Certificate Authority Configuration
+TrustedUserCAKeys /etc/ssh/ca/user_ca_key.pub
+
+# Principals file - maps certificate principal to local user
+AuthorizedPrincipalsFile /etc/ssh/auth_principals/%u
+
+# Revoked keys list
+RevokedKeys /etc/ssh/revoked_keys.krl
+EOF
+
+# Create principals directory
+sudo mkdir -p /etc/ssh/auth_principals
 ```
 
-**Root SSH login disabled:**
+### Part 3 - Issue User Certificates with Principals
+
+The `principals` field restricts which users can use the certificate - critical for access control.
+
 ```bash
-sudo sed -i 's/^#*PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+# Generate alice's user key pair (this would happen on alice's workstation)
+ssh-keygen -t ed25519 -f /tmp/alice_key -C "alice@lab13" -N ""
+
+# Sign alice's certificate for principal "alice" only (can only log in as alice)
+# Flags:
+#   -s = CA key to sign with
+#   -I = certificate identity (for logging/auditing)
+#   -n = principals (comma-separated - who this cert allows login as)
+#   -V = validity period (+52w = valid for 1 year)
+#   -O = option (source-address restricts client IP - production best practice)
+sudo ssh-keygen   -s /etc/ssh/ca/user_ca_key   -I "alice@lab13-2025"   -n alice   -V +52w   -O source-address=192.168.56.0/24   /tmp/alice_key.pub
+
+# Inspect the certificate to verify fields
+ssh-keygen -L -f /tmp/alice_key-cert.pub
+```
+
+Configure the server to require the `alice` principal for the `alice` user account:
+
+```bash
+echo "alice" | sudo tee /etc/ssh/auth_principals/alice
+```
+
+Test certificate login:
+```bash
+# Copy key and cert to alice's home
+sudo cp /tmp/alice_key /tmp/alice_key-cert.pub /home/alice/.ssh/
+sudo chown alice:alice /home/alice/.ssh/alice_key*
+
+# Test login (from client or using su)
+ssh -i /home/alice/.ssh/alice_key -o "CertificateFile=/home/alice/.ssh/alice_key-cert.pub"   alice@localhost
+```
+
+### Part 4 - Host Certificate Signing
+
+Without host certificates, users must manually verify host fingerprints on first connection (Trust on First Use - TOFU). Host certificates eliminate this by having the CA vouch for the server's identity.
+
+```bash
+# Sign the server's host key
+sudo ssh-keygen   -s /etc/ssh/ca/host_ca_key   -I "ubuntu-01.lab.local"   -h   -n "ubuntu-01.lab.local,192.168.56.10"   -V +52w   /etc/ssh/ssh_host_ed25519_key.pub
+
+# Configure sshd to present the host certificate
+echo "HostCertificate /etc/ssh/ssh_host_ed25519_key-cert.pub" | sudo tee -a /etc/ssh/sshd_config
+sudo systemctl reload sshd
+
+# Verify the host cert
+ssh-keygen -L -f /etc/ssh/ssh_host_ed25519_key-cert.pub
+```
+
+On a client VM, configure it to trust hosts signed by the Host CA instead of individual fingerprints:
+```bash
+# On client VM:
+echo "@cert-authority * $(cat /etc/ssh/ca/host_ca_key.pub)" >> ~/.ssh/known_hosts
+# Now connecting to the server should NOT prompt for fingerprint verification
+ssh alice@192.168.56.10 -i /tmp/alice_key
+```
+
+### Part 5 - Certificate Revocation (KRL)
+
+```bash
+# Create a Key Revocation List
+sudo ssh-keygen -k -f /etc/ssh/revoked_keys.krl
+
+# Revoke alice's certificate by serial number
+# First, find the serial: ssh-keygen -L -f alice_key-cert.pub | grep Serial
+sudo ssh-keygen -k -u   -f /etc/ssh/revoked_keys.krl   /home/alice/.ssh/alice_key-cert.pub
+
+sudo systemctl reload sshd
+
+# Verify revoked cert is rejected
+ssh -i /home/alice/.ssh/alice_key alice@localhost
+# Expected: sign_and_send_pubkey: certificate invalid: revoked by key revocation list
+```
+
+Screenshot the rejection error.
+
+### Part 6 - TOTP MFA with Google Authenticator
+
+```bash
+sudo apt install libpam-google-authenticator -y
+
+# Configure Google Authenticator for alice
+sudo -u alice google-authenticator
+# Options to select:
+#   Time-based: y
+#   Update .google_authenticator: y
+#   Disallow multiple uses: y
+#   Permit 30-second clock skew: n
+#   Rate limiting: y
+# Screenshot the QR code and backup codes
+```
+
+Configure PAM - edit `/etc/pam.d/sshd`:
+```
+# Add at the TOP of auth section:
+auth required pam_google_authenticator.so nullok
+```
+
+Configure sshd for MFA:
+```bash
+sudo tee -a /etc/ssh/sshd_config << 'EOF'
+
+# MFA Configuration
+ChallengeResponseAuthentication yes
+AuthenticationMethods publickey,keyboard-interactive
+EOF
+
 sudo systemctl reload sshd
 ```
 
-**AIDE (if flagged as not configured):**
+Test the full MFA flow:
 ```bash
-sudo apt install aide -y && sudo aideinit && sudo cp /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+# Re-issue alice's certificate (revoked in Part 5 - generate a new key pair)
+ssh-keygen -t ed25519 -f /tmp/alice_key2 -N ""
+sudo ssh-keygen -s /etc/ssh/ca/user_ca_key -I "alice@lab13-mfa" -n alice -V +52w /tmp/alice_key2.pub
+
+# Login should now require both cert and TOTP code
+ssh -i /tmp/alice_key2 alice@localhost
+# Expected: enters key auth silently, then prompts: "Verification code:"
 ```
 
-For each remediation, document:
-- Rule ID (STIG rule ID, format: `xccdf_org.ssgproject.content_rule_...`)
-- Finding title
-- Exact command(s) applied
-- Service/function verification command and output
+### Part 7 - ForceCommand: Restricted Shell Access
 
-### Part 3 - Create a Tailoring File
-
-Some STIG rules are inapplicable in your lab environment (e.g., rules requiring a GUI when you have a server install, or rules about specific hardware). Create an OpenSCAP tailoring file to suppress these rules rather than having them show as failures:
-
-Create `lab6-tailoring.xml`:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<xccdf:Tailoring xmlns:xccdf="http://checklists.nist.gov/xccdf/1.2"
-    id="xccdf_lab6_tailoring_default">
-  <xccdf:benchmark href="/usr/share/xml/scap/ssg/content/ssg-ubuntu2204-ds.xml"/>
-  <xccdf:version time="2025-01-15T12:00:00">1</xccdf:version>
-  <xccdf:Profile id="xccdf_lab6_profile_stig_tailored"
-      extends="xccdf_org.ssgproject.content_profile_stig">
-    <xccdf:title>STIG - Lab Tailored</xccdf:title>
-    <xccdf:description>STIG profile with lab-inapplicable rules suppressed</xccdf:description>
-
-    <!-- Suppress this rule if running server (no GUI) -->
-    <!-- Replace RULE_ID with the actual rule ID from your scan results -->
-    <xccdf:select idref="xccdf_org.ssgproject.content_rule_RULE_ID_HERE" selected="false"/>
-  </xccdf:Profile>
-</xccdf:Tailoring>
-```
-
-Identify at least 2 rules that are genuinely inapplicable to your headless server environment. Add them to the tailoring file with a comment explaining why each is suppressed.
-
-Run the scan with the tailoring file:
+Configure a `bob` user who can only run a specific command via SSH (useful for automated jobs):
 
 ```bash
-oscap xccdf eval \
-  --tailoring-file lab6-tailoring.xml \
-  --profile xccdf_lab6_profile_stig_tailored \
-  --results lab6-tailored-results.xml \
-  --report lab6-tailored-report.html \
-  /usr/share/xml/scap/ssg/content/ssg-ubuntu2204-ds.xml
+# Add to /etc/ssh/sshd_config for bob's certificate principal
+echo 'Match User bob
+    ForceCommand /usr/bin/df -h
+    AllowTcpForwarding no
+    X11Forwarding no' | sudo tee -a /etc/ssh/sshd_config
+sudo systemctl reload sshd
 ```
 
-Compare the tailored scan score to the original - the "improvement" from tailoring is separate from actual remediation.
-
-### Part 4 - Post-Remediation Verification Scan
-
-Run a final scan to verify all CAT I items are resolved:
-
+Issue bob's certificate with `ForceCommand` in the certificate options:
 ```bash
-oscap xccdf eval \
-  --profile xccdf_org.ssgproject.content_profile_stig \
-  --results lab6-post-results.xml \
-  --report lab6-post-report.html \
-  /usr/share/xml/scap/ssg/content/ssg-ubuntu2204-ds.xml
+ssh-keygen -t ed25519 -f /tmp/bob_key -N ""
+sudo ssh-keygen -s /etc/ssh/ca/user_ca_key -I "bob@lab13" -n bob   -O force-command="/usr/bin/df -h" -V +52w /tmp/bob_key.pub
 ```
 
-Build a remediation tracking table:
-
-| Rule ID | Title | CAT | Pre-Status | Post-Status | Verified |
-|---|---|---|---|---|---|
-| rule_sshd_disable_root_login | SSH Root Login Disabled | I | FAIL | PASS |  |
-
-All CAT I findings must show PASS. If any remain FAIL, document why and what the next step is.
-
-### Part 5 - STIG Viewer Checklist Export
-
-1. Download STIG Viewer 2.x from public.cyber.mil
-2. Import your ARF results file (`lab6-arf.xml`): **File → Import XCCDF Results**
-3. For each Open finding:
-   - Set Status: **Open** / **Not a Finding** / **Not Applicable**
-   - Add a Finding Detail comment explaining the current state
-   - Add a Comments field for remediated items explaining what was done
-4. Export the completed checklist: **File → Export → CKL file** → `lab6-completed.ckl`
-
-### Part 6 - Network Segmentation with nftables
-
-Week 2's firewall coverage was a flat default-deny ruleset - one policy for the whole host. Real network security design segments hosts into zones with different trust levels, not one blanket rule. Build a zoned ruleset for this VM, imagining it hosts a web application with a separate database backend:
-
-```bash
-sudo nft flush ruleset
-
-sudo tee /etc/nftables.conf << 'EOF'
-#!/usr/sbin/nft -f
-
-flush ruleset
-
-table inet filter {
-    chain input {
-        type filter hook input priority 0; policy drop;
-
-        # Loopback and established connections always allowed
-        iif lo accept
-        ct state established,related accept
-        ct state invalid drop
-
-        # Management zone: SSH only from the admin subnet
-        ip saddr 10.0.0.0/24 tcp dport 22 accept
-
-        # Web zone: HTTP/HTTPS from anywhere
-        tcp dport { 80, 443 } accept
-
-        # Database zone: 5432 only from the app-tier subnet, never from the internet
-        ip saddr 10.0.1.0/24 tcp dport 5432 accept
-
-        # ICMP for diagnostics, rate-limited
-        ip protocol icmp limit rate 5/second accept
-
-        # Everything else is dropped by the chain policy - log it first
-        log prefix "nft-dropped: " drop
-    }
-}
-EOF
-
-sudo nft -f /etc/nftables.conf
-sudo systemctl enable nftables
-```
-
-**Test the zones actually hold:**
-
-```bash
-# From the admin subnet - should succeed
-nc -zv <this-vm-ip> 22
-
-# From outside the admin subnet (or use a second network namespace to simulate it) - should be dropped
-sudo ip netns add outsider
-# ... configure outsider netns on a different subnet, then:
-sudo ip netns exec outsider nc -zv <this-vm-ip> 22   # should time out / be dropped
-
-# Database port should never be reachable except from the app-tier subnet
-nc -zv <this-vm-ip> 5432
-```
-
-Capture the ruleset (`sudo nft list ruleset`), the dropped-connection log entries (`journalctl -k | grep nft-dropped`), and the results of each test above (which succeeded, which were dropped).
-
-{: .note }
-This is the same "default-deny, explicit allow" principle from Week 2, applied per-zone instead of per-host - it's a small step from here to full VLAN-based segmentation, which is what the Graduate Extension below covers.
+Test: `ssh bob@localhost` should ONLY show disk usage output - any other command should be rejected.
 
 ---
 
 ## Submission Requirements
 
-- Initial scan HTML report (with CAT I findings highlighted)
-- Remediation log: for each CAT I finding - Rule ID, description, exact commands, verification output
-- `lab6-tailoring.xml` with explanation of each suppressed rule
-- Post-remediation HTML report
-- Before/after comparison table (all CAT I items should move to PASS)
-- `lab6-completed.ckl` STIG Viewer export
-- Written reflection (3-5 sentences): In a real DoD environment, the STIG findings must be documented in a POAM before an Authority to Operate (ATO) is granted. What is the difference between a technical STIG remediation and a formal POAM entry?
-- `nft list ruleset` output, the dropped-connection log entries, and the zone test results (which connections succeeded vs. were dropped, and why)
+- `ssh-keygen -L` output for alice's user certificate (showing all fields)
+- `ssh-keygen -L` output for the server's host certificate
+- Principal file contents for alice (`/etc/ssh/auth_principals/alice`)
+- Screenshot: successful alice certificate login
+- Screenshot: alice certificate login REJECTED after KRL revocation
+- Full `sshd_config` additions (commented)
+- Screenshot: TOTP MFA login showing "Verification code:" prompt and successful auth
+- ForceCommand: bob SSH output showing only `df -h` even when user tries to run `ls`
+- Written reflection (4-5 sentences): Compare certificate-based SSH access to authorized_keys-based access. What is the operational advantage of certificates when you need to revoke access for a departing employee across 200 servers?
 
 ---
 
 ##  Graduate Extension - Master's Students Only
 
 {: .callout-grad }
-> **Required for students enrolled in the graduate section (CS 544 / IT 544). Undergraduate students skip this section.**
+> **Required for students enrolled in the graduate section. Undergraduate students skip this section.**
 
-### Automated STIG Remediation Playbook
+### Automated Certificate Issuance Script & Break-Glass Procedure
 
-Generate and run OpenSCAP's built-in Ansible remediation playbook, then validate and extend it:
+1. **Automated Issuance Script:** Write `lab13-issue-cert.sh` - a script a CA operator would run to issue a new user certificate. The script must:
+   - Accept arguments: `--user`, `--principal`, `--validity`, `--source-ip` (optional)
+   - Validate that the user's public key is provided as input
+   - Sign the certificate with the correct options
+   - Log the issuance to `/var/log/ssh-ca/issuance.log`: `DATE | OPERATOR | USER | PRINCIPAL | VALIDITY | KEY_FINGERPRINT | SERIAL`
+   - Verify the certificate after signing (`ssh-keygen -L` and check validity)
+   - Print the certificate fingerprint and serial number for the operator's records
 
-```bash
-# Generate Ansible remediation playbook from scan results
-oscap xccdf generate fix \
-  --fix-type ansible \
-  --profile xccdf_org.ssgproject.content_profile_stig \
-  --output lab6-remediation.yml \
-  /usr/share/xml/scap/ssg/content/ssg-ubuntu2204-ds.xml
-```
+2. **Break-Glass Emergency Access:** Design a documented break-glass procedure for when the CA key is unavailable (key lost, CA machine down) and an admin needs emergency access to a critical server. The procedure must:
+   - Define who can authorize break-glass access (role, not person)
+   - Document the temporary authorized_keys method to use (with time limit)
+   - Include the auditd rule to detect authorized_keys modifications: `-w /root/.ssh/authorized_keys -p wa -k emergency_access`
+   - Define the cleanup procedure (remove emergency key, update CA to issue proper cert, log the incident)
 
-1. Review `lab6-remediation.yml` - it will attempt to auto-remediate ALL STIG findings. Before running it:
-   - Identify 3 tasks that could break your lab environment if run blindly (e.g., tasks that disable services you need)
-   - Comment those tasks out and document why in the playbook as a comment
-2. Run the playbook against your VM using `ansible-playbook lab6-remediation.yml --check` first (dry run), then `--diff` to preview changes, then apply
-3. Run a final OpenSCAP scan after the playbook runs - record the score improvement
-4. Document: Which CAT I or CAT II findings did the automated playbook successfully remediate that you had not done manually? Which ones did it fail or skip?
-
-Submit the modified playbook, the dry-run output, and the final scan score.
-
-### Network Segmentation: nftables Sets and VLAN Design
-
-Extend Part 6's zoned ruleset using nftables **sets and maps** instead of hardcoded subnets, so the ruleset scales without editing rule logic every time a host is added:
-
-```bash
-sudo nft add set inet filter admin_hosts { type ipv4_addr\; }
-sudo nft add element inet filter admin_hosts { 10.0.0.5, 10.0.0.6 }
-sudo nft add rule inet filter input ip saddr @admin_hosts tcp dport 22 accept
-```
-
-Then design (diagram, not implement - VLAN hardware isn't available in the lab environment) a full VLAN-segmented network for a 3-tier application (web/app/database), with a separate management VLAN carrying only SSH/IPMI traffic (tying back to Week 5's out-of-band management work), inter-VLAN routing rules restricting each tier to only the ports the tier above/below it actually needs, and an explanation of what specific lateral-movement attack this segmentation prevents that a flat network wouldn't.
-
-Submit your updated nftables set/map ruleset with test output, the VLAN design diagram, and your lateral-movement analysis.
+Submit the script, the issuance log from at least 2 test runs, and the break-glass procedure document.
 
 ---
 

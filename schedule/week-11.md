@@ -4,28 +4,28 @@ parent: Schedule
 nav_order: 11
 ---
 
-# Week 11 - Logging, Monitoring & Audit Architecture
+# Week 11 - Automated Hardening
 {: .no_toc }
 
 ---
 
 ## Topics
 
-- Linux `auditd` rule writing (syscall, file watch, key-based); Windows Event Log forwarding (WEF/WEC)
-- Syslog-ng and rsyslog pipelines; centralized log aggregation with Graylog or Elastic
-- Log retention policies and NIST SP 800-92 log management
-- MITRE ATT&CK for log analysis: mapping auditd and Windows Event Log entries to ATT&CK techniques, using ATT&CK Navigator, building detection rules
-- Prometheus data model: metric types, labels, scrape intervals; PromQL instant vectors, range queries, aggregations
-- Grafana dashboard design: panels, variables, thresholds, annotations
-- node_exporter and custom exporters; SNMP for network device monitoring (MIBs, SNMPv3)
-- Alerting rule design: severity levels, routing, avoiding alert fatigue; PagerDuty/OpsGenie integration
-- Capacity planning methodology: trending, forecasting, headroom analysis
+- Ansible Galaxy and reusable roles; CIS hardening roles (dev-sec.io)
+- Drift detection with `ansible --check`; CI/CD pipeline integration for compliance-as-code
+- Terraform state security (remote backends, state encryption); HashiCorp Vault for secrets
+- Cloud IAM: roles, policies, least privilege, role chaining, service accounts
+- Security groups vs. NACLs; CloudTrail / Azure Monitor audit logging and retention
+- Cloud cost management: tagging strategies, budgets, and alerts
+- Cloud patching strategies: golden AMIs, immutable infrastructure
+- AWS Well-Architected Framework: security pillar overview
+- Docker Compose for multi-service stacks: service definitions, port binding security, image update policies
 
 ---
 
 ## Slides
 
-[Week11_Logging_Monitoring_and_Audit_Architecture.pptx]({{ site.baseurl }}/lectures/Week11_Logging_Monitoring_and_Audit_Architecture.pptx)
+[Automated Hardening]({{ site.baseurl }}/lectures/CYBER444_Week11_Automated_Hardening.pptx)
 
 ---
 
@@ -33,8 +33,7 @@ nav_order: 11
 
 | Track | Lab |
 |---|---|
-| **IT Track** | [IT LAB 11 - Prometheus & Grafana Monitoring Stack]({% link labs/it-lab-11.md %}) |
-| **Cyber Track** | [CYBER LAB 11 - Centralized Logging with auditd & Graylog]({% link labs/cyber-lab-11.md %}) |
+| **Both Tracks** | [LAB 11 - Ansible Galaxy Hardening Role]({% link labs/lab-11.md %}) |
 
 ---
 
@@ -42,14 +41,7 @@ nav_order: 11
 
 | Track | Assignment |
 |---|---|
-| **Cyber Track** | [CYBER HW 11 - Audit Log Analysis & Attack Reconstruction]({% link homework/cyber-hw-11.md %}) |
-| **IT Track** | [IT HW 11 - Monitoring Architecture with Alerting Rules & Runbooks]({% link homework/it-hw-11.md %}) |
-
----
-
-## Assessments
-
-None this week.
+| **Both Tracks** | [HW 11 - Configuration Drift: Detection, Threat Modeling & Monitoring]({% link homework/hw-11.md %}) |
 
 ---
 

@@ -1,10 +1,10 @@
 ---
-title: "IT HW 4 - RFC Writing & Change Risk Analysis"
+title: "IT HW 4 - Windows Server Infrastructure Design"
 parent: Homework
-nav_order: 104
+nav_order: 4
 ---
 
-# IT HW 4 - RFC Writing & Change Risk Analysis
+# IT HW 4 - Windows Server Infrastructure Design
 {: .no_toc }
 
 <details open markdown="block">
@@ -16,54 +16,71 @@ nav_order: 104
 
 ---
 
-## Overview
-
-| | |
-|---|---|
-| **Assignment** | IT HW 4 |
-| **Points** | 100 |
-| **Due** | Week 5 |
-| **Track** | IT |
-
----
-
 ## Description
 
-### Part 1 - RFC Critique (25 pts)
+Design a complete Windows Server infrastructure for Cedar Ridge School District and defend every decision as you would to the district's IT Director during a professional engagement. Use the [District Environment Profile]({% link homework/description-files/it-hw-04-scenario.md %}) for the staffing, current-state server, network, budget, and compliance facts your design needs to be written against.
 
-A draft RFC is provided on Learning Suite (`IT_HW4_Bad_RFC.pdf`). It was submitted by a junior admin and rejected by the CAB. Write a structured critique identifying every deficiency.
+### Part 1 - Server Inventory & AD Design (25 pts)
 
-For each problem found, document: which RFC section it's in, what is wrong or missing, the business/operational risk if the change proceeded with this gap, and what the correct content should be. You must identify **at least 8 distinct deficiencies**. Organize as a table followed by a 1-paragraph summary stating whether you would approve, reject, or request revisions - and what must change before approval.
+**Server inventory:** For each proposed server list: role(s), hardware spec (CPU/RAM/Storage), which location it lives in, and Datacenter vs. Standard licensing justification. Include a total licensing cost estimate.
 
-### Part 2 - Full RFC (60 pts)
+**Active Directory design:**
+- Domain name and forest/domain structure (single vs. multi-domain - justify)
+- OU structure with at least 6 OUs - show the tree structure and explain what objects go in each OU and why the hierarchy is designed this way (not just "Users OU for users")
+- AD Sites and Services: site topology, subnet assignments, site link cost, replication schedule between the District Office and the Operations Center
+- At least 3 specific security-focused AD configurations (e.g., Protected Users group, Authentication Policies, AdminSDHolder)
 
-Write a complete, production-quality RFC for the following scenario:
+### Part 2 - Group Policy Design (25 pts)
 
-**Scenario:** Acme Financial Corp (2,000 employees, subject to SOX and PCI-DSS) is migrating their primary email from on-premises Exchange Server 2016 to Microsoft 365. Requirements: preserve 7 years of email archives under legal hold, maintain continuous mail flow (no lost email), and complete migration in a rolling 6-week process with no single maintenance window longer than 4 hours. The CISO has classified this as High-risk due to regulated data.
+Design a GPO architecture with **at least 12 GPOs**. For each GPO document:
 
-Your RFC must include:
+- GPO name and link target (domain/site/OU)
+- What it enforces (specific policy paths and settings, not just "hardens workstations")
+- Whether it applies via security filtering or WMI filter
+- Link order relative to other GPOs at the same level and why
 
-1. **Change summary** - one paragraph written for a non-technical CFO
-2. **Business justification** - quantified cost-benefit including license cost assumptions, Exchange support end-of-life, and estimated operational savings
-3. **Risk classification** - Normal/Standard/Emergency, risk level, and written justification referencing specific regulatory exposure
-4. **Pre-change prerequisites** - every dependency that must be verified before the first window opens (minimum 6, with owner and verification method for each)
-5. **Phased implementation plan** - 6-week timeline with specific milestones per phase. Each phase must define a measurable go/no-go criterion before proceeding to the next.
-6. **Per-phase rollback plan** - for each phase: the exact trigger that causes you to abort (specific metric or failure condition), the rollback steps, and the maximum recovery time before you are back to baseline
-7. **Validation plan** - how you verify mail flow, archive access, calendar sync, and mobile device connectivity for each user group before decommissioning Exchange
-8. **Communication plan** - specific dates, channels, content summaries, and owners for notifications to end users, helpdesk, legal/compliance, and executives
-9. **Post-implementation success metrics** - what you measure in the 30 days after completion; define numeric targets for each metric
+Your GPO design must address: password policy, account lockout, software restriction / AppLocker, Windows Defender settings, audit policy (aligned with CIS Benchmark Level 2), USB/removable media control, and remote desktop access control. The FERPA requirement for student-record-system access logging must be specifically addressed in at least one GPO.
 
-### Part 3 - Reflection (15 pts)
+### Part 3 - WSUS & Patch Strategy (15 pts)
 
-Under what specific circumstances would you invoke an emergency change process (bypassing the 2-week CAB review) for a migration of this scope? What governance controls ensure the emergency process is not abused as a shortcut? Reference at least two ITIL 4 guiding principles in your answer.
+Design your WSUS topology and patch approval workflow:
+
+- Upstream vs. downstream server placement and why
+- Computer groups and their membership criteria
+- Approval workflow: who approves critical vs. non-critical patches and in what time window?
+- How do you handle patches that fail in your pilot ring - what is the rollback decision process?
+- How do you verify patch compliance across all 200 machines? (What report or tool, and at what frequency?)
+
+### Part 4 - File Services & DFS (15 pts)
+
+Design the DFS namespace and replication topology:
+
+- Namespace structure (domain-based or standalone - justify)
+- At least 4 specific DFS shares with their purpose, access group, and quota
+- DFS-R replication group configuration between the District Office and the Operations Center: replication schedule, bandwidth throttle, staging area size
+- Access-Based Enumeration (ABE): where you enable it and why
+
+### Part 5 - Backup & Disaster Recovery (15 pts)
+
+Design a backup strategy that meets a **4-hour RTO and 1-hour RPO** for the domain controllers:
+
+- What gets backed up, with what tool, at what frequency
+- Retention policy and where backups are stored (on-site and off-site/cloud)
+- Bare-metal recovery procedure for a DC: specific steps from "the DC is dead" to "DC is restored and fully replicated"
+- SYSVOL recovery procedure if GPOs are corrupted
+- How you test backups and at what frequency
+
+### Part 6 - FERPA Compliance Controls (5 pts)
+
+List the 5 most important Windows infrastructure controls that directly protect student education records under FERPA. For each: the specific FERPA requirement it addresses (e.g., limiting access to school officials with a legitimate educational interest, access logging/auditability, retention), the Windows configuration or tool that implements it, and how you would produce evidence of it for a compliance review or state records request.
 
 ---
 
 ## Deliverable(s)
 
-Write your full submission in `homework/it-hw-04.md`.
+Write your full design in `homework/it-hw-04.md`.
 
-Open a PR titled `IT HW 4 - RFC Writing & Change Risk Analysis` and submit the PR link on Learning Suite by the due date.
+Open a PR titled `IT HW 4 - Windows Server Infrastructure Design` and submit your repo link on Learning Suite by the due date.
 
 ---
 
@@ -71,18 +88,19 @@ Open a PR titled `IT HW 4 - RFC Writing & Change Risk Analysis` and submit the P
 
 | Criterion | Points |
 |---|---|
-| RFC critique - issues identified with risk explanations | 25 |
-| RFC completeness - all 9 sections present and substantive | 20 |
-| RFC quality - specific, quantified, no vague language | 25 |
-| Per-phase rollback plan - triggers, steps, recovery time | 15 |
-| Reflection - ITIL 4 principles cited, governance controls defined | 15 |
+| Server inventory + AD design (OU rationale, security configs) | 25 |
+| GPO architecture - 12+ GPOs, specific settings, FERPA addressed | 25 |
+| WSUS topology and patch approval workflow | 15 |
+| DFS design - namespace, replication, ABE | 15 |
+| Backup/DR - RTO/RPO met, bare-metal recovery steps | 15 |
+| FERPA controls - specific, auditable | 5 |
 
 ---
 
 ## Tip
 
 {: .tip }
-"Notify users before migration" is not a communication plan. Specify exact dates, channels (email/Teams/intranet), content summaries, and who owns each touchpoint.
+"Create a Users OU" is not a design - explain why that OU exists at that level in the hierarchy and what GPOs link to it. Think about delegation: who can create objects in each OU?
 
 ---
 
@@ -90,29 +108,15 @@ Open a PR titled `IT HW 4 - RFC Writing & Change Risk Analysis` and submit the P
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section (CS 544 / IT 544). Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
+### Part 7 - FERPA Compliance Assessment Report (30 pts)
 
-### Part 4 - CAB Briefing & Post-Mortem Research (30 pts)
+Write a 3-4 page **FERPA Compliance Assessment Report** (`it-hw-04-ferpa-report.md`) written as if presenting to the district's School Board and legal counsel:
 
-**Change Advisory Board (CAB) Briefing Document (15 pts)**
-
-Your RFC is a technical document. Graduate students must also produce the **CAB Briefing** that a change manager would present when seeking approval (`it-hw-04-cab-briefing.md`). The CAB audience is IT leadership and business stakeholders - not engineers. The briefing must:
-
-1. **Executive Summary** (1 paragraph) - what is changing, why, and when, in business terms
-2. **Business Risk Assessment** - likelihood and impact of the change failing, expressed as business impact (revenue, compliance, customer impact) not technical terms
-3. **Rollback Decision Gate** - specific, measurable criteria that trigger rollback. Not "if something goes wrong" - actual metrics: "if >5% of mailboxes fail to migrate within the first 2-hour window, rollback is initiated"
-4. **Success Metrics** - how will the CAB know the change succeeded? Define KPIs measured at 24h, 72h, and 30d post-change.
-5. **Stakeholder Communication Plan** - who is notified at each phase, through what channel, and what they are told. Include a user-facing communication template.
-6. **Approval Matrix** - who must sign off (CAB chair, CISO, business owner, legal/compliance) and the minimum quorum required for approval
-
-**Post-Mortem Research Analysis (15 pts)**
-
-Research a real, publicly documented migration post-mortem or failure (Exchange, M365, or major email migration preferred - e.g., the Sidekick data loss incident, Knight Capital, or any public case study with enough technical detail). Write a 2-page analysis:
-
-1. Summarize what happened, what the change process was, and what failed
-2. Map the failure to a specific gap in your RFC - which section of your RFC would have caught or mitigated this failure?
-3. Extract 3 specific lessons and propose concrete additions or amendments to your RFC based on each lesson (cite the section you would modify)
+1. **Scope** - which systems, applications, and processes (EduTrack SIS access, the GPOs from Part 2, backups, etc.) are in scope for this assessment
+2. **Control Environment** - overall assessment of the control environment maturity (CMMI-style 1-5 rating with justification for each control domain: Access Management, Change Management, Availability). For each domain, cite the specific Windows control from Part 6 and the exact evidence artifact it produces (e.g., the PowerShell command or report that would demonstrate the control is operating, not just configured)
+3. **Deficiencies** - identify at least 2 control deficiencies in your design (be honest - no design is perfect) and classify each by severity (Minor, Significant, or Material, using your own defensible criteria - FERPA doesn't prescribe PCAOB-style categories, so define what each severity level means for student-data risk)
+4. **Management's Response** - for each deficiency, write a response the IT Director could give the School Board, acknowledging the finding and committing to a remediation timeline
+5. **Conclusion** - whether you believe your controls are sufficient to protect student education records under FERPA (and the caveats)
 
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

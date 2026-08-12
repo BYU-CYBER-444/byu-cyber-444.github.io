@@ -30,6 +30,20 @@
   }
 }
 
+// ── Content width ─────────────────────────────────────────────────────────────
+// The theme's .main margin-left/width calc assumes its default ~15.5rem
+// sidebar. Since the sidebar above is pinned to 10rem, that calc leaves a
+// large dead gap before the content even starts, on top of the theme's own
+// max-width: 50rem cap. Re-anchor to the real sidebar width, widen the cap,
+// and center the content block in the space right of the sidebar (falls back
+// to flush-left at 10rem on narrower screens via max()).
+@media (min-width: 50rem) {
+  .main {
+    max-width: 80rem;
+    margin-left: max(10rem, calc((100% - 80rem) / 2 + 10rem)) !important;
+  }
+}
+
 // ── Assignment badge pills ────────────────────────────────────────────────────
 .badge-lab    { background:#1F3864; color:#fff; border-radius:4px; padding:2px 8px; font-size:.75rem; font-weight:600; }
 .badge-hw     { background:#2E75B6; color:#fff; border-radius:4px; padding:2px 8px; font-size:.75rem; font-weight:600; }
@@ -76,9 +90,18 @@
 .callout.tip    { border-left-color: #217346; background: #f0faf4; }
 
 // ── Tables ────────────────────────────────────────────────────────────────────
+// just-the-docs sets th/td min-width: 7.5rem by default, which forces wide
+// tables (6+ columns) past the content width and triggers .table-wrapper's
+// overflow-x scrollbar even though the cell text would otherwise wrap to fit.
 table {
   width: 100%;
   font-size: .9rem;
+  table-layout: fixed;
   thead th { background-color: #1F3864 !important; color: #fff !important; }
   tbody tr:nth-child(even) td { background-color: #f2f6fc; }
+  th, td {
+    min-width: 0 !important;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
 }

@@ -1,10 +1,9 @@
 ---
-title: "IT HW 14 - Post-Incident Review & Problem Management"
+title: "IT HW 14 - On-Premises AI Inference Server Proposal"
 parent: Homework
-nav_order: 114
+nav_order: 14
 ---
-
-# IT HW 14 - Post-Incident Review & Problem Management
+# IT HW 14 - On-Premises AI Inference Server Proposal
 {: .no_toc }
 
 <details open markdown="block">
@@ -16,80 +15,81 @@ nav_order: 114
 
 ---
 
-## Overview
-
-| | |
-|---|---|
-| **Assignment** | IT HW 14 |
-| **Points** | 100 |
-| **Due** | Week 15 |
-| **Track** | IT |
-
----
-
 ## Description
 
-Using the P1 incident from **IT LAB 14** as your source material, produce the two formal ITSM documents that close out every major incident: the Post-Incident Review and the Problem ticket. These must be written as if they will be presented to IT leadership and retained for compliance.
+Valley Medical Group's CISO has approved a pilot of an on-premises AI assistant for clinical staff. No patient data may leave the building - cloud AI APIs are prohibited by the HIPAA BAA review. You are writing the IT proposal that must survive a security and budget review.
 
-### Part 1 - Post-Incident Review Report (60 pts)
+Use the [Valley Medical Group Environment Profile]({% link homework/description-files/it-hw-14-scenario.md %}) for the specific facility, staffing, existing network, identity provider, budget ceiling, and expected usage volume your proposal needs to reference - a proposal that invents its own headcount, budget, or query volume instead of using the assigned figures will lose points for not being grounded in the assigned environment.
 
-The PIR is presented to IT leadership, and potentially to compliance or legal, within 5 business days of a P1 incident. It must be factual, blameless, and specific. Vague language or unsupported claims will be returned.
+### Part 1 - Use Case Definition & Data Flow (15 pts)
 
-1. **Incident header** - title, date/time opened and closed, total duration, P-level, affected services, total users/patients impacted, incident commander name/role
+Define exactly 3 use cases. For each:
 
-2. **Executive summary** - 2 paragraphs maximum written for a non-technical CTO. Must state what broke, how long it was broken, and the business impact in dollar or patient-impact terms.
+- What clinical task does the AI assist with?
+- What data is submitted as a prompt (be specific - "the physician types a draft note" is not enough; describe what PHI fields could appear)
+- What data the model receives vs. what stays client-side
+- Why on-premises inference satisfies the HIPAA requirement that this use case could not meet with a cloud API
 
-3. **Detailed timeline** - chronological table from first alert to full resolution. Include timestamps to the minute, actor (person or automated system), action taken, and outcome. Gaps in the timeline must be explained.
+Then draw or describe the data flow diagram: from clinical workstation → AI request → inference server → response → workstation. Identify every point where PHI could be present and what protects it at each point.
 
-4. **Root cause analysis - 5 Whys** - document each layer of "why" until you reach the underlying cause. The final "why" must not be a person ("because the admin made a mistake") - it must be a system, process, or design failure that allowed the mistake to happen. Format as a numbered chain.
+### Part 2 - Model Evaluation & Selection (20 pts)
 
-5. **Contributing factors** - beyond the root cause, list every factor that made the incident worse or harder to detect (delayed alerting, missing runbook, single point of failure, etc.). At least 3.
+Evaluate **at least 3 open-weight models** for your use cases. For each model:
 
-6. **Impact quantification** - calculate:
-   - Total downtime duration
-   - Number of users/patients affected (from Lab 14 data)
-   - Financial impact: use $5,600/minute (Gartner average for IT downtime in healthcare) or a figure you justify differently
-   - SLA breach: did this incident breach any SLA? If so, what are the contractual consequences?
-   - Patient safety impact: for a healthcare environment, was there any possibility of patient harm? If yes, does this trigger mandatory reporting?
+| Model | Parameters | Quantization Options | VRAM Required (Q4) | Context Window | License | Medical Benchmark Score (if available) |
+|---|---|---|---|---|---|---|
+| Llama 3.1 8B Instruct *(example row - propose your own 3 models, don't just reuse this one)* | 8B | Q4_K_M, Q5_K_M, Q8_0, FP16 | ~5.5 GB (Q4_K_M) | 128K tokens | Llama 3.1 Community License (commercial use permitted, no clinical-use restriction) | None published - general-purpose baseline, not medically fine-tuned |
 
-7. **What went well** - at least 4 things the team did correctly during the response. Be specific ("the on-call engineer acknowledged the page within 3 minutes, within our P1 SLA of 5 minutes").
+Select one model and justify the choice based on: performance for clinical language tasks, hardware requirements vs. your proposed server, license compatibility with commercial clinical use, and context window adequacy for the longest prompt your use cases generate.
 
-8. **What needs improvement** - at least 5 specific, measurable improvement items. Each must have an owner and a completion date. Vague items like "improve monitoring" are not acceptable - "Add a Prometheus alert rule for PostgreSQL replication lag >30s by Dec 1" is.
+Explain the quantization trade-off: what does Q4_K_M cost you in accuracy compared to full precision, and is that acceptable given the use case?
 
-9. **Action items table** - formal tracking table:
+### Part 3 - Hardware Specification (20 pts)
 
-| Action | Owner | Due Date | Priority | Status |
-|---|---|---|---|---|
+Propose a server specification. Your spec must be derived from the model's requirements - not a generic "powerful server." Include:
 
-### Part 2 - Problem Management Ticket (25 pts)
+- CPU (cores, generation, why this matters for CPU-only inference throughput in tokens/sec)
+- RAM (minimum for the model size + OS + concurrent requests - show your calculation)
+- GPU decision: CPU-only vs. GPU inference. If GPU: model name, VRAM, expected tokens/sec improvement. If CPU-only: justify why the latency is acceptable for your use cases.
+- Storage: model weights storage (show size calculation), inference cache, audit logs (show retention × log size calculation)
+- Network: bandwidth requirements for concurrent users
+- Estimated acquisition cost (name specific products and prices or quote ranges)
+- Estimated monthly power cost (use server TDP and $0.12/kWh)
 
-The problem ticket tracks the underlying root cause through to permanent fix. Create a ticket with:
+### Part 4 - Security Architecture (25 pts)
 
-- **Problem title** - specific, not "server crashed"
-- **Root cause** - verbatim from your 5 Whys analysis
-- **Problem category** - Hardware / Software / Configuration / Process / Human Error (ITIL classification)
-- **Known error record** - what is the known workaround while the permanent fix is pending? How long is this workaround sustainable?
-- **Permanent fix plan** - the specific change(s) that will prevent recurrence. For each fix: description, owner, estimated effort, target completion date
-- **Verification criteria** - how will you confirm the fix is effective? (Specific test, metric, or audit check)
-- **Recurrence risk** - if the permanent fix is delayed past its target date, what is the escalation path and who decides whether to accept the ongoing risk?
+Design the full security architecture for this system:
 
-### Part 3 - SLA Breach Analysis (15 pts)
+**Network isolation:** Which VLAN? What firewall rules allow access to the inference server? What egress rules ensure the server cannot reach the internet? Write the specific firewall rules (source/destination/port/action).
 
-Assume Valley Medical Group has a standard SLA with the following commitments to clinical department heads:
+**Authentication & authorization:** How do clinical staff authenticate to the AI service? Design a role-based access model (at minimum: Physician, Nurse, Admin-only). Specify whether you use API keys, SSO (which IdP?), or a reverse proxy with auth. Include the nginx or HAProxy config snippet for the auth proxy.
 
-- Availability: 99.9% monthly (≤43.8 minutes unplanned downtime/month)
-- P1 response: Incident Commander assigned within 5 minutes of detection
-- P1 resolution: Initial mitigation within 60 minutes, full resolution within 4 hours
+**Audit logging:** Every query to the inference server must be logged. Design the log schema (what fields are captured per request), the log destination, retention period, and who has access to audit logs. Write a sample log entry in JSON format.
 
-For each commitment: did this incident breach it? If yes, calculate the magnitude of the breach. Identify any SLA credits or contractual remedies that may apply. Write a 1-paragraph communication to the clinical department head who was most impacted - this is a professional stakeholder communication, not a technical email.
+**Incident response plan:** What is the response procedure if the inference server is compromised? Who is notified, in what order, and within what timeframe? How do you determine if any PHI-containing prompts were exfiltrated? What is the HIPAA breach determination checklist for this scenario?
+
+### Part 5 - AUP Addendum & Governance (10 pts)
+
+Write a 1-paragraph Acceptable Use Policy addendum for Valley Medical Group covering clinical AI assistant use. It must address: what staff may submit to the AI, what is prohibited (PHI in prompts for uses beyond clinical documentation, sharing responses externally, using AI output without clinical review), and consequences for violation.
+
+Then define: who owns the AI system from a governance perspective (IT? Clinical informatics? CISO?), how the model is updated (who approves a new model version and what security review is required?), and how the system is decommissioned when no longer needed.
+
+### Part 6 - Cost Summary (10 pts)
+
+Produce a 3-year total cost of ownership:
+
+- Year 0: hardware acquisition, setup labor (estimate hours × your loaded hourly rate)
+- Years 1-3: power, maintenance contract or self-maintained labor, storage growth, model updates
+- Compare to 3-year cost of a HIPAA-compliant cloud AI API (Azure OpenAI with BAA, or AWS Bedrock) at estimated query volume
+- State the break-even point and your recommendation
 
 ---
 
 ## Deliverable(s)
 
-Write your full submission in `homework/it-hw-14.md`.
+Write your full proposal in `homework/it-hw-14.md`.
 
-Open a PR titled `IT HW 14 - Post-Incident Review` and submit the PR link on Learning Suite by the due date.
+Open a PR titled `IT HW 14 - AI Inference Server Proposal` and submit your repo link on Learning Suite by the due date.
 
 ---
 
@@ -97,61 +97,43 @@ Open a PR titled `IT HW 14 - Post-Incident Review` and submit the PR link on Lea
 
 | Criterion | Points |
 |---|---|
-| PIR - timeline detail, executive summary, 5 Whys chain | 25 |
-| PIR - impact quantification with financial calculation | 15 |
-| PIR - what went well + improvement items (specific, owned, dated) | 20 |
-| Problem ticket - root cause, known error, permanent fix plan, verification | 25 |
-| SLA breach analysis - breach determination, stakeholder communication | 15 |
-
----
-
-## Tip
-
-{: .tip }
-The 5 Whys must reach a systemic cause. "Why did the server crash? Because the disk filled up. Why? Because log rotation wasn't configured. Why? Because the runbook for new server provisioning didn't include log rotation setup. Why? Because the runbook was never reviewed after the logging system changed. Why? Because there is no change management process for runbook updates." That's a systemic cause.
-
----
+| Use case definition + data flow - PHI risks identified | 15 |
+| Model evaluation - 3 models compared, selection justified | 20 |
+| Hardware spec - derived from model requirements, costs shown | 20 |
+| Security architecture - network isolation, auth, audit log schema, IR plan | 25 |
+| AUP + governance | 10 |
+| 3-year TCO + cloud comparison | 10 |
 
 ---
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section (CS 544 / IT 544). Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
+### Part 7 - NIST AI RMF Assessment & AI System Card (30 pts)
 
-### Part 4 - Organizational Resilience Assessment & Executive Presentation (30 pts)
+**NIST AI Risk Management Framework Assessment (15 pts)**
 
-**Resilience Maturity Assessment (20 pts)**
+Assess your proposed AI inference deployment against the **NIST AI RMF 1.0** four core functions. For each function, identify at least 3 specific actions your deployment plan does or should take:
 
-Assess your organization's resilience maturity across 5 domains using a structured maturity model (adapt from CERT-RMM, RESILIA, or define your own 5-level scale). For each domain:
+| Function | Action | Current State | Gap |
+|---|---|---|---|
+| **GOVERN** | Establish AI risk management policies | Draft policy in Part 5 | No approval process defined |
+| **MAP** | Identify AI risks and impacts | ... | ... |
+| **MEASURE** | Analyze and assess AI risks | ... | ... |
+| **MANAGE** | Prioritize and address AI risks | ... | ... |
 
-| Domain | Maturity Level (1-5) | Evidence from the Incident | Gap Analysis | 90-Day Improvement |
-|---|---|---|---|---|
-| Incident Management | | | | |
-| Service Continuity | | | | |
-| Risk Management | | | | |
-| Knowledge Management | | | | |
-| External Dependencies | | | | |
+For each gap identified, propose a specific remediation with an estimated implementation effort (days/weeks of work). Prioritize your top 3 gaps by risk and justify why they are highest priority.
 
-**Maturity Scale Definition:** Define your 5 levels explicitly (e.g., 1=Ad Hoc, 2=Repeatable, 3=Defined, 4=Managed, 5=Optimizing) with concrete behavioral descriptors for each level at each domain. Base your ratings on evidence from the incident - not aspirational self-assessment.
+**AI System Card (15 pts)**
 
-For your lowest-scored domain:
-1. Describe exactly what happened during the incident that revealed this maturity gap
-2. Propose 3 specific improvements with implementation effort estimates (person-days)
-3. Define a measurable success criterion for each improvement
+Produce a formal **AI System Card** (`it-hw-14-system-card.md`) for your proposed model following the Hugging Face Model Card / Mitchell et al. (2019) format, extended for organizational deployment:
 
-**Executive Steering Committee Presentation (10 pts)**
-
-Produce a 5-7 slide presentation (`it-hw-14-exec-presentation.pptx` or `.md` with clearly delineated slides) suitable for delivery to an executive steering committee (CFO, COO, CISO). The audience has no technical depth - they care about business risk, cost, and accountability.
-
-Slides must cover:
-1. **What happened** - in business terms, not technical terms
-2. **Business impact** - financial loss, customer impact, regulatory exposure
-3. **Why it happened** - root cause in one sentence, systemic factor in one sentence
-4. **What we're doing** - top 3 remediation investments with cost and expected risk reduction
-5. **What we're asking for** - specific budget approval, policy decision, or executive action required
-
-Avoid all technical jargon. If you must use a technical term, define it in the slide. The committee should be able to make an informed funding decision after reading your presentation.
+1. **Model Details** - architecture, version, training data provenance (what was it trained on, by whom, under what license), intended use cases, and out-of-scope uses
+2. **Intended Users** - who will use this system, what their technical sophistication is, and what guardrails exist to prevent misuse
+3. **Data Provenance** - for your use case's inference inputs, where does the data come from, who owns it, and what data classification does it carry?
+4. **Performance Metrics** - what metrics will you use to evaluate model performance in production (accuracy, latency, drift), at what thresholds will you trigger a model update or rollback?
+5. **Bias & Fairness** - what populations or edge cases might your model underperform on, and what testing will you do before deployment?
+6. **Incident Reporting** - how would a user report a model error or harmful output, who triages it, and what is the escalation path if the error is systematic?
+7. **Limitations** - what can this model definitively NOT do, and how will you prevent users from relying on it for those tasks?
 
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

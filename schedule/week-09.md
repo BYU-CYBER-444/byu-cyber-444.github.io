@@ -4,36 +4,29 @@ parent: Schedule
 nav_order: 9
 ---
 
-# Week 9 - Configuration Management & Cloud Fundamentals
+# Week 9 - Midterm Exam & Final Project Kickoff
 {: .no_toc }
 
 ---
 
 ## Topics
 
-- Infrastructure-as-Code (IaC) concepts and security implications
-- Ansible architecture (inventory, playbooks, roles, vault); idempotency and configuration drift detection
-- Terraform basics (providers, state, plan/apply); secrets management in IaC
-- Cloud computing service models: IaaS, PaaS, SaaS, FaaS
-- AWS and Azure core services: VPCs, subnets, route tables, IGW, NAT gateways, EC2/Azure VM lifecycle
-- Cloud storage: S3/Blob, EFS/Azure Files; shared responsibility model
-- AWS CLI and Azure CLI: authentication, core EC2/VPC commands, EBS management, JMESPath output formatting
-- Containers and Docker: images, layers, registries, namespaces, cgroups; essential Docker commands; volumes and networking; Docker Compose
+- Midterm exam: comprehensive review session covering Weeks 1-8, followed by the exam itself
+- Final Project overview: scope, deliverables, timeline, and grading rubric for both tracks
+- Final Project proposal requirements: problem statement, target environment, and success criteria
+- Choosing a final project topic: pairing with a real organizational need vs. a self-contained lab-scale simulation
 
 ---
 
 ## Slides
 
-[Week09_Configuration_Management_and_Cloud_Fundamentals.pptx]({{ site.baseurl }}/lectures/Week09_Configuration_Management_and_Cloud_Fundamentals.pptx)
+[ Midterm Exam + Final Project Kickoff]({{ site.baseurl }}/lectures/CYBER444_Week09_Midterm_and_Final_Project.pptx)
 
 ---
 
 ## Labs
 
-| Track | Lab |
-|---|---|
-| **IT Track** | [IT LAB 9 - Cloud Infrastructure Provisioning]({% link labs/it-lab-09.md %}) |
-| **Cyber Track** | [CYBER LAB 9 - Ansible Hardening Playbook]({% link labs/cyber-lab-09.md %}) |
+None this week.
 
 ---
 
@@ -41,14 +34,16 @@ nav_order: 9
 
 | Track | Assignment |
 |---|---|
-| **Cyber Track** | [CYBER HW 9 - Ansible Hardening Playbook: Advanced Features & Testing]({% link homework/cyber-hw-09.md %}) |
-| **IT Track** | [IT HW 9 - Cloud Migration Plan with IaC]({% link homework/it-hw-09.md %}) |
+| **Both Tracks** | [HW 9 - Midterm Practice Exam]({% link homework/hw-09.md %}) |
+
 
 ---
 
-## Assessments
+## Final Project
 
-None this week.
+**Cyber Track:** [Cyber Final Project Proposal]({% link final-project-cyber/proposal.md %})
+
+**IT Track:** [IT Final Project Proposal]({% link final-project-it/proposal.md %}) 
 
 ---
 

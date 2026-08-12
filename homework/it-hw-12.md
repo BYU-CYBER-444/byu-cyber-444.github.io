@@ -1,10 +1,9 @@
 ---
-title: "IT HW 12 - On-Premises AI Inference Server Proposal"
+title: "IT HW 12 - Monitoring Architecture with Alerting Rules & Runbooks"
 parent: Homework
-nav_order: 112
+nav_order: 12
 ---
-
-# IT HW 12 - On-Premises AI Inference Server Proposal
+# IT HW 12 - Monitoring Architecture with Alerting Rules & Runbooks
 {: .no_toc }
 
 <details open markdown="block">
@@ -16,89 +15,63 @@ nav_order: 112
 
 ---
 
-## Overview
-
-| | |
-|---|---|
-| **Assignment** | IT HW 12 |
-| **Points** | 100 |
-| **Due** | Week 13 |
-| **Track** | IT |
-
----
-
 ## Description
 
-Valley Medical Group's CISO has approved a pilot of an on-premises AI assistant for clinical staff. No patient data may leave the building - cloud AI APIs are prohibited by the HIPAA BAA review. You are writing the IT proposal that must survive a security and budget review.
+Design a complete monitoring architecture for Valley Medical Group's full infrastructure. Use the [Valley Medical Group Infrastructure & Monitoring Scope]({% link homework/description-files/it-hw-12-scenario.md %}) for the specific server inventory, AWS environment, and business-downtime-cost figures your design needs to reference. This assignment is a design exercise, not a hands-on build - you'll implement and test real Prometheus alerting rules against a live stack separately in lab. Here, the deliverable is a set of runbooks specific enough that an on-call engineer could actually use them at 2 AM.
 
-### Part 1 - Use Case Definition & Data Flow (15 pts)
+### Part 1 - Stack Selection & Justification (10 pts)
 
-Define exactly 3 use cases. For each:
+Choose your monitoring stack (Prometheus + Grafana, Datadog, Zabbix, or another). Justify your choice against at least two alternatives using a weighted decision matrix. Criteria to evaluate: cost, HIPAA audit log support, Windows support, alert routing flexibility, on-call integration, and setup complexity. Show your scoring.
 
-- What clinical task does the AI assist with?
-- What data is submitted as a prompt (be specific - "the physician types a draft note" is not enough; describe what PHI fields could appear)
-- What data the model receives vs. what stays client-side
-- Why on-premises inference satisfies the HIPAA requirement that this use case could not meet with a cloud API
+### Part 2 - Metrics & Alerting Conditions Inventory (45 pts)
 
-Then draw or describe the data flow diagram: from clinical workstation → AI request → inference server → response → workstation. Identify every point where PHI could be present and what protects it at each point.
+For each infrastructure component, specify the exact metrics you will collect. Be specific - not "CPU usage" but `node_cpu_seconds_total{mode="idle"}` and the derived PromQL-style expression you'd use to compute utilization from it:
 
-### Part 2 - Model Evaluation & Selection (20 pts)
+- Linux servers (5): system metrics via node_exporter, plus application-specific metrics for Nginx and Django
+- Windows Server: equivalent metrics (use windows_exporter or Datadog agent - specify which)
+- Network devices (3 switches, 1 firewall): SNMP OIDs for interface utilization, error rates, and availability (list the specific OIDs)
+- AWS resources: CloudWatch metrics for EC2, RDS, and ALB (list metric names and namespaces)
 
-Evaluate **at least 3 open-weight models** for your use cases. For each model:
+Then design **at least 10 alerting conditions** covering the following categories. This is a design exercise - describe each one in a table (metric/expression, threshold, sustained duration, severity, and a one-sentence rationale for why you chose that threshold), not a Prometheus rules file. (Implementing and testing this as a real `alerts.yml` against a live Prometheus stack is covered separately in lab.)
 
-| Model | Parameters | Quantization Options | VRAM Required (Q4) | Context Window | License | Medical Benchmark Score (if available) |
-|---|---|---|---|---|---|---|
+- **Infrastructure:** High CPU (>85% for 5 min), high memory (>90%), disk filling fast (will fill in <4 hours based on derivative)
+- **Availability:** Node down (instance unreachable), service down (specific process not running)
+- **Application:** HTTP error rate >1% over 5 min (4xx+5xx), p95 response time >2s
+- **Database:** PostgreSQL replication lag >30s, active connections >80% of `max_connections`
+- **Business:** EMR application health check failure (endpoint returning non-200)
 
-Select one model and justify the choice based on: performance for clinical language tasks, hardware requirements vs. your proposed server, license compatibility with commercial clinical use, and context window adequacy for the longest prompt your use cases generate.
+For two of your alert conditions, describe how each should be routed - P1 to PagerDuty, P2 to Slack, P3 email - and justify why that severity maps to that channel.
 
-Explain the quantization trade-off: what does Q4_K_M cost you in accuracy compared to full precision, and is that acceptable given the use case?
+### Part 3 - Runbooks (30 pts)
 
-### Part 3 - Hardware Specification (20 pts)
+Write runbooks for **3 of your alert conditions from Part 2**. A runbook is what an on-call engineer opens when paged at 2 AM. Each runbook must include:
 
-Propose a server specification. Your spec must be derived from the model's requirements - not a generic "powerful server." Include:
+1. **Alert name and trigger condition** - restate, in plain English, the specific condition you defined in Part 2 (metric, threshold, duration)
+2. **Initial triage** - the first 3 commands to run and what you are looking for in the output
+3. **Decision tree** - at least 3 branches: "if you see X, do Y; if you see A, do B"
+4. **Resolution steps** - numbered, specific commands, not vague actions
+5. **Escalation criteria** - when do you wake up the senior engineer vs. handle it yourself?
+6. **Post-resolution** - what do you document, and how do you verify the system is stable before going back to sleep?
 
-- CPU (cores, generation, why this matters for CPU-only inference throughput in tokens/sec)
-- RAM (minimum for the model size + OS + concurrent requests - show your calculation)
-- GPU decision: CPU-only vs. GPU inference. If GPU: model name, VRAM, expected tokens/sec improvement. If CPU-only: justify why the latency is acceptable for your use cases.
-- Storage: model weights storage (show size calculation), inference cache, audit logs (show retention × log size calculation)
-- Network: bandwidth requirements for concurrent users
-- Estimated acquisition cost (name specific products and prices or quote ranges)
-- Estimated monthly power cost (use server TDP and $0.12/kWh)
+### Part 4 - SLO Design & Error Budget (15 pts)
 
-### Part 4 - Security Architecture (25 pts)
+Define SLOs for Valley Medical Group's EMR application:
 
-Design the full security architecture for this system:
-
-**Network isolation:** Which VLAN? What firewall rules allow access to the inference server? What egress rules ensure the server cannot reach the internet? Write the specific firewall rules (source/destination/port/action).
-
-**Authentication & authorization:** How do clinical staff authenticate to the AI service? Design a role-based access model (at minimum: Physician, Nurse, Admin-only). Specify whether you use API keys, SSO (which IdP?), or a reverse proxy with auth. Include the nginx or HAProxy config snippet for the auth proxy.
-
-**Audit logging:** Every query to the inference server must be logged. Design the log schema (what fields are captured per request), the log destination, retention period, and who has access to audit logs. Write a sample log entry in JSON format.
-
-**Incident response plan:** What is the response procedure if the inference server is compromised? Who is notified, in what order, and within what timeframe? How do you determine if any PHI-containing prompts were exfiltrated? What is the HIPAA breach determination checklist for this scenario?
-
-### Part 5 - AUP Addendum & Governance (10 pts)
-
-Write a 1-paragraph Acceptable Use Policy addendum for Valley Medical Group covering clinical AI assistant use. It must address: what staff may submit to the AI, what is prohibited (PHI in prompts for uses beyond clinical documentation, sharing responses externally, using AI output without clinical review), and consequences for violation.
-
-Then define: who owns the AI system from a governance perspective (IT? Clinical informatics? CISO?), how the model is updated (who approves a new model version and what security review is required?), and how the system is decommissioned when no longer needed.
-
-### Part 6 - Cost Summary (10 pts)
-
-Produce a 3-year total cost of ownership:
-
-- Year 0: hardware acquisition, setup labor (estimate hours × your loaded hourly rate)
-- Years 1-3: power, maintenance contract or self-maintained labor, storage growth, model updates
-- Compare to 3-year cost of a HIPAA-compliant cloud AI API (Azure OpenAI with BAA, or AWS Bedrock) at estimated query volume
-- State the break-even point and your recommendation
+- Define 3 SLOs (availability, latency, and error rate) with specific numeric targets
+- Justify each target: why is 99.9% the right availability SLO - not 99.5% or 99.99%? (Use the business cost of downtime from the [Valley Medical Group Infrastructure & Monitoring Scope]({% link homework/description-files/it-hw-12-scenario.md %}).)
+- Calculate the error budget for each SLO over a 30-day window (in minutes/requests)
+- Define your burn rate alert thresholds: at what burn rate do you page immediately vs. create a ticket?
+- What happens when the error budget is exhausted? Define the policy (freeze new deployments? reduce release cadence?)
 
 ---
 
 ## Deliverable(s)
 
-Write your full proposal in `homework/it-hw-12.md`.
+Write your design document in `homework/it-hw-12.md`. Commit to `homework/assets/`:
 
-Open a PR titled `IT HW 12 - AI Inference Server Proposal` and submit the PR link on Learning Suite by the due date.
+- `it-hw-12-runbook-[alert-name].md` - 3 runbook files (one per alert)
+
+Open a PR titled `IT HW 12 - Monitoring Architecture` and submit your repo link on Learning Suite by the due date.
 
 ---
 
@@ -106,19 +79,10 @@ Open a PR titled `IT HW 12 - AI Inference Server Proposal` and submit the PR lin
 
 | Criterion | Points |
 |---|---|
-| Use case definition + data flow - PHI risks identified | 15 |
-| Model evaluation - 3 models compared, selection justified | 20 |
-| Hardware spec - derived from model requirements, costs shown | 20 |
-| Security architecture - network isolation, auth, audit log schema, IR plan | 25 |
-| AUP + governance | 10 |
-| 3-year TCO + cloud comparison | 10 |
-
----
-
-## Tip
-
-{: .tip }
-Ollama's model page shows VRAM requirements by quantization level. For CPU inference, llama.cpp benchmarks on your target CPU class are searchable on GitHub - use these to estimate tokens/sec and therefore response latency for your use cases.
+| Stack selection - decision matrix, justified | 10 |
+| Metrics & alerting conditions inventory - specific metrics/OIDs for all components, 10+ alert conditions, routing justified | 45 |
+| Runbooks - 3 complete, actionable at 2 AM | 30 |
+| SLO design - targets justified, error budget calculated, burn rate alerts | 15 |
 
 ---
 
@@ -126,35 +90,17 @@ Ollama's model page shows VRAM requirements by quantization level. For CPU infer
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section (CS 544 / IT 544). Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
+### Part 5 - Decision-Tree Runbook Library (30 pts)
 
-### Part 7 - NIST AI RMF Assessment & AI System Card (30 pts)
+Extend each of your 3 runbooks with a **diagnostic decision tree** that guides an on-call engineer who has never seen this system before. Each decision tree must:
 
-**NIST AI Risk Management Framework Assessment (15 pts)**
+1. Start from a single entry point: the PagerDuty/alerting system alert title
+2. Branch based on observable conditions (command output, dashboard state, log patterns) - not assumptions
+3. Lead to one of 4 terminal outcomes: `RESOLVED` (with remediation step), `ESCALATE` (with escalation path), `INVESTIGATE_FURTHER` (with next data source to examine), or `FALSE_POSITIVE` (with suppression procedure)
+4. Cover at least 8 decision nodes per runbook
+5. Be formatted in Mermaid flowchart syntax (rendered in your markdown)
 
-Assess your proposed AI inference deployment against the **NIST AI RMF 1.0** four core functions. For each function, identify at least 3 specific actions your deployment plan does or should take:
-
-| Function | Action | Current State | Gap |
-|---|---|---|---|
-| **GOVERN** | Establish AI risk management policies | Draft policy in Part 3 | No approval process defined |
-| **MAP** | Identify AI risks and impacts | ... | ... |
-| **MEASURE** | Analyze and assess AI risks | ... | ... |
-| **MANAGE** | Prioritize and address AI risks | ... | ... |
-
-For each gap identified, propose a specific remediation with an estimated implementation effort (days/weeks of work). Prioritize your top 3 gaps by risk and justify why they are highest priority.
-
-**AI System Card (15 pts)**
-
-Produce a formal **AI System Card** (`it-hw-12-system-card.md`) for your proposed model following the Hugging Face Model Card / Mitchell et al. (2019) format, extended for organizational deployment:
-
-1. **Model Details** - architecture, version, training data provenance (what was it trained on, by whom, under what license), intended use cases, and out-of-scope uses
-2. **Intended Users** - who will use this system, what their technical sophistication is, and what guardrails exist to prevent misuse
-3. **Data Provenance** - for your use case's inference inputs, where does the data come from, who owns it, and what data classification does it carry?
-4. **Performance Metrics** - what metrics will you use to evaluate model performance in production (accuracy, latency, drift), at what thresholds will you trigger a model update or rollback?
-5. **Bias & Fairness** - what populations or edge cases might your model underperform on, and what testing will you do before deployment?
-6. **Incident Reporting** - how would a user report a model error or harmful output, who triages it, and what is the escalation path if the error is systematic?
-7. **Limitations** - what can this model definitively NOT do, and how will you prevent users from relying on it for those tasks?
+Include the exact command to run at each diagnostic step and what the output means (both healthy and unhealthy patterns). For each terminal `ESCALATE` outcome, name the specific escalation contact/role and the maximum time-to-escalate. For each terminal `FALSE_POSITIVE` outcome, write the exact Alertmanager silence/suppression command you'd run, including a bounded duration.
 
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

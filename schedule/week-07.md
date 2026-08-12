@@ -4,29 +4,27 @@ parent: Schedule
 nav_order: 7
 ---
 
-# Week 7 - Windows Hardening & DNS/Email Security
+# Week 7 - Patch Management
 {: .no_toc }
 
 ---
 
 ## Topics
 
-- Windows Security Baseline (Microsoft SCT): AppLocker, WDAC, Credential Guard, BitLocker
-- Windows Firewall with Advanced Security; disabling legacy protocols (SMBv1, NTLMv1)
-- Attack surface reduction rules
-- DNS security: DNSSEC zone signing, trust anchors, validation chain
-- DNS attack types (cache poisoning, amplification, hijacking) and mitigations (RPZ, rate limiting)
-- Email authentication: SPF record structure, DKIM key generation and DNS publishing, DMARC policy modes and reporting
-- Mail server hardening: relay restrictions, TLS enforcement, anti-spam
-- PKI fundamentals: X.509 certificate structure, Root CA → Intermediate CA → end-entity hierarchy
-- Certificate lifecycle: issuance, renewal, revocation (CRL vs. OCSP); TLS handshake overview
-- OpenSSL essentials (`genrsa`, `req`, `x509`, `ca`, `verify`, `s_client`); internal CA vs. Let's Encrypt trade-offs
+- Vulnerability lifecycle (CVE, NVD, CVSS v3.1 scoring) and patch priority frameworks
+- Linux patching (`apt`/`dnf` unattended-upgrades) and Windows patching (WSUS)
+- Testing patches in staging, rollback strategies, and patch SLA definitions
+- ITIL change management: Normal, Standard, and Emergency change types
+- Change Advisory Board (CAB): structure, meeting cadence, decision criteria
+- RFC lifecycle, change scheduling, conflict detection, and change calendar management
+- Post-implementation review (PIR) documentation
+- Change metrics and KPIs (success rate, failed changes, emergency change ratio)
 
 ---
 
 ## Slides
 
-[Week07_Windows_Hardening_and_DNS_Email_Security.pptx]({{ site.baseurl }}/lectures/Week07_Windows_Hardening_and_DNS_Email_Security.pptx)
+[Patch Management]({{ site.baseurl }}/lectures/CYBER444_Week07_Patch_Management.pptx) 
 
 ---
 
@@ -34,8 +32,7 @@ nav_order: 7
 
 | Track | Lab |
 |---|---|
-| **IT Track** | [IT LAB 7 - DNSSEC & Email Security Configuration]({% link labs/it-lab-07.md %}) |
-| **Cyber Track** | [CYBER LAB 7 - Windows Server 2022 Hardening]({% link labs/cyber-lab-07.md %}) |
+| **Both Tracks** | [LAB 7 - Patch Management Implementation]({% link labs/lab-07.md %}) |
 
 ---
 
@@ -43,12 +40,7 @@ nav_order: 7
 
 | Track | Assignment |
 |---|---|
-| **Both Tracks** | [HW 7 - Midterm Practice Exam]({% link homework/hw-07.md %}) (Ungraded) |
----
-
-## Assessments
-
-None this week.
+| **Both Tracks** | [HW 7 - Patch Management & Vulnerability Policy]({% link homework/hw-07.md %}) |
 
 ---
 
