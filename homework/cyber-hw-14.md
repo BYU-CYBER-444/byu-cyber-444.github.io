@@ -58,19 +58,6 @@ Research the following container escape technique: **cgroup v1 release_agent esc
 4. **Detection** - what host-level log entries or kernel events would indicate this escape was attempted? Write a specific `auditd` rule that would detect the key syscall in this escape
 5. **Residual risk** - if ALL your Part 2 controls are applied, is this escape completely prevented? If any residual risk remains, what additional control addresses it?
 
-### Part 4 - Runtime Security Monitoring (15 pts)
-
-Write a `docker-bench-security.sh` wrapper script that:
-
-1. Runs the official CIS Docker Benchmark tool (`docker/docker-bench-security`) against your hardened Compose stack
-2. Parses the output and counts WARN vs. PASS results
-3. Prints a summary and exits with code 1 if more than 5 WARNs remain
-
-Then write a Falco rule (`cyber-hw-12-falco-rules.yml`) that detects the following runtime behavior in any running container:
-- A shell spawned inside a container that is not during a `docker exec` debug session (detect: `container.id != "" and proc.name in (bash, sh, zsh) and not proc.pname in (docker, sshd)`)
-- A container writing to `/etc/` (detect filesystem writes outside of expected paths)
-
-Explain what legitimate use case might trigger each rule as a false positive and how you would tune the rule to reduce that noise.
 
 ---
 
@@ -78,10 +65,8 @@ Explain what legitimate use case might trigger each rule as a false positive and
 
 Write your full analysis in `homework/cyber-hw-14.md`. Commit to `homework/assets/` using exactly these filenames (the autograder workflow triggers on these exact paths):
 
-- `cyber-hw-12-Dockerfile.hardened` - your corrected Dockerfile
-- `cyber-hw-12-docker-compose.hardened.yml` - your remediated Compose file
-- `cyber-hw-12-docker-bench-wrapper.sh` - your benchmark wrapper
-- `cyber-hw-12-falco-rules.yml` - your Falco detection rules
+- `cyber-hw-14-Dockerfile.hardened` - your corrected Dockerfile
+- `cyber-hw-14-docker-compose.hardened.yml` - your remediated Compose file
 
 Open a PR titled `CYBER HW 14 - Container Security` and submit your repo link on Learning Suite by the due date.
 
@@ -91,43 +76,23 @@ Open a PR titled `CYBER HW 14 - Container Security` and submit your repo link on
 
 | Criterion | Points |
 |---|---|
-| Dockerfile audit - 8+ issues, corrected file provided | 30 |
-| Compose audit - 10 controls, all required categories covered | 30 |
+| Dockerfile audit - 8+ issues, corrected file provided | 40 |
+| Compose audit - 10 controls, all required categories covered | 35 |
 | Container escape analysis - mechanism explained, controls mapped | 25 |
-| Docker Bench wrapper script + Falco rules | 15 |
 
----
 
-## Tip
-
-{: .tip }
-The CIS Docker Benchmark is free to download from cisecurity.org. Section 4 covers container image hardening (your Dockerfile audit) and Section 5 covers container runtime (your Compose audit). Reference the specific control numbers.
-
----
 
 ---
 
 ##  Graduate Extension - Graduate Students Only
 
-### Part 5 - SBOM Pipeline & Container Security Policy (30 pts)
+### Part 4 - Container Security Policy (30 pts)
 
-**Software Bill of Materials Pipeline (15 pts)**
 
-Implement a complete SBOM generation and vulnerability scanning pipeline:
 
-1. Use **Syft** (`syft <image> -o spdx-json > sbom.spdx.json`) to generate an SPDX 2.3 SBOM for your hardened image
-2. Feed the SBOM into **Grype** (`grype sbom:sbom.spdx.json -o json > vulns.json`) and produce a vulnerability report
-3. Write a Python script (`cyber-hw-12-sbom-gate.py`) that reads `vulns.json` and:
-   - Fails with exit code 1 if any CRITICAL severity vulnerability exists with a fix available
-   - Prints a formatted summary: total packages, total CVEs by severity, list of CRITICAL CVEs with CVE ID, package, version, and fix version
-   - Exits 0 (pass) if all criticals are either fixed in your image or have no fix available (with a warning)
-4. Integrate this gate as a step in your CI/CD pipeline (GitHub Actions) that runs after the image build and blocks the push if it fails
 
-Submit your SBOM file, vulnerability report, and a screenshot of the gate passing on your hardened image.
 
-**Container Security Policy Document (15 pts)**
-
-Write a formal **Container Security Policy** (`cyber-hw-12-security-policy.md`) suitable for adoption by a DevSecOps team. The policy must cover:
+Write a formal **Container Security Policy** (`cyber-hw-14-security-policy.md`) suitable for adoption by a DevSecOps team. The policy must cover:
 
 1. **Approved Base Images** - list of approved base image registries and tags, process for adding new base images, and mandatory review cadence
 2. **SBOM Requirements** - when an SBOM must be generated, where it must be stored, and how long it must be retained
