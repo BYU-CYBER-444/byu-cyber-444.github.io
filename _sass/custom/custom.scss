@@ -3,9 +3,17 @@
 // Do NOT add @import "just-the-docs" here — the remote theme handles that.
 
 // ── Sidebar nav styling ───────────────────────────────────────────────────────
+// The theme's own @media (min-width: 66.5rem) block sets .side-bar's
+// min-width to 15rem. min-width always wins over width regardless of
+// !important (it's a separate clamp on the used value, not a competing
+// cascade declaration), so without overriding it too, the sidebar silently
+// widens to 15rem (240px) on any viewport from 1064px up to ~1440px while
+// .main's margin-left below still assumes the intended 10rem - content
+// renders underneath the sidebar's real edge in that whole range.
 .side-bar {
   background-color: #1F3864;
   width: 10rem !important;
+  min-width: 15rem !important;
   .site-header {
     height: auto !important;
     max-height: none !important;
@@ -32,15 +40,15 @@
 
 // ── Content width ─────────────────────────────────────────────────────────────
 // The theme's .main margin-left/width calc assumes its default ~15.5rem
-// sidebar. Since the sidebar above is pinned to 10rem, that calc leaves a
+// sidebar. Since the sidebar above is pinned to 15rem, that calc leaves a
 // large dead gap before the content even starts, on top of the theme's own
 // max-width: 50rem cap. Re-anchor to the real sidebar width, widen the cap,
 // and center the content block in the space right of the sidebar (falls back
-// to flush-left at 10rem on narrower screens via max()).
-@media (min-width: 50rem) {
+// to flush-left at 15rem on narrower screens via max()).
+@media (min-width: 30rem) {
   .main {
     max-width: 80rem;
-    margin-left: max(10rem, calc((100% - 80rem) / 2 + 10rem)) !important;
+    margin-left: max(15rem, calc((100% - 80rem) / 2 + 15rem)) !important;
   }
 }
 

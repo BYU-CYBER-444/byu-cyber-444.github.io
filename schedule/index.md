@@ -9,7 +9,7 @@ has_toc: false
 # Fall 2026 Course Schedule
 {: .no_toc }
 
-**Tuesday & Thursday · 4:00-5:50 PM** · Classes begin Sept 2 · Last class Dec 10
+**Tuesday & Thursday · 4:00-5:50 PM**
 
 ---
 

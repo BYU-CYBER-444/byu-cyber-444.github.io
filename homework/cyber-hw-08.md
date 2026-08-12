@@ -1,10 +1,9 @@
 ---
-title: "CYBER HW 8 - Windows Hardening Deep Dive"
+title: "CYBER HW 8 - CIS Benchmark Gap Analysis & Remediation Plan"
 parent: Homework
 nav_order: 8
 ---
-
-# CYBER HW 8 - Windows Hardening Deep Dive
+# CYBER HW 8 - CIS Benchmark Gap Analysis & Remediation Plan
 {: .no_toc }
 
 <details open markdown="block">
@@ -16,88 +15,50 @@ nav_order: 8
 
 ---
 
-## Overview
-
-| | |
-|---|---|
-| **Assignment** | CYBER HW 8 |
-| **Points** | 100 |
-| **Due** | Week 9 |
-| **Track** | Cyber |
-
----
-
 ## Description
 
-### Part 1 - Hardening Controls Documentation (50 pts)
+Produce a gap analysis report that goes beyond listing failures - it must prioritize them, explain the business risk, and provide verified remediation steps.
 
-Document **15 Windows hardening controls** applied in or derived from Lab 7. For each control produce a complete record:
+You are given a completed CIS Benchmark assessment report to work from - you do not need to run CIS-CAT Pro or any other scanner yourself:
 
-| Control # | CIS ID | DISA STIG Rule ID | Control Name | Default State | Hardened State | Implementation Method | Registry Path / GPO Path | PowerShell Verification Command | Security Impact | Operational Impact |
-|---|---|---|---|---|---|---|---|---|---|---|
+- [Sample CIS Benchmark Assessment Report]({% link homework/description-files/cyber-hw-08-sample-report.md %}) - CIS Ubuntu 22.04 LTS Benchmark results (48 controls, 21 FAIL) for a fictional host, rendered inline on the page
 
-**Implementation method** must be one of: GPO (with the exact policy path), Registry key edit (with the key path and value), PowerShell command (include the full command), or Group Policy Preference.
+### Part 1 - Scoring & Risk Prioritization (35 pts)
 
-**PowerShell verification command** must be a one-liner that returns the current value and can be used in an audit script - not just "check in the GUI."
+Rank all 21 failing controls in the sample report by CIS severity/level, then document the **top 15**:
 
-**Security Impact** must use CIA Triad framing: which of Confidentiality, Integrity, or Availability does this control protect, and against what specific attack technique (cite MITRE ATT&CK technique ID)?
+| Control ID | Title | CIS Level | CIS Section | CVSS-equivalent Risk (1-10 - your assessment) | Rationale for Rating |
+|---|---|---|---|---|---|
+| 5.2.10 | Ensure SSH root login is disabled | L1 | 5 - Access, Authentication and Authorization | 8 | Direct root login over SSH means a stolen or brute-forced root credential grants immediate, full-privilege remote access with no intermediate account to detect or revoke - no privilege escalation step required, and no per-user audit trail for root actions. |
 
-**Operational Impact** - what breaks or changes for users when this control is applied? Who needs to be notified?
+After documenting all failures, group them into three tiers:
+- **Tier 1 (Fix immediately):** Controls whose failure creates direct exploitation risk - remote code execution, privilege escalation, or credential exposure
+- **Tier 2 (Fix within 30 days):** Controls whose failure increases attack surface or degrades detection capability
+- **Tier 3 (Fix within 90 days):** Hardening controls with limited standalone risk
 
-Your 15 controls must include at minimum: 3 credential protections (Credential Guard, LAPS, or similar), 3 network protections (SMB signing, LLMNR disable, etc.), 3 audit/logging controls, 2 application controls (AppLocker, WDAC), and 2 attack surface reduction controls.
+Justify every tier assignment. "Low risk" is not a justification - explain specifically what an attacker would need to do to exploit this gap and why that is or is not realistic in your environment.
 
-### Part 2 - Hardening Verification Script (25 pts)
+### Part 2 - Verified Remediation Commands (65 pts)
 
-Write `cyber-hw-08-verify.ps1` - a PowerShell script that checks the compliance state of all 15 controls and produces a report:
+For every Tier 1 and Tier 2 control (and at least 5 Tier 3 controls), provide:
 
-- For each control: `[PASS]` or `[FAIL]` with the current value vs. expected value
-- Summary at the end: X/15 controls compliant
-- Export results to `hardening-audit-YYYY-MM-DD.csv`
-- The script must run without errors on both a hardened and non-hardened Windows Server 2022
+1. **Current state** - what the CIS-CAT scan found (exact value or configuration)
+2. **Target state** - what CIS requires and why
+3. **Remediation command(s)** - the exact bash command(s) to remediate. Must be tested and working.
+4. **Verification command** - the exact command to confirm the fix was applied, with expected output
+5. **Side effect risk** - does this change break anything? List any services or workflows that need to be tested after applying this control
 
-Run the script on your hardened Lab 7 VM and include the output in your submission.
+Format as a numbered remediation runbook - a junior admin should be able to run through it sequentially and harden the system.
 
-### Part 3 - Attack Scenario Analysis (15 pts)
-
-For the following two attack techniques, analyze how your hardened controls would detect or prevent each:
-
-**Technique 1: Pass-the-Hash (T1550.002)**
-An attacker has dumped NTLM hashes from a workstation using Mimikatz and is attempting lateral movement to your Windows Server.
-
-- Which of your 15 controls specifically prevent or detect this technique?
-- What would the attacker see differently on a hardened system vs. an unprotected system?
-- What Windows Security event IDs would be generated and what would they show?
-
-**Technique 2: Scheduled Task Persistence (T1053.005)**
-An attacker who has gained SYSTEM on one server is creating scheduled tasks to maintain persistence after reboots.
-
-- Which of your controls prevent or detect this?
-- How would you distinguish a malicious scheduled task from a legitimate administrative one in your audit logs?
-
-### Part 4 - Compensating Controls (10 pts)
-
-Two of your 15 hardening controls cannot be applied to a specific server because they break a legacy application that the vendor refuses to update. The controls are: SMB v1 disable and NTLM restriction.
-
-Write a formal compensating control plan for each:
-- What compensating control(s) replace the original control's security intent?
-- Is the compensating control equivalent, stronger, or weaker? Justify.
-- What additional monitoring do you implement to detect exploitation of the known-weak configuration?
-- What is your remediation timeline and who accepts the residual risk?
+**For at least 5 controls**, show before-and-after: paste the CIS-CAT output line showing the failure, apply your remediation, then re-run the specific check and paste the passing result.
 
 ---
 
 ## Deliverable(s)
 
-{: .callout }
-**Auto-grader:** When you open your PR, a GitHub Actions workflow runs your `cyber-hw-08-verify.ps1` on a plain Windows Server runner and checks that it runs cleanly and produces a `hardening-audit-*.csv` with exactly 15 PASS/FAIL rows. Since you choose your own 15 controls, this can't verify they're the *right* controls or correctly implemented - that's graded from your hardened-VM screenshot and CSV.
+Write your full gap analysis in `homework/cyber-hw-08.md`.
 
-Write your full analysis in `homework/cyber-hw-08.md`. Commit to `homework/assets/`:
-
-- `cyber-hw-08-verify.ps1` - your verification script
-- `cyber-hw-08-audit-output.csv` - output from running the script on your hardened VM
-- `cyber-hw-08-audit-screenshot.png` - screenshot of script running on your VM
-
-Open a PR titled `CYBER HW 8 - Windows Hardening` and submit the PR link on Learning Suite by the due date.
+Open a PR titled `CYBER HW 8 - CIS Benchmark Gap Analysis` and submit your repo link on Learning Suite by the due date.
 
 ---
 
@@ -105,53 +66,26 @@ Open a PR titled `CYBER HW 8 - Windows Hardening` and submit the PR link on Lear
 
 | Criterion | Points |
 |---|---|
-| 15 controls - CIS ID, STIG ID, registry/GPO path, ATT&CK mapping | 50 |
-| Verification script - all 15 checks, CSV export, runs cleanly | 25 |
-| Attack scenario analysis - specific event IDs, control mapping | 15 |
-| Compensating controls - equivalent intent, monitoring added | 10 |
+| Risk prioritization - tier assignments justified | 35 |
+| Remediation runbook - tested commands + verification for all Tier 1/2 | 65 |
+
 
 ---
 
-## Tip
-
-{: .tip }
-Use `Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "LmCompatibilityLevel"` as a model for your verification commands - registry reads are reliable and scriptable. GUI screenshots are not acceptable as verification evidence.
-
----
-
----
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section (CS 544 / IT 544). Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
+### Part 5 - FAIR Quantitative Risk Analysis (30 pts)
 
-### Part 5 - Assume-Breach Detection Layer (30 pts)
 
-Your hardening controls reduce attack surface but assume prevention is sufficient. Graduate students must design a complementary **detection layer** assuming an attacker has already obtained valid credentials.
+Using the FAIR ontology, define and estimate values for your top gap:
 
-**Sigma Detection Rules (15 pts)**
+- **Threat Event Frequency (TEF):** How often does the threat community attempt this attack against similar organizations? Cite a data source (Verizon DBIR, MITRE ATT&CK prevalence data, or similar).
+- **Vulnerability (Vuln):** Given a threat event occurs, what is the probability it succeeds given your current control state? Justify with the control gap specifics.
+- **Primary Loss Magnitude (PLM):** Estimate productivity loss, response costs, and data breach costs if the threat succeeds. Use Ponemon or equivalent benchmarks.
+- **Risk Range:** Calculate Loss Event Frequency (LEF = TEF × Vuln) and expected annual loss range (minimum, most likely, maximum). A Monte Carlo simulation is not required but earns extra credit if implemented.
 
-Write 5 Sigma rules in `cyber-hw-08-sigma-rules.yml` targeting Windows post-exploitation TTPs that your hardening controls alone cannot prevent:
-
-1. **Lateral Movement** - detect Pass-the-Hash or Overpass-the-Hash (NTLM authentication from an unusual source process)
-2. **Credential Access** - detect LSASS memory access (Mimikatz pattern: a process opening LSASS with `PROCESS_VM_READ`)
-3. **Persistence** - detect a new scheduled task created by a non-SYSTEM, non-admin process
-4. **Defense Evasion** - detect PowerShell with a Base64-encoded command longer than 500 characters
-5. **Discovery** - detect `net user /domain`, `net group "Domain Admins"`, or equivalent LDAP enumeration burst (5+ queries in 60 seconds from one host)
-
-Each rule must include: `title`, `status`, `description`, `references` (MITRE ATT&CK technique ID), `logsource` (product/category/service), `detection` (selection + condition), `falsepositives`, and `level`.
-
-**MITRE ATT&CK Navigator Layer (15 pts)**
-
-Produce a MITRE ATT&CK Navigator layer JSON file (`cyber-hw-08-navigator.json`) that:
-
-- Colors all techniques **prevented** by your 15 hardening controls in green
-- Colors all techniques **detected** by your 5 Sigma rules in blue
-- Colors techniques that are **neither prevented nor detected** (your blind spots) in red
-- Includes a comment on each colored technique explaining which control or rule covers it
-
-Write a 1-page analysis of your red (blind spot) techniques: which 2-3 represent the highest risk given your assumed threat model, and what additional data source (EDR telemetry, network captures, deception technology) would be required to detect them?
+Submit as `cyber-hw-08-fair-analysis.md`.
 
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

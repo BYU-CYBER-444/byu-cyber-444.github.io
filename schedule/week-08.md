@@ -35,7 +35,7 @@ nav_order: 8
 
 | Track | Lab |
 |---|---|
-| **Cyber Track** | [CYBER LAB 8 - CIS-CAT Pro Benchmark Assessment]({% link labs/cyber-lab-08.md %}) |
+| **Cyber Track** | [CYBER LAB 8 - CIS Benchmark Assessment & Targeted Remediation]({% link labs/cyber-lab-08.md %}) |
 | **IT Track** | [IT LAB 8 - Data Center Site Survey Exercise]({% link labs/it-lab-08.md %}) |
 
 
