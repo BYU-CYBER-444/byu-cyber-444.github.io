@@ -1,12 +1,11 @@
 ---
-title: "LAB 5 - PKI & Certificate Management"
+title: "IT LAB 8 - Data Center Site Survey Exercise"
 parent: Labs
-nav_order: 5
+nav_order: 8
 ---
 
-# LAB 5 - PKI & Certificate Management
+# IT LAB 8 - Data Center Site Survey Exercise
 {: .no_toc }
-
 
 <details open markdown="block">
   <summary>Contents</summary>

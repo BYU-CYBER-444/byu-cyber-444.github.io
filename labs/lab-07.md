@@ -1,10 +1,10 @@
 ---
-title: "CYBER LAB 6 - SSH Certificate Authority & PAM MFA"
+title: "LAB 7 - Patch Management Implementation"
 parent: Labs
-nav_order: 6
+nav_order: 7
 ---
 
-# CYBER LAB 6 - SSH Certificate Authority & PAM MFA
+# LAB 7 - Patch Management Implementation
 {: .no_toc }
 
 

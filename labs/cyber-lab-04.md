@@ -1,10 +1,10 @@
 ---
-title: "LAB 5 - PKI & Certificate Management"
+title: "CYBER LAB 4 - Windows Server 2022 Hardening"
 parent: Labs
-nav_order: 5
+nav_order: 4
 ---
 
-# LAB 5 - PKI & Certificate Management
+# CYBER LAB 4 - Windows Server 2022 Hardening
 {: .no_toc }
 
 
