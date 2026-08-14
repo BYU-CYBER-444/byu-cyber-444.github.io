@@ -3,7 +3,6 @@ title: "CYBER HW 2 - Linux Security Audit Script Suite"
 parent: Homework
 nav_order: 2
 ---
-
 # CYBER HW 2 - Linux Security Audit Script Suite
 {: .no_toc }
 
@@ -16,93 +15,82 @@ nav_order: 2
 
 ---
 
-## Overview
-
-| | |
-|---|---|
-| **Assignment** | CYBER HW 2 |
-| **Points** | 100 |
-| **Due** | Week 3 |
-| **Track** | Cyber |
-
----
-
 ## Description
 
-Write a production-quality Linux security audit script that a sysadmin could drop onto any Ubuntu 22.04 system and get an actionable security posture report. This is not a homework exercise - it is a tool you would actually use.
+This assignment is about **using and interpreting** a security audit tool, not writing one. You are given a working audit script that checks 5 categories - filesystem, accounts, network, SSH, and scheduled tasks - and a sample of its expected output; your job is to run it against 3 target machines you don't already know the state of, and produce a findings analysis a sysadmin could actually act on.
 
-### Part 1 - Audit Script (70 pts)
+You are provided:
+- [`cyber-hw-02-audit.sh`]({% link homework/description-files/cyber-hw-02-audit-script.md %}) - the audit script itself
+- [Sample Audit Output]({% link homework/description-files/cyber-hw-02-sample-output.md %}) - reference clean-run and planted-issue output, for calibrating that the script is working correctly on your system
 
-Build `hw-02-audit.sh`. The script must perform all of the following checks and output a structured report:
+Your instructor has provisioned **four Rocky 9 VMs** for this assignment - one known-clean **HW 2 baseline VM**, plus **three target VMs** - connection details and credentials are on Learning Suite. You are not told in advance what, if anything, is wrong on any of the three targets; that's the point of running an audit rather than being handed a list of known issues.
 
-**Account & Privilege Auditing:**
-- List all accounts with UID 0 (should be only root - flag any others as CRITICAL)
-- List all accounts with empty passwords (check `/etc/shadow`)
-- List all accounts with a login shell that are not in `/etc/sudoers` or a sudo group - flag any with `sudo` or `wheel` group membership that haven't logged in within 90 days
-- Enumerate all sudoers rules including `/etc/sudoers.d/*` and flag any `NOPASSWD` entries
+### Part 1 - Run the Audit (20 pts)
 
-**Filesystem Security:**
-- Find all SUID/SGID binaries - compare against a hardcoded expected whitelist and flag any that are NOT on the list
-- Find all world-writable files and directories outside `/tmp`, `/var/tmp`, and `/dev` - flag any in `/etc`, `/usr`, or `/home`
-- Check that `/etc/passwd`, `/etc/shadow`, and `/etc/sudoers` have correct permissions and ownership
+1. Save the script as `cyber-hw-02-audit.sh` and `chmod +x` it.
+2. **Before touching the target VMs:** run it against the **HW 2 baseline VM** and compare your output against the Sample Audit Output reference. Confirm the report file passes `jq empty` and its schema matches. Don't skip this step: if the script isn't behaving correctly on a machine you understand, you can't trust its results on one you don't.
+3. Run `sudo ./cyber-hw-02-audit.sh` against each of the 3 target VMs. Do not modify the script or the target machines - the script is read-only and safe to run more than once if you need to re-check something.
+4. Save each run's report with a name that identifies which machine it came from, e.g. `cyber-hw-02-target1.json`, `cyber-hw-02-target2.json`, `cyber-hw-02-target3.json`. Confirm all three pass `jq empty` before moving on.
 
-**Network Exposure:**
-- List all listening services (TCP and UDP) with the process name and PID
-- Flag any service listening on `0.0.0.0` or `::` that is not in a hardcoded expected-services list
-- Check for active outbound connections to non-RFC1918 addresses (potential C2 or data exfiltration indicator)
+### Part 2 - Findings Analysis & Remediation (45 pts)
 
-**SSH Configuration:**
-- Parse `/etc/ssh/sshd_config` and flag: `PasswordAuthentication yes`, `PermitRootLogin yes`, `X11Forwarding yes`, `Protocol 1`, and any `PermitEmptyPasswords yes`
-- List all authorized_keys files across all user home directories and flag any with more than one key (unusual for most environments)
+For **each of the 3 target machines**, write up:
 
-**Scheduled Tasks:**
-- Enumerate all system crontabs (`/etc/cron*`, `/var/spool/cron`) and flag any that run scripts from world-writable directories or run as root with a writable script path
+- A summary of findings by severity (how many CRITICAL, WARNING, INFO, and what categories of check they came from)
+- The single most urgent finding on that machine, and a one-paragraph justification for why it's the most urgent (not just "it's CRITICAL" - explain the actual risk)
+- For every CRITICAL and WARNING finding, a specific remediation step - the exact command or configuration change that would fix it, not a general description like "restrict permissions"
 
-**Report Output:**
-- Output a color-coded summary to stdout: `[CRITICAL]` in red, `[WARNING]` in yellow, `[INFO]` in green
-- Write a full machine-readable JSON report to `/tmp/security-audit-YYYY-MM-DD.json` with a top-level structure: `{"hostname": ..., "audit_date": ..., "critical_count": ..., "warning_count": ..., "findings": [...]}`
-- Exit with code `1` if any CRITICAL findings exist, `0` if clean
+Then, across all 3 machines:
 
-**Script requirements:** `set -euo pipefail`, all functions documented with comments, no hardcoded paths (use variables at top), must run without errors on a clean Ubuntu 22.04 VM and also on a deliberately weakened VM.
+- **Rank the machines from highest to lowest risk** and justify the ranking. Raw finding count is not the same as risk - explain why your ranking is or isn't just "the machine with the most findings wins."
+- If you had one hour to remediate before a compliance audit and could only fully address **one** of the three machines, which would you choose and why?
 
-### Part 2 - Deliberately Weakened VM Test (15 pts)
+### Part 3 - Reflection Write-Up (35 pts)
 
-Introduce at least **5 deliberate misconfigurations** into a test VM (from your lab or a fresh VM) that your script should detect:
+1. This script uses a hardcoded SUID whitelist. In a real enterprise environment managing 200 servers with different roles (web, database, build), how would you manage this whitelist at scale? Describe a practical approach.
+2. What category of attack would NOT be detected by this script, even with all 5 categories running? Describe one real attack technique (name a MITRE ATT&CK technique) that leaves no trace in the artifacts this script examines, and explain what additional data source would be needed to detect it.
+3. This script now checks 5 categories against a real 200-server fleet. Which single category do you think would generate the most **false positives** at that scale, and why? Propose one specific change to that category's logic (a config option, an exception list, a different threshold) that would cut down the noise without just turning the check off. Separately: which category's findings would you treat as highest priority to triage first if a fleet-wide scan came back with results in all 5 categories at once, and why?
 
-- One UID-0 account that is not root
-- One account with `NOPASSWD` sudo
-- One unexpected SUID binary
-- One world-writable file in `/etc`
-- One SSH misconfiguration
+### What This Script Checks
 
-Run your script against the weakened VM and paste the colored output (screenshot) and the JSON report (file) in your submission. Every introduced misconfiguration must appear as a CRITICAL or WARNING finding.
+{: .note }
+The finding `check` and `severity` values below are exactly what appears in each finding's JSON - useful for Part 2 when you're cross-referencing your 3 target machines' reports.
 
-### Part 3 - Write-Up (15 pts)
+| Category | `check` | Severity | What it means |
+|---|---|---|---|
+| `filesystem` | `unexpected_suid` | WARNING | SUID/SGID binary not on the script's whitelist |
+| `filesystem` | `world_writable` | WARNING | World-writable file/dir under `/etc`, `/usr`, or `/home` |
+| `filesystem` | `bad_permissions` | CRITICAL | Wrong owner/mode on `/etc/passwd`, `/etc/shadow`, or `/etc/sudoers` |
+| `filesystem` | `unowned_file` | WARNING | File/dir owned by a UID or GID with no matching account |
+| `accounts` | `duplicate_uid0` | CRITICAL | An account other than `root` has UID 0 |
+| `accounts` | `empty_password` | CRITICAL | An account has a blank password hash in `/etc/shadow` |
+| `accounts` | `stale_privileged_account` | WARNING | A `wheel`-group member hasn't logged in within 90 days (or never) |
+| `accounts` | `nopasswd_sudo` | WARNING | An active `NOPASSWD` entry exists in sudoers |
+| `network` | `unexpected_listener` | WARNING | A service is listening on all interfaces on a port not on the expected list |
+| `network` | `external_connection` | INFO | An established outbound connection to a non-private address |
+| `ssh` | `ssh_password_auth_enabled` | WARNING | `PasswordAuthentication yes` in `sshd_config` |
+| `ssh` | `ssh_root_login_enabled` | CRITICAL | `PermitRootLogin yes` in `sshd_config` |
+| `ssh` | `ssh_x11_forwarding_enabled` | WARNING | `X11Forwarding yes` in `sshd_config` |
+| `ssh` | `ssh_protocol1_enabled` | CRITICAL | Deprecated, broken SSH protocol 1 enabled |
+| `ssh` | `excessive_authorized_keys` | WARNING | An account's `authorized_keys` has more than 5 entries |
+| `cron` | `cron_world_writable_path` | CRITICAL | A scheduled command runs from a world-writable directory |
+| `cron` | `cron_writable_script` | CRITICAL | A root-run scheduled command's script file is group/other-writable |
 
-Answer in your write-up:
-
-1. Your script uses a hardcoded SUID whitelist. In a real enterprise environment managing 200 servers with different roles (web, database, build), how would you manage this whitelist at scale? Describe a practical approach.
-2. What category of attack would NOT be detected by your script? Describe one real attack technique (name a MITRE ATT&CK technique) that leaves no trace in the artifacts your script examines, and explain what additional data source would be needed to detect it.
-3. If you installed PostgreSQL or MySQL on a box this audit script runs against, why would you scope a database user to a single database rather than granting it superuser/root on the whole instance? Give one concrete consequence of getting this wrong.
+The script's own comments explain the detection logic and any simplifying assumptions (e.g. the stale-account check only looks at supplementary `wheel` membership, not primary-group membership) if you want the full detail behind any row above.
 
 ---
 
 ## Deliverable(s)
 
 {: .callout }
-**Auto-grader:** When you open your PR, a GitHub Actions workflow will run `homework/assets/hw-02-audit.sh` against a test Ubuntu 22.04 environment with 3 known misconfigurations. Your script must flag all 3 as CRITICAL or WARNING and produce a valid JSON report. The auto-grader posts results as a PR comment. Re-push to fix issues.
 
 Commit to `homework/assets/` using exactly these filenames:
 
-- `hw-02-audit.sh` - your audit script
-- `cyber-hw-02-clean-output.txt` - output from clean VM
-- `cyber-hw-02-dirty-output.txt` - output from weakened VM  
-- `cyber-hw-02-dirty-report.json` - JSON report from weakened VM
-- `cyber-hw-02-dirty-screenshot.png` - screenshot of colored terminal output on weakened VM
+- `cyber-hw-02-target1.json`, `cyber-hw-02-target2.json`, `cyber-hw-02-target3.json` - the raw audit reports from each target VM
 
-Write your analysis in `homework/cyber-hw-02.md`.
+Write your analysis (Parts 2 and 3) in `homework/cyber-hw-02.md`.
 
-Open a PR titled `CYBER HW 2 - Linux Security Audit Suite` and submit the PR link on Learning Suite by the due date.
+Open a PR titled `CYBER HW 2 - Linux Security Audit Suite` and submit your repo link on Learning Suite by the due date.
 
 ---
 
@@ -110,27 +98,19 @@ Open a PR titled `CYBER HW 2 - Linux Security Audit Suite` and submit the PR lin
 
 | Criterion | Points |
 |---|---|
-| All audit checks implemented and working | 40 |
-| JSON report output - valid JSON, correct schema | 15 |
-| Exit code logic and color-coded output | 10 |
-| Error handling (`set -euo pipefail`, graceful failures) | 5 |
-| Weakened VM test - all 5 misconfigs detected in output | 15 |
-| Write-up - whitelist scaling answer, undetectable attack | 15 |
-
----
+| Part 1 - all 3 reports collected correctly, valid JSON, correct schema | 20 |
+| Part 2 - per-machine findings summary, urgency justification, specific remediation | 30 |
+| Part 2 - cross-machine risk ranking and prioritization | 15 |
+| Part 3 - whitelist scaling, undetectable attack, false-positive tuning & triage priority | 35 |
 
 ---
 
 ##  Graduate Extension - Graduate Students Only
 
-{: .callout-grad }
-> **Required for students enrolled in the graduate section (CS 544 / IT 544). Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
 
-### Part 4 - CVSS Environmental Scoring & STRIDE Threat Model (30 pts)
+### Part 4 - CVSS Environmental Scoring (30 pts)
 
-**CVSS Environmental Scoring (15 pts)**
-
-Extend `hw-02-audit.sh` to calculate a **CVSS v3.1 Environmental Score** for each CRITICAL finding. For each finding, the JSON output must include a `cvss` object with:
+Make a copy of `cyber-hw-02-audit.sh` and extend it to calculate a **CVSS v3.1 Environmental Score** for each CRITICAL finding. For each finding, the JSON output must include a `cvss` object with:
 
 ```json
 {
@@ -145,18 +125,7 @@ Extend `hw-02-audit.sh` to calculate a **CVSS v3.1 Environmental Score** for eac
 }
 ```
 
-You must implement the Environmental score calculation in bash (no external tools). Document your scoring rationale for each finding type in your write-up - explain why you assigned the Confidentiality/Integrity/Availability Requirements you did.
-
-**STRIDE Threat Model (15 pts)**
-
-Produce a formal STRIDE threat model for a Linux server running the services your audit examines (SSH, cron, web server, sudo). Your threat model must:
-
-1. Create a Data Flow Diagram (DFD, Level 1) - can be ASCII art or a linked image - showing external actors, processes, data stores, and trust boundaries
-2. For each of the 6 STRIDE categories, identify at least one concrete threat against your system and map it to a specific finding type your audit script checks (or explicitly note if it is a blind spot)
-3. For each threat, assign a DREAD score and rank your top 3 threats
-4. For your top-ranked threat, propose a specific detective and preventive control beyond what your audit script currently checks, and explain what data source would be required to detect it
-
-Submit your threat model as `cyber-hw-02-threat-model.md`.
+You must implement the Environmental score calculation in bash (no external tools). Run your extended script against the same 3 target machines from Part 1 and use those real CRITICAL findings as your scoring examples - don't invent hypothetical findings. Document your scoring rationale for each one in your write-up - explain why you assigned the Confidentiality/Integrity/Availability Requirements you did.
 
 
 [← Back to Homework]({{ site.baseurl }}/homework/)
