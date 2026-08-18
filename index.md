@@ -15,9 +15,9 @@ permalink: /
 | | |
 |---|---|
 | [Syllabus]({% link syllabus.md %}) | Course policies, grading, and outcomes |
-| [Schedule]({% link schedule/index.md %}) | 15-week lecture & lab calendar |
-| [Homework]({% link homework/index.md %}) | 14 homework assignments |
-| [Labs]({% link labs/index.md %}) | 14 hands-on lab exercises |
+| [Schedule]({% link schedule/index.md %}) | 14-week lecture & lab calendar |
+| [Homework]({% link homework/index.md %}) | 11 homework assignments |
+| [Labs]({% link labs/index.md %}) | 12 hands-on lab exercises |
 | [Final Project (Cyber Track)]({% link final-project-cyber/index.md %}) | Multi-week infrastructure build (Cyber) |
 | [Final Project (IT Track)]({% link final-project-it/index.md %}) | Multi-week infrastructure build (IT) |
 | [Resources]({% link resources/index.md %}) | Tools, downloads, and references |
@@ -39,7 +39,7 @@ STIG requirements.
 
 | Component | Weight | Count |
 |---|---|---|
-| Weekly Labs | 55% | 14 labs |
-| Homework Assignments | 30% | 14 assignments |
-| Midterm Exam | 5% | 1 exam (Week 8) |
+| Labs | 55% | 12 labs |
+| Homework | 30% | 11 assignments |
+| Midterm Exam | 5% | 1 exam |
 | Final Project | 10% | Weeks 8-15 |
