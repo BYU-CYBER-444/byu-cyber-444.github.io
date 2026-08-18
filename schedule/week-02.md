@@ -11,15 +11,12 @@ nav_order: 2
 
 ## Topics
 
-- Linux filesystem hierarchy (FHS), user/group management, file permissions (DAC, ACLs, umask)
-- Storage management: partitioning, LVM (physical/volume/logical volumes, live resize, snapshots), software RAID with `mdadm`
-- Sudo policy design, PAM basics, systemd service management (including managing a database service like PostgreSQL/MySQL as a systemd unit)
-- Key sysadmin commands (`find`, `awk`, `ss`, `lsof`)
-- Linux firewall management (`firewalld`, `nftables`, default-deny rulesets) and fail2ban
-- Bash scripting for automation: variables, conditionals, loops, functions, error handling, cron scheduling
-- Parsing command output to build audit reports (`awk`, `grep`, `cut`, process substitution)
-- auditd introduction: architecture, rule types (file watches, syscall rules, key labels), querying with `ausearch` and `aureport`
-- Linux network services overview: DNS (BIND), DHCP (ISC DHCP), NTP (chrony), NFS, Samba
+- Linux filesystem hierarchy (FHS), user/group management, file permissions (DAC, umask) and POSIX ACLs for role-based access on shared paths
+- Least-privilege sudo policy design (`sudoers.d`, `Cmnd_Alias`) and alternatives (`doas`, centralized sudo via FreeIPA/IdM, PAM-gated MFA)
+- Linux network services: authoritative DNS with BIND (zones, SOA/NS/MX/CNAME/TXT/PTR records), DHCP, and NFS
+- Time synchronization with chrony (client and internal stratum-2 server) and NTP vs. PTP
+- `firewalld` service scoping
+- Interpreting automated security audit output (filesystem, accounts, network, SSH, and cron findings) and prioritizing remediation
 
 ---
 
@@ -33,7 +30,7 @@ nav_order: 2
 
 | Track | Lab |
 |---|---|
-| **Both Tracks** | [LAB 2 - Linux Network Services, Privilege Management & Storage]({% link labs/lab-02.md %}) |
+| **Both Tracks** | [LAB 2 - Linux Network Services & Privilege Management]({% link labs/lab-02.md %}) |
 
 ---
 

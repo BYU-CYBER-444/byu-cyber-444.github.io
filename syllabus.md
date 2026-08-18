@@ -20,51 +20,51 @@ nav_order: 2
 |---|---|
 | **Course Number** | CYBER 444 |
 | **Credits** | 3 |
-| **Prerequisites** | CYBER 366 or instructors consent |
+| **Prerequisites** | CYBER 366 or instructor's consent |
 | **Delivery** | 2 hrs. lecture + 2 hrs. in-person lab/week |
 | **Instructor** | Sebastian Hayes |
 | **Office Hours** | By Appointment |
 | **Email** | sebastian.hayes@byu.edu |
-| **Class Location** | CTB 345 · Tuesdays & Thursdays · 4:00-5:50 PM |
+| **Class Location** | CTB 350 · Tuesdays & Thursdays · 4:00-5:50 PM |
 
 
 ## Course Tracks
 
-CYBER 444 is delivered in two parallel tracks: a **Cyber Track** and an **IT Track**. The lectures and midterm are common to the whole class, but most weeks each track has its own lab and homework assignment focused on the work that track is preparing you for.
+CYBER 444 is delivered in two parallel tracks: a **Cyber Track** and an **IT Track**. The lectures and midterm are common to the whole class, but some weeks each track has its own lab and homework assignment focused on the work that track is preparing you for.
 
 ### Purpose of the two tracks
 
 System administration sits at the intersection of two adjacent careers, and students in CYBER 444 come from both sides. The two tracks let you spend the semester practicing the work that matches the role you're aiming at, while still sharing a common foundation with the rest of the class.
 
 - **Cyber Track** is for students preparing for security engineering, security operations, GRC, or compliance-focused sysadmin roles. Track-specific assignments emphasize hardening (CIS Benchmarks, DISA STIGs), audit and logging architecture, vulnerability and patch remediation, secure configuration management with Ansible, container security, and incident response from the sysadmin seat.
-- **IT Track** is for students preparing for infrastructure engineering, IT operations, cloud, or platform roles. Track-specific assignments emphasize ITSM workflows (ticketing, change management), networking and DNS, high availability, data center operations, cloud provisioning and IAM, monitoring with Prometheus/Grafana, and enterprise IT policy.
+- **IT Track** is for students preparing for infrastructure engineering, IT operations, cloud, or platform roles. Track-specific assignments emphasize networking and DNS, high availability, data center operations, monitoring with Prometheus/Grafana, and enterprise IT policy.
 
 You will see the track designation on every lab and homework page. Shared assignments are listed under "Shared" on the [Labs]({% link labs/index.md %}) and [Homework]({% link homework/index.md %}) index pages; track-specific assignments are prefixed with `CYBER` or `IT`.
 
 ### How the tracks work
 
-The following rules apply to every weekly lab and homework assignment:
+The following rules apply to every lab and homework assignment:
 
-1. **Shared assignments are required for everyone.** Any assignment listed under "Shared" (or marked as applying to both tracks) must be completed by every student regardless of which track you identify with. These cover material the whole class is responsible for.
+1. **Shared assignments are required for everyone.** Any assignment listed under "Shared" (or marked as applying to both tracks) must be completed by every student regardless of which track you choose. These cover material the whole class is responsible for.
 2. **You choose your track.** You do not need to formally declare a track, register it with the instructor, or stay locked into one for the whole semester. Pick the track whose work is most useful to you.
 3. **One assignment per week from your chosen track.** In any given week that offers a Cyber and an IT version of the lab (or homework), you are only required to complete **one of the two**. You may switch which track you pick from week to week - for example, doing the Cyber lab in Week 5 and the IT lab in Week 6 is perfectly fine. Pick whichever assignment that week best serves what you want to learn.
 4. **Doing both does not earn extra credit.** If you choose to complete both the Cyber and IT version of a given week's assignment, only one will count toward your grade. There is no bonus, multiplier, or extra-credit adjustment for doing the second one. Do the second only if you want the practice.
-5. **Lowest scores are dropped on the track assignments.** Learning Suite is configured to **drop the lowest scores** on the homework and lab categories equal to the number of weeks that offer two track options. In practical terms this means that if you complete only your chosen track's assignment each week (and skip the other track's version, as expected), the unsubmitted assignment is dropped automatically and your grade is not affected. You do **not** need to email the instructor or request a manual drop - it happens automatically in the gradebook.
+5. **Lowest scores are dropped** Learning Suite is configured to **drop the lowest score** on the homework and lab categories.
 
 ### Choosing and switching tracks
 
-You can switch tracks freely from week to week, but for your own consistency it is recommended that you pick a primary track at the start of the semester and stay with it most of the time. The track-specific labs build progressively (e.g., the Cyber Ansible playbook in Week 9 is extended in Week 10; the IT cloud provisioning lab in Week 9 is the foundation for IAM and monitoring in Weeks 10-11). Bouncing between tracks every week may leave you without the prerequisite work for the next assignment in either lane.
+You can switch tracks freely from week to week, but for your own consistency it is recommended that you pick a primary track at the start of the semester and stay with it most of the time. Bouncing between tracks every week may leave you without the prerequisite work for the next assignment in either lane.
 
 If you are unsure which track to pick, the default recommendation is:
 
 - Pick **Cyber** if you are pursuing a security, GRC, SOC, or compliance career, or if you plan to take CYBER electives focused on offensive/defensive security.
-- Pick **IT** if you are pursuing an IT operations, infrastructure engineering, cloud, SRE, or platform career, or if you intend to pursue certifications like ITIL, AWS/Azure infrastructure tracks, or RHCE/RHCSA-style admin paths.
+- Pick **IT** if you are pursuing an IT operations, infrastructure engineering, cloud, SRE, or platform career, or if you intend to pursue certifications like ITIL, or RHCE/RHCSA-style admin paths.
 
 The final project has both a Cyber-track and IT-track version; you may pick either regardless of which track you have been doing weekly. See [Final Project (Cyber)]({% link final-project-cyber/index.md %}) and [Final Project (IT)]({% link final-project-it/index.md %}) for the respective scopes.
 
 ### Midterm and final project
 
-The midterm and lecture material are the same for both tracks. Rather than a written exam, the midterm is a single tabletop scenario: every student works through the same scenario individually, adjudicated by the course's AI Dungeon Master, drawing on material every student is responsible for (the shared lectures and readings), not track-specific lab content. You are not at a disadvantage on the midterm because of which track you chose.
+The midterm and lecture material are the same for both tracks. Rather than a written exam, the midterm is a single tabletop scenario: every student works through a scenario individually, adjudicated by the course's AI Dungeon Master, drawing on material every student is responsible for (the shared lectures and readings), not track-specific lab content. You are not at a disadvantage on the midterm because of which track you chose. The midterm will have a 30-minute time limit and can be attempted up to 3 times. Due to the new nature of a midterm like this, everyone who completes at least one attempt will get a passing grade for the midterm.
 
 
 ## Student Learning Outcomes
@@ -74,46 +74,41 @@ The midterm and lecture material are the same for both tracks. Rather than a wri
 Regardless of track, upon successful completion of this course students will be able to:
 
 1. Build and maintain a hardened Linux and Windows Server lab environment suitable for production-grade work.
-2. Apply Active Directory and Group Policy fundamentals to manage a small Windows estate.
-3. Operate a basic patch management pipeline and certificate / PKI infrastructure.
-4. Document operations work clearly using a GitHub-based pull request workflow that mirrors industry change management.
-5. Design, implement, and present a multi-week capstone infrastructure project.
+1. Apply Active Directory and Group Policy fundamentals to manage a small Windows estate.
+1. Operate a basic patch management pipeline and certificate / PKI infrastructure.
+1. Document operations work clearly using a GitHub-based pull request workflow that mirrors industry change management.
+1. Design, implement, and present a multi-week capstone infrastructure project.
 
 ### Cyber Track outcomes
 
 Students completing the Cyber Track will additionally be able to:
 
 1. Apply CIS Benchmark and DISA STIG controls to harden Linux and Windows Server systems to a measurable compliance score.
-2. Design and implement automated configuration management solutions using Ansible playbooks and Galaxy roles.
-3. Configure centralized logging, auditd, and SIEM integration to establish a defensible audit trail.
-4. Implement identity and access management (PAM, SSH CA) aligned with least-privilege principles.
-5. Harden Docker container deployments against CIS Docker Benchmark criteria.
-6. Produce professional-grade compliance documentation including STIG checklists, gap analyses, and post-incident reports.
+1. Design and implement automated configuration management solutions using Ansible playbooks and Galaxy roles.
+1. Configure centralized logging, auditd, and SIEM integration to establish a defensible audit trail.
+1. Implement identity and access management (PAM, SSH CA) aligned with least-privilege principles.
+1. Harden Docker container deployments against CIS Docker Benchmark criteria.
+1. Produce professional-grade compliance documentation including STIG checklists, gap analyses, and post-incident reports.
 
 ### IT Track outcomes
 
 Students completing the IT Track will additionally be able to:
 
-1. Operate within an ITSM framework, including ticketing, change management, and problem management workflows.
-2. Design and implement core network services (DNS / DNSSEC, email security, high-availability load balancing).
-3. Conduct data center site evaluations and risk assessments.
-4. Provision and secure cloud infrastructure using IaC, including cloud IAM configuration and auditing.
-5. Build a monitoring and observability stack using Prometheus and Grafana.
-6. Draft enterprise IT policy and produce architecture and problem-management documentation.
+1. Design and implement core network services (DNS / DNSSEC, email security, high-availability load balancing).
+1. Conduct data center site evaluations and risk assessments.
+1. Provision and secure cloud infrastructure using IaC, including cloud IAM configuration and auditing.
+1. Build a monitoring and observability stack using Prometheus and Grafana.
+1. Draft enterprise IT policy and produce architecture and problem-management documentation.
 
 
 ## Grading
 
 | Component | Weight | Details |
 |---|---|---|
-| Weekly Labs (14) | 55% | Started in lab session; report due within one week. Most weeks offer a Cyber and an IT version - pick one. |
-| Homework (14) | 30% | Written, scripted, and analysis assignments. Most weeks offer a Cyber and an IT version - pick one. |
-| Midterm Exam | 5% | Week 8, individual tabletop exercise (shared scenario, both tracks) |
-| Final Project | 10% | Weeks 8-15 (Cyber or IT version) |
-
-### Drop-lowest policy for track assignments
-
-Learning Suite is configured to **automatically drop the lowest scores** in the homework and lab categories equal to the number of weeks that have two track-specific options. If you complete only one of the two track versions each week (which is what you are expected to do), the unsubmitted assignment will be dropped from your grade automatically - your average will not be reduced for skipping the other track's version. See the [Course Tracks](#course-tracks) section for the full rules.
+| Labs (12) | 55% | Started in lab session; report due within one week. Some weeks offer a Cyber and an IT version - pick one. |
+| Homework (10 graded) | 30% | Written, scripted, and analysis assignments. Some weeks offer a Cyber and an IT version - pick one. An 11th assignment, an ungraded practice exam (Week 9), does not count toward this total. |
+| Midterm Exam | 5% | Week 9, individual tabletop exercise |
+| Final Project | 10% | Weeks 9-15 (Cyber or IT version) |
 
 ### Grade Scale
 
@@ -135,7 +130,7 @@ Learning Suite is configured to **automatically drop the lowest scores** in the 
 
 ## Assignments
 
-### Weekly Labs
+### Labs
 
 Labs are the core of this course and are submitted through a GitHub-based workflow that mirrors professional sysadmin documentation practice. At the start of the semester you will create a GitHub repository from the course template. Each lab is submitted as a pull request to your site, reviewed by the Teaching Assistant, and merged into your main branch, the same change-management workflow used by operations teams.
 
@@ -144,32 +139,32 @@ A handful of labs are **shared** (required for both tracks); the rest are split 
 **Workflow for each lab:**
 
 1. Create a branch from `main` named `lab-NN-short-description` (e.g., `lab-03-windows-hardening`)
-2. Add your report as `labs/lab-NN.md` written in Markdown in runbook style, with commands, expected vs. actual output, screenshots, and analysis
+2. Add to the location specified in the lab instructions, written in Markdown in runbook style, with commands, expected vs. actual output, screenshots, and analysis
 3. Commit any supporting artifacts to the branch: config files, scripts, scan outputs (XCCDF XML, CIS-CAT HTML), STIG checklists
-4. Open a pull request to `main` with the title `Lab NN: [Topic]`
-5. The Teaching Assistant will review and leave inline comments; address any requested changes with additional commits
-6. Once approved, merge the PR; your report goes live on your main branch
-7. Submit the PR link on Learning Suite by the due date (one week after the lab session, Thursday 11:59 PM)
+4. Open a pull request to `main` with the title `Grade: lab-NN`
+5. The Autograder will leave feedback on your PR in the next few hours; address any requested changes with additional commits
+6. Once you have the grade you want or the deadline has passed, merge the PR; your report goes live on your main branch
 
-Your repository site will grow throughout the semester into a technical reference you can share with employers. By the final week it will contain 14 lab reports, supporting scripts and configs, and your final project documentation, a real artifact of the work you did in this course.
+Your repository site will grow throughout the semester into a technical reference you can share with employers. By the final week it will contain 12 lab reports, supporting scripts and configs, and your final project documentation, a real artifact of the work you did in this course.
 
 See the Schedule in Learning Suite for specific due dates and the [Lab index]({% link labs/index.md %})
 
 ### Homework
 
-Homework assignments are written, scripted, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable such as a gap analysis, a hardening checklist, a policy document, or an Ansible playbook (Cyber Track), or an architecture design, an ITSM workflow, a risk assessment, or a cloud audit (IT Track). Homework follows the same GitHub PR workflow as labs: commit any supporting files, open a pull request, and submit the PR link on Learning Suite. Assignments are due on Tuesdays at 11:59 PM. See the Schedule in Learning Suite for specific due dates and the [Homework index]({% link homework/index.md %}) for which weeks are shared vs. split by track.
+Homework assignments are written, scripted, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable such as a gap analysis, a hardening checklist, a policy document, or an Ansible playbook (Cyber Track), or an architecture design, an ITSM workflow, a risk assessment, or a cloud audit (IT Track). Homework follows the same GitHub PR workflow as labs: commit any supporting files, open a pull request. Assignments are due on Tuesdays at 11:59 PM. See the Schedule in Learning Suite for specific due dates and the [Homework index]({% link homework/index.md %}) for which weeks are shared vs. split by track.
+
 ### Midterm Exam
 
-The midterm is administered during Week 8 as an individual, tabletop exercise covering material from Weeks 1-8. Each student works through the same branching scenario alone, making decisions under uncertainty and rolling against posted difficulty checks; the course's AI Dungeon Master narrates encounters and adjudicates outcomes in place of a live proctor. No make-up midterms are given except for university-approved absences arranged in advance.
+The midterm is administered during Week 9 as an individual, tabletop exercise covering material from Weeks 1-8. Each student works through a scenario alone, making decisions under uncertainty and rolling against posted difficulty checks; the course's AI Dungeon Master narrates encounters and adjudicates outcomes in place of a live proctor. No make-up midterms are given except for university-approved absences arranged in advance. There will be one class period dedicated to taking the midterm but it will be open from Monday to Thursday.
 
 ### Final Project
 
-The final project is a multi-week capstone running from Week 8 through the last class, and has a version aligned with each track:
+The final project is a multi-week capstone running from Week 9 through the last class, and has a version aligned with each track:
 
 - **Cyber Track final project:** design, harden, document, and present a fully compliant server infrastructure meeting CIS Level 2 and applicable DISA STIG requirements. See [Final Project (Cyber)]({% link final-project-cyber/index.md %}).
 - **IT Track final project:** design, build, document, and present an enterprise infrastructure deliverable aligned with the IT Track's focus on operations, networking, cloud, monitoring, and policy. See [Final Project (IT)]({% link final-project-it/index.md %}).
 
-You may pick either version regardless of which weekly track you have been following -- most students will pick the version that matches the track they have practiced most. All project documentation is submitted through your GitHub portfolio using the same PR workflow as labs. A project proposal is due Week 8, and the final deliverable and live presentation are due on the last class day (December 10).
+You may pick either version regardless of which weekly track you have been following -- most students will pick the version that matches the track they have practiced most. All project documentation is submitted through your GitHub portfolio using the same PR workflow as labs. A project proposal is due Week 9, and the final deliverable and live presentation are due on the last class day (December 10).
 
 This is an individual assignment and serves as the final exam for the course. As such, you may not receive help from the instructor, teaching assistants, classmates, or anyone else. You must complete it on your own. You may ask the instructor or teaching assistant clarifying questions related to grading or scope requirements, but no help on the project itself will be given.
 
@@ -239,4 +234,55 @@ The first injunction of the Honor Code is the call to "be honest." Students come
 
 BYU students should seek to be totally honest in their dealings with others. They should complete their own work and be evaluated based upon that work. They should avoid academic dishonesty and misconduct in all its forms, including but not limited to plagiarism, fabrication or falsification, cheating, and other academic misconduct.
 
-**In this course specifically**, academic dishonesty includes but is not limited to: submitting another student's lab report or scripts 
+**In this course specifically**, academic dishonesty includes but is not limited to: submitting another student's lab report or scripts as your own, sharing completed lab configurations or scripts with classmates before the due date, and using generative AI tools beyond the scope permitted in the AI Tools policy above without disclosure.
+
+### Honor Code
+
+In keeping with the principles of the BYU Honor Code, students are expected to be honest in all of their academic work. Academic honesty means, most fundamentally, that any work you present as your own must in fact be your own work and not that of another. Violations of this principle may result in a failing grade in the course and additional disciplinary action by the university. Students are also expected to adhere to the Dress and Grooming Standards. Please call the Honor Code Office at 801-422-2847 if you have questions about those standards.
+
+### Plagiarism
+
+Intentional plagiarism is a form of intellectual theft that violates widely recognized principles of academic integrity as well as the Honor Code. Such plagiarism may subject the student to appropriate disciplinary action administered through the university Honor Code Office, in addition to academic sanctions that may be applied by an instructor. Inadvertent plagiarism, which may not be a violation of the Honor Code, is nevertheless a form of intellectual carelessness that is unacceptable in the academic community.
+
+Examples of plagiarism include:
+
+- **Direct Plagiarism:** The verbatim copying of an original source without acknowledging the source.
+- **Paraphrased Plagiarism:** The paraphrasing, without acknowledgement, of ideas from another that the reader might mistake for the author's own.
+- **Plagiarism Mosaic:** Borrowing words, ideas, or data from an original source and blending this original material with one's own without acknowledging the source.
+- **Insufficient Acknowledgement:** Partial or incomplete attribution of words, ideas, or data from an original source.
+
+Copying another student's work and submitting it as your own individual work without proper attribution is a serious form of plagiarism.
+
+### Inappropriate Use of Course Materials
+
+All course materials (e.g., outlines, handouts, syllabi, exams, quizzes, PowerPoint presentations, lectures, audio and video recordings, etc.) are proprietary. Students are prohibited from posting or selling any such course materials without the express written permission of the instructor. To do so is a violation of the BYU Honor Code. It is also unethical to post your own work (study sheets, papers, scripts) from this course on file-sharing websites, as this encourages others to engage in plagiarism.
+
+### Lab Environment Policy
+
+All lab activities must be conducted within your designated lab environment (local VMs or provided cloud lab). Students are **prohibited** from deploying course tools, including vulnerability scanners (Nessus, OpenSCAP), configuration scanners (CIS-CAT), and Ansible playbooks, against any system they do not own or have explicit written permission to test. Unauthorized scanning may violate the Computer Fraud and Abuse Act (18 U.S.C. § 1030) and university policy.
+
+### Accessibility & Accommodations
+
+Brigham Young University is committed to providing a working and learning atmosphere that reasonably accommodates qualified persons with disabilities. A disability is a physical or mental impairment that substantially limits one or more major life activities, including vision or hearing impairments, physical disabilities, chronic illnesses, emotional disorders (e.g., depression, anxiety), learning disorders, and attention disorders (e.g., ADHD).
+
+If you have a disability that impairs your ability to complete this course successfully, please contact the **University Accessibility Center (UAC)**, 2170 WSC, 801-422-2767, to request a reasonable accommodation. The UAC can also assess students for learning, attention, and emotional concerns. If you feel you have been unlawfully discriminated against on the basis of disability, please contact the Equal Opportunity Office at 801-422-5895 or [eo_manager@byu.edu](mailto:eo_manager@byu.edu).
+
+### Title IX / Preventing & Responding to Sexual Misconduct
+
+In accordance with Title IX of the Education Amendments of 1972, BYU prohibits unlawful sex discrimination, including sexual harassment, against any participant in its education programs or activities. Sexual harassment occurs when a person is subjected to unwelcome sexual speech or conduct so severe, pervasive, and offensive that it effectively denies their ability to access any BYU education program or activity, or when a person suffers sexual assault, dating violence, domestic violence, or stalking on the basis of sex.
+
+University policy requires all faculty members to promptly report incidents of sexual harassment that come to their attention. Incidents should be reported to the **Title IX Coordinator** at [t9coordinator@byu.edu](mailto:t9coordinator@byu.edu), (801) 422-8692, or 1085 WSC. Reports may also be submitted at [titleix.byu.edu/report](https://titleix.byu.edu/report) or 1-888-238-1062 (24 hours a day). Additional information is available at [titleix.byu.edu](http://titleix.byu.edu).
+
+### Respectful Environment & Diversity
+
+Because we feel the depth of God's love for His children, we care deeply about every child of God, regardless of age, personal circumstances, gender, sexual orientation, or other unique challenges. As a university community we strive to foster an educational environment that promotes the personal dignity of every student. Our course participation reflects our understanding that every individual is a child of Heavenly Parents. We use language that is polite, considerate, and courteous, even when we strongly disagree.
+
+Derogatory or demeaning comments about other students, their career choices, or their backgrounds are completely out of place at BYU and in this course.
+
+### Mental Health
+
+Mental health concerns and stressful life events can affect students' academic performance and quality of life. **BYU Counseling and Psychological Services (CAPS)**, 1500 WSC, 801-422-3035, [caps.byu.edu](https://caps.byu.edu), provides individual, couples, and group counseling, as well as stress management services. These services are confidential and are provided by the university at no cost for full-time students. For more immediate concerns, visit [help.byu.edu](http://help.byu.edu).
+
+### University Policies & Compliance Hotline
+
+If you have questions about university policies, please visit [policy.byu.edu](https://policy.byu.edu). If you observe any non-emergency dangerous, illegal, or suspicious activity on campus or by a member of the BYU community, please report it through the **BYU Compliance Hotline** at [hotline.byu.edu](https://hotline.byu.edu). Emergencies and ongoing criminal activity should be reported directly to BYU Police at 801-422-2911.
