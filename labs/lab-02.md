@@ -349,7 +349,7 @@ Consider: carol has read-only POSIX ACL access to `/var/named`. Describe a scena
 
 ## Deliverables
 
-Submit a single notes file (Markdown or plain text) logging every command you ran across Parts 1-4, in order, along with your own notes on what happened. This is where every "record," "document," and "explain" prompt in the Procedure above ends up - the notes file *is* the report. Your hands-on configuration work itself is autograded directly against the live system, so the notes file doesn't need separate screenshots or copy-pasted proof of success - it needs the command history and your reasoning.
+Submit a single Markdown document at `labs/lab-02.md` logging every command you ran across Parts 1-4, in order, along with your own notes on what happened, and open a PR called `Grade: lab-2`. This is where every "record," "document," and "explain" prompt in the Procedure above ends up - the notes file *is* the report. Your hands-on configuration work itself is autograded directly against the live system, so the notes file doesn't need separate screenshots or copy-pasted proof of success - it needs the command history and your reasoning.
 
 At minimum, your notes should capture:
 
