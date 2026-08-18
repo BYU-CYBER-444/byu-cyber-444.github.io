@@ -68,7 +68,7 @@ Write your full analysis in `homework/cyber-hw-14.md`. Commit to `homework/asset
 - `cyber-hw-14-Dockerfile.hardened` - your corrected Dockerfile
 - `cyber-hw-14-docker-compose.hardened.yml` - your remediated Compose file
 
-Open a PR titled `CYBER HW 14 - Container Security` and submit your repo link on Learning Suite by the due date.
+Open a PR titled `Grade: cyber-hw-14 - Container Security` and submit your repo link on Learning Suite by the due date.
 
 ---
 

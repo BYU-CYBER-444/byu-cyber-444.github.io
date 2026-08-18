@@ -78,7 +78,7 @@ Design (do not build) the PAM-based TOTP MFA layer for SSH logins:
 
 Write your full design in `homework/cyber-hw-06.md`.
 
-Open a PR titled `CYBER HW 6 - SSH CA & MFA Deployment Design` and submit your repo link on Learning Suite by the due date.
+Open a PR titled `Grade: cyber-hw-06 - SSH CA & MFA Deployment Design` and submit your repo link on Learning Suite by the due date.
 
 ---
 

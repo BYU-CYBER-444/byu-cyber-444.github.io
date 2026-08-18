@@ -73,7 +73,7 @@ For the two highest-scoring power risks and one cooling risk:
 
 Write your full report in `homework/it-hw-08.md`.
 
-Open a PR titled `IT HW 8 - Data Center Risk Assessment` and submit your repo link on Learning Suite by the due date.
+Open a PR titled `Grade: it-hw-08 - Data Center Risk Assessment` and submit your repo link on Learning Suite by the due date.
 
 ---
 

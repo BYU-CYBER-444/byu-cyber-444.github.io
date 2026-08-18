@@ -63,7 +63,7 @@ Write your full report in `homework/it-hw-02.md`. Commit your working (corrected
 - `it-hw-02-exports` - corrected NFS exports file
 - `it-hw-02-audit.md` - your config audit table (Part 1)
 
-Open a PR titled `IT HW 2 - Linux Network Services` and submit your repo link on Learning Suite by the due date.
+Open a PR titled `Grade: it-hw-02 - Linux Network Services` and submit your repo link on Learning Suite by the due date.
 
 ---
 

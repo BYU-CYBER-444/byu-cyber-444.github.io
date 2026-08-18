@@ -71,7 +71,7 @@ Write your design document in `homework/it-hw-12.md`. Commit to `homework/assets
 
 - `it-hw-12-runbook-[alert-name].md` - 3 runbook files (one per alert)
 
-Open a PR titled `IT HW 12 - Monitoring Architecture` and submit your repo link on Learning Suite by the due date.
+Open a PR titled `Grade: it-hw-12 - Monitoring Architecture` and submit your repo link on Learning Suite by the due date.
 
 ---
 

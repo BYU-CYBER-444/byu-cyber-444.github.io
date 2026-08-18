@@ -72,7 +72,7 @@ Write a formal compensating control plan for each:
 
 Write your full analysis in `homework/cyber-hw-04.md`.
 
-Open a PR titled `CYBER HW 4 - Windows Hardening` and submit your repo link on Learning Suite by the due date.
+Open a PR titled `Grade: cyber-hw-04 - Windows Hardening` and submit your repo link on Learning Suite by the due date.
 
 ---
 

@@ -90,7 +90,7 @@ Commit to `homework/assets/` using exactly these filenames:
 
 Write your analysis (Parts 2 and 3) in `homework/cyber-hw-02.md`.
 
-Open a PR titled `CYBER HW 2 - Linux Security Audit Suite` and submit your repo link on Learning Suite by the due date.
+Open a PR titled `Grade: cyber-hw-02 - Linux Security Audit Suite` and submit your repo link on Learning Suite by the due date.
 
 ---
 

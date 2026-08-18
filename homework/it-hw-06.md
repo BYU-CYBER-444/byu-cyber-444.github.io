@@ -70,7 +70,7 @@ The three policies above collectively implement pieces of a Zero Trust Architect
 
 Write all three policies in `homework/it-hw-06.md` (or as three linked sub-pages if you prefer). Each policy must be clearly delineated with a version number, effective date, owner, and approval signature block. Include the Zero Trust alignment write-up as a final section.
 
-Open a PR titled `IT HW 6 - Policy Package` and submit your repo link on Learning Suite by the due date.
+Open a PR titled `Grade: it-hw-06 - Policy Package` and submit your repo link on Learning Suite by the due date.
 
 ---
 

@@ -58,7 +58,7 @@ Format as a numbered remediation runbook - a junior admin should be able to run 
 
 Write your full gap analysis in `homework/cyber-hw-08.md`.
 
-Open a PR titled `CYBER HW 8 - CIS Benchmark Gap Analysis` and submit your repo link on Learning Suite by the due date.
+Open a PR titled `Grade: cyber-hw-08 - CIS Benchmark Gap Analysis` and submit your repo link on Learning Suite by the due date.
 
 ---
 
