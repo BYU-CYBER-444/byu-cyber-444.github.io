@@ -366,11 +366,11 @@ Autograded from your live system and submitted notes file - the point values bel
 
 | Item | Points |
 |------|--------|
-| BIND DNS - forward zone with all record types | 12 |
-| BIND DNS - reverse zone and broken-serial diagnosis | 8 |
-| Chrony - configuration/synchronization evidence, and PTP vs NTP comparison | 26 |
-| Sudo policy - least-privilege roles verified | 22 |
-| ACLs - role-based access across zone/data paths verified | 32 |
+| BIND DNS - forward zone with all record types | 15 |
+| BIND DNS - reverse zone and broken-serial diagnosis | 10 |
+| Chrony - configuration/synchronization evidence, and PTP vs NTP comparison | 20 |
+| Sudo policy - least-privilege roles verified | 25 |
+| ACLs - role-based access across zone/data paths verified | 30 |
 | **Total** | **100** |
 
 ---
