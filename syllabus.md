@@ -74,9 +74,9 @@ The midterm and lecture material are the same for both tracks. Rather than a wri
 Regardless of track, upon successful completion of this course students will be able to:
 
 1. Build and maintain a hardened Linux and Windows Server lab environment suitable for production-grade work.
-1. Apply Active Directory and Group Policy fundamentals to manage a small Windows estate.
+1. Apply Active Directory and Group Policy fundamentals to manage a small Windows Domain.
 1. Operate a basic patch management pipeline and certificate / PKI infrastructure.
-1. Document operations work clearly using a GitHub-based pull request workflow that mirrors industry change management.
+1. Document using a GitHub-based pull request workflow.
 1. Design, implement, and present a multi-week capstone infrastructure project.
 
 ### Cyber Track outcomes
