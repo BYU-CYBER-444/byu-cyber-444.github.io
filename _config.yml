@@ -79,6 +79,10 @@ exclude:
   - "*.sh"
   - README.md
   - infra
+  - labs/copies
+  - homework/needs-play-testing
+  - final-project-cyber/needs-play-testing
+  - final-project-it/needs-play-testing
 
 # Markdown settings
 markdown: kramdown

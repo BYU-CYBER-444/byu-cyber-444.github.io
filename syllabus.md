@@ -28,6 +28,21 @@ nav_order: 2
 | **Class Location** | CTB 350 · Tuesdays & Thursdays · 4:00-5:50 PM |
 
 
+
+## Office Hours
+
+| Time | Monday | Tuesday | Wednesday | Thursday | Friday |
+|---|---|---|---|---|---|
+| 9:00 - 10:00 AM | | | | | |
+| 10:00 - 11:00 AM | | | | | |
+| 11:00 AM - 12:00 PM | | | | | |
+| 12:00 - 1:00 PM | | | | | |
+| 1:00 - 2:00 PM | | | | | |
+| 2:00 - 3:00 PM | | Sebastian | | Sebastian | |
+| 3:00 - 4:00 PM | | Sebastian| | Sebastian | |
+| 4:00 - 5:00 PM | | | | | |
+| 5:00 - 6:00 PM | | Sebastian | | Sebastian  | |
+
 ## Course Tracks
 
 CYBER 444 is delivered in two parallel tracks: a **Cyber Track** and an **IT Track**. The lectures and midterm are common to the whole class, but some weeks each track has its own lab and homework assignment focused on the work that track is preparing you for.
@@ -49,11 +64,10 @@ The following rules apply to every lab and homework assignment:
 2. **You choose your track.** You do not need to formally declare a track, register it with the instructor, or stay locked into one for the whole semester. Pick the track whose work is most useful to you.
 3. **One assignment per week from your chosen track.** In any given week that offers a Cyber and an IT version of the lab (or homework), you are only required to complete **one of the two**. You may switch which track you pick from week to week - for example, doing the Cyber lab in Week 5 and the IT lab in Week 6 is perfectly fine. Pick whichever assignment that week best serves what you want to learn.
 4. **Doing both does not earn extra credit.** If you choose to complete both the Cyber and IT version of a given week's assignment, only one will count toward your grade. There is no bonus, multiplier, or extra-credit adjustment for doing the second one. Do the second only if you want the practice.
-5. **Lowest scores are dropped** Learning Suite is configured to **drop the lowest score** on the homework and lab categories.
 
 ### Choosing and switching tracks
 
-You can switch tracks freely from week to week, but for your own consistency it is recommended that you pick a primary track at the start of the semester and stay with it most of the time. Bouncing between tracks every week may leave you without the prerequisite work for the next assignment in either lane.
+You can switch tracks freely from week to week, but for your own consistency it is recommended that you pick a primary track at the start of the semester and stay with it most of the time.
 
 If you are unsure which track to pick, the default recommendation is:
 
@@ -83,18 +97,18 @@ Regardless of track, upon successful completion of this course students will be 
 
 Students completing the Cyber Track will additionally be able to:
 
-1. Apply CIS Benchmark and DISA STIG controls to harden Linux and Windows Server systems to a measurable compliance score.
+1. Apply controls to harden Linux and Windows Server systems to a measurable compliance score.
 1. Design and implement automated configuration management solutions using Ansible playbooks and Galaxy roles.
 1. Configure centralized logging, auditd, and SIEM integration to establish a defensible audit trail.
 1. Implement identity and access management (PAM, SSH CA) aligned with least-privilege principles.
 1. Harden Docker container deployments against CIS Docker Benchmark criteria.
-1. Produce professional-grade compliance documentation including STIG checklists, gap analyses, and post-incident reports.
+1. Produce professional-grade compliance documentation.
 
 ### IT Track outcomes
 
 Students completing the IT Track will additionally be able to:
 
-1. Design and implement core network services (DNS / DNSSEC, email security, high-availability load balancing).
+1. Design and implement core network services.
 1. Conduct data center site evaluations and risk assessments.
 1. Provision and secure cloud infrastructure using IaC, including cloud IAM configuration and auditing.
 1. Build a monitoring and observability stack using Prometheus and Grafana.
@@ -107,7 +121,7 @@ Students completing the IT Track will additionally be able to:
 |---|---|---|
 | Labs (12) | 55% | Started in lab session; report due within one week. Some weeks offer a Cyber and an IT version - pick one. |
 | Homework (10 graded) | 30% | Written, scripted, and analysis assignments. Some weeks offer a Cyber and an IT version - pick one. An 11th assignment, an ungraded practice exam (Week 9), does not count toward this total. |
-| Midterm Exam | 5% | Week 9, individual tabletop exercise |
+| Midterm Exam | 5% | Week 10, individual tabletop exercise |
 | Final Project | 10% | Weeks 9-15 (Cyber or IT version) |
 
 ### Grade Scale
@@ -132,14 +146,12 @@ Students completing the IT Track will additionally be able to:
 
 ### Labs
 
-Labs are the core of this course and are submitted through a GitHub-based workflow that mirrors professional sysadmin documentation practice. At the start of the semester you will create a GitHub repository from the course template. Each lab is submitted as a pull request to your site, reviewed by the Teaching Assistant, and merged into your main branch, a similar workflow as used by some operations teams. You will be able to find your grade and comments as an attached comment on that submitted PR.
-
-A handful of labs are **shared** (required for both tracks); the rest are split into a **Cyber Track** and an **IT Track** version, and you complete only one. See the [Labs index]({% link labs/index.md %}) for which weeks are shared and which are split, and review the [Course Tracks](#course-tracks) section above for the full set of rules.
+Labs are the core of this course and are submitted GitHub Pull Requests (PRs). At the start of the semester you will create a GitHub repository from the course template. Each lab is submitted as a PR to your site, reviewed by the Teaching Assistant, and merged into your main branch, a similar workflow as used by some operations teams. You will be able to find your grade and comments as an attached comment on that submitted PR.
 
 **Workflow for each lab:**
 
 1. Create a branch from `main` named `lab-NN-short-description` (e.g., `lab-03-windows-hardening`)
-2. Follow the instructions in the lab to edit and add any relevant files for the lab, which can include items such as config files, scripts, scan outputs (XCCDF XML, CIS-CAT HTML), STIG checklists. Make sure all relevant files are committed and included in your PR
+2. Follow the instructions in the lab to edit and add any relevant files for the lab, which can include items such as config files, scripts, scan outputs, etc. Make sure all relevant files are committed and included in your PR
 4. Open a pull request to `main` with the title `Grade: lab-NN`
 5. The Autograder will leave feedback on your PR in the next few hours; address any requested changes with additional commits
 6. Once you have the grade you want or the deadline has passed, merge the PR; your report goes live on your main branch
@@ -148,37 +160,37 @@ Your repository site will grow throughout the semester into a technical referenc
 
 As you complete these labs, we strongly suggest that you document the commands used in each lab (failures, successes, etc) in a markdown file in the lab. This will not be graded, but if you get into the habit of keeping strong notes as you work, it will be a huge benefit during the class and as you enter the workforce.
 
-See the Schedule in Learning Suite for specific due dates and the [Lab index]({% link labs/index.md %})
+See the Schedule in Learning Suite for specific due dates.
 
 ### Homework
 
-Homework assignments are written, scripted, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable building on the recently learned principles, such as a hardening checklist or policy document. Homework follows the same GitHub PR workflow as labs: commit any supporting files, open a pull request. Assignments are due on Tuesdays at 11:59 PM. See the Schedule in Learning Suite for specific due dates and the [Homework index]({% link homework/index.md %}) for which weeks are shared vs. split by track.
+Homework assignments are written, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable building on the recently learned principles, such as a hardening checklist or policy document. Homework follows the same GitHub PR workflow as labs: commit any supporting files, open a pull request. Assignments are due on Tuesdays at 11:59 PM. See the Schedule in Learning Suite for specific due dates.
 
 ### Midterm Exam
 
-The midterm is administered during Week 9 as an individual, tabletop exercise covering material from Weeks 1-8. Each student works through a scenario alone, making decisions under uncertainty and rolling against posted difficulty checks; the course's AI Dungeon Master narrates encounters and adjudicates outcomes in place of a live proctor. No make-up midterms are given except for university-approved absences arranged in advance. There will be one class period dedicated to taking the midterm but it will be open from Monday to Thursday.
+The midterm is administered during Week 10 as an individual, tabletop exercise covering material from Weeks 1-9. Each student works through a scenario alone, making decisions under uncertainty and rolling against posted difficulty checks; the course's AI Dungeon Master narrates encounters and adjudicates outcomes in place of a live proctor. No make-up midterms are given except for university-approved absences arranged in advance. There will be one class period dedicated to taking the midterm but it will be open from Tuesday to Thursday.
 
 ### Final Project
 
 The final project is a multi-week capstone running from Week 9 through the last class, and has a version aligned with each track:
 
-- **Cyber Track final project:** design, harden, document, and present a fully compliant server infrastructure meeting CIS Level 2 and applicable DISA STIG requirements. See [Final Project (Cyber)]({% link final-project-cyber/index.md %}).
+- **Cyber Track final project:** design, harden, document, and present a fully compliant server infrastructure meeting CIS Level 2. See [Final Project (Cyber)]({% link final-project-cyber/index.md %}).
 - **IT Track final project:** design, build, document, and present an enterprise infrastructure deliverable aligned with the IT Track's focus on operations, networking, cloud, monitoring, and policy. See [Final Project (IT)]({% link final-project-it/index.md %}).
 
-You may pick either version regardless of which weekly track you have been following -- most students will pick the version that matches the track they have practiced most. All project documentation is submitted through your GitHub portfolio using the same PR workflow as labs. A project proposal is due Week 9, and the final deliverable and live presentation are due on the last class day (December 10).
+You may pick either version regardless of which weekly track you have been following. All project documentation is submitted through your GitHub portfolio using the same PR workflow as labs. A project proposal is due Week 9, and the final deliverable and live presentation are due on the last class day (December 10).
 
-This is an individual assignment and serves as the final exam for the course. As such, you may not receive help from the instructor, teaching assistants, classmates, or anyone else. You must complete it on your own. You may ask the instructor or teaching assistant clarifying questions related to grading or scope requirements, but no help on the project itself will be given.
+This will be a group assignment and will serve as the final exam for the class. You will work in groups of 2. As such, you may not receive help from the instructor, teaching assistants, classmates, or anyone outside your group. Each group must complete the assignment on its own. You may ask the instructor or teaching assistant clarifying questions related to grading or scope requirements, but no help on the project itself will be given.
 
 
 ## Course Policies
 
 ### Attendance
 
-Attendance at both lecture and lab is expected. If you need to miss a class, please notify the instructor in advance whenever possible.
+Attendance at both lecture and lab is expected, but not required. If you need to miss a class, please notify the instructor in advance whenever possible.
 
 Lectures will **not** be recorded as a general practice. Recordings may be made on a case-by-case basis for university-excused absences (e.g., documented illness, university travel); contact the instructor before the missed session to arrange this.
 
-Attendance is not a graded component of the course; however, missing lecture and lab sessions will put you at a significant disadvantage. Course material builds week over week, lab work cannot easily be replicated outside of scheduled sessions, and in-class discussions and walkthroughs are not captured elsewhere. Frequent absences will likely be reflected in your overall performance. You cannot expect to utilize the instructor and TA as a substitute for class attendance, since hours are extremely limited for both outside of class time.
+Missing lecture and lab sessions will put you at a significant disadvantage. Course material builds week over week, lab work cannot easily be replicated outside of scheduled sessions, and in-class discussions and walkthroughs are not captured elsewhere. Frequent absences will likely be reflected in your overall performance. You cannot expect to utilize the instructor and TA as a substitute for class attendance, since hours are extremely limited for both outside of class time.
 
 ### Late Work
 
@@ -229,7 +241,7 @@ A few norms that keep things running smoothly:
 
 - For questions about assignment requirements, grading, or course content that others might benefit from, post in the appropriate Discord channel rather than a DM; you'll get a faster answer and your classmates will thank you.
 - For anything personal (grade disputes, accommodation requests, sensitive circumstances), email or a private Discord message is appropriate.
-- Office hours details are listed in the Course Information table above. If you cannot make scheduled hours, reply to your email thread and we can find a time that works.
+- Office hours details are listed in the Course Information table above.
 
 ### Academic Honesty
 
