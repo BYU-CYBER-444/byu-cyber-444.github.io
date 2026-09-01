@@ -13,7 +13,7 @@ nav_order: 1
 
 The proposal locks in your project scope before you begin building. It is graded pass/fail - all five sections must be present and specific. An instructor feedback session in Week 9 lab will confirm your scope before you invest significant time in implementation.
 
-Submit your proposal on your portfolio site using the GitHub PR workflow. Open a PR titled `IT Final Project Proposal` and submit the PR link on Learning Suite by the end of Week 8.
+Submit your proposal on your portfolio site using the GitHub PR workflow. Open a PR titled `IT Final Project Proposal` and submit the PR link on Learning Suite by the end of Week 9.
 
 {: .important }
 The proposal is required. You may not receive credit for Progress Check 1 if a passing proposal is not on file.
@@ -85,26 +85,25 @@ Provide a preliminary outline of your on-premises AI proposal:
 
 ### 5. Week-by-Week Milestones
 
-Provide a personal timeline from Week 8 through Week 15. Each week must list specific deliverables - not generic entries like "work on project." Your timeline must align with both progress check due dates (end of Week 10 and end of Week 12).
+Provide a personal timeline from Week 9 through Week 15. Each week must list specific deliverables - not generic entries like "work on project." Your timeline must align with both progress check due dates (end of Week 10 and end of Week 12).
 
 | Week | Planned Deliverables |
 |---|---|
-| Week 8 | Proposal submitted |
-| Week 9 | |
+| Week 9 | Proposal submitted |
 | Week 10 | Progress Check 1 - Infrastructure Build |
 | Week 11 | |
 | Week 12 | Progress Check 2 - Monitoring & Documentation |
-| Week 13 | |
+| Week 13 | Thanksgiving Break - No Class |
 | Week 14 | |
 | Week 15 | Final deliverables + presentation |
 
-Fill in Weeks 9, 11, 13, and 14 with your specific plans.
+Fill in Weeks 11 and 14 with your specific plans.
 
 ---
 
 ## Submission
 
-Open a PR titled `IT Final Project Proposal` and submit the PR link on Learning Suite by the end of Week 8.
+Open a PR titled `IT Final Project Proposal` and submit the PR link on Learning Suite by the end of Week 9.
 
 ---
 
@@ -116,7 +115,7 @@ Open a PR titled `IT Final Project Proposal` and submit the PR link on Learning 
 | ITSM Scope | RFC scenario, incident scenario, and KEDB entry all described | ITSM deliverables not described or incident scenario too vague |
 | Policy Scope | Three policies identified with org context and key decisions stated | Policy documents not specified or org not named |
 | AI Proposal Scope | Use case, model candidate, and hardware decision all addressed | AI proposal not described or missing hardware decision |
-| Week-by-Week Milestones | Personal timeline with specific deliverables for all 8 weeks | Generic entries or milestone weeks left blank |
+| Week-by-Week Milestones | Personal timeline with specific deliverables for all weeks (Week 13 excepted - Thanksgiving Break) | Generic entries or milestone weeks left blank |
 | Completeness | All five sections present; submitted on time | Any section missing or submitted late |
 
 [Back to IT Track Final Project Overview]({% link final-project-it/index.md %})

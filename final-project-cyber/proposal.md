@@ -11,7 +11,7 @@ nav_order: 1
 
 ## Overview
 
-The proposal locks in your infrastructure scope before you begin building. It is graded pass/fail; all five sections must be present and specific. A brief instructor feedback session in Week 8 lab will confirm your scope before you invest significant time in implementation.
+The proposal locks in your infrastructure scope before you begin building. It is graded pass/fail; all five sections must be present and specific. A brief instructor feedback session in Week 9 lab will confirm your scope before you invest significant time in implementation.
 
 ---
 
@@ -49,7 +49,7 @@ List the automation and scanning tools you plan to use and briefly justify each 
 
 ### 4. Week-by-Week Milestones
 
-Provide a personal timeline from Week 8 through Week 15 with specific deliverables for each week. Generic entries such as "work on project" will not receive credit. Your timeline must account for both progress check due dates.
+Provide a personal timeline from Week 9 through Week 15 with specific deliverables for each week (Week 13 is Thanksgiving Break - no deliverable needed that week). Generic entries such as "work on project" will not receive credit. Your timeline must account for both progress check due dates.
 
 ### 5. Division of Responsibilities
 
@@ -73,7 +73,7 @@ The proposal is required. You may not receive credit for Progress Check 1 if a p
 | Infrastructure Scope | All 3 servers listed with hostname, OS, IP range, and role | Missing servers or vague descriptions |
 | Compliance Frameworks | CIS Benchmark level and applicable STIGs specified per server | Frameworks listed without server-level mapping |
 | Tools | Automation tools listed and justified | Tools omitted or listed without context |
-| Week-by-Week Milestones | Personal timeline from Week 8 to Week 15 with specific deliverables | Generic or missing milestones |
+| Week-by-Week Milestones | Personal timeline from Week 9 to Week 15 with specific deliverables | Generic or missing milestones |
 | Completeness | All 5 sections present; submitted on time | Any section missing or submitted late |
 
 [Back to Final Project Overview]({% link final-project-cyber/index.md %})
