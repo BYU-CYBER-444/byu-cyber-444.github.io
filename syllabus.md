@@ -74,9 +74,9 @@ The midterm and lecture material are the same for both tracks. Rather than a wri
 Regardless of track, upon successful completion of this course students will be able to:
 
 1. Build and maintain a hardened Linux and Windows Server lab environment suitable for production-grade work.
-1. Apply Active Directory and Group Policy fundamentals to manage a small Windows estate.
+1. Apply Active Directory and Group Policy fundamentals to manage a small Windows Domain.
 1. Operate a basic patch management pipeline and certificate / PKI infrastructure.
-1. Document operations work clearly using a GitHub-based pull request workflow that mirrors industry change management.
+1. Document using a GitHub-based pull request workflow.
 1. Design, implement, and present a multi-week capstone infrastructure project.
 
 ### Cyber Track outcomes
@@ -132,26 +132,27 @@ Students completing the IT Track will additionally be able to:
 
 ### Labs
 
-Labs are the core of this course and are submitted through a GitHub-based workflow that mirrors professional sysadmin documentation practice. At the start of the semester you will create a GitHub repository from the course template. Each lab is submitted as a pull request to your site, reviewed by the Teaching Assistant, and merged into your main branch, the same change-management workflow used by operations teams.
+Labs are the core of this course and are submitted through a GitHub-based workflow that mirrors professional sysadmin documentation practice. At the start of the semester you will create a GitHub repository from the course template. Each lab is submitted as a pull request to your site, reviewed by the Teaching Assistant, and merged into your main branch, a similar workflow as used by some operations teams. You will be able to find your grade and comments as an attached comment on that submitted PR.
 
 A handful of labs are **shared** (required for both tracks); the rest are split into a **Cyber Track** and an **IT Track** version, and you complete only one. See the [Labs index]({% link labs/index.md %}) for which weeks are shared and which are split, and review the [Course Tracks](#course-tracks) section above for the full set of rules.
 
 **Workflow for each lab:**
 
 1. Create a branch from `main` named `lab-NN-short-description` (e.g., `lab-03-windows-hardening`)
-2. Add to the location specified in the lab instructions, written in Markdown in runbook style, with commands, expected vs. actual output, screenshots, and analysis
-3. Commit any supporting artifacts to the branch: config files, scripts, scan outputs (XCCDF XML, CIS-CAT HTML), STIG checklists
+2. Follow the instructions in the lab to edit and add any relevant files for the lab, which can include items such as config files, scripts, scan outputs (XCCDF XML, CIS-CAT HTML), STIG checklists. Make sure all relevant files are committed and included in your PR
 4. Open a pull request to `main` with the title `Grade: lab-NN`
 5. The Autograder will leave feedback on your PR in the next few hours; address any requested changes with additional commits
 6. Once you have the grade you want or the deadline has passed, merge the PR; your report goes live on your main branch
 
-Your repository site will grow throughout the semester into a technical reference you can share with employers. By the final week it will contain 12 lab reports, supporting scripts and configs, and your final project documentation, a real artifact of the work you did in this course.
+Your repository site will grow throughout the semester into a technical reference you can share with employers. By the final week it will contain scripts and configs for each lab and your final project documentation.
+
+As you complete these labs, we strongly suggest that you document the commands used in each lab (failures, successes, etc) in a markdown file in the lab. This will not be graded, but if you get into the habit of keeping strong notes as you work, it will be a huge benefit during the class and as you enter the workforce.
 
 See the Schedule in Learning Suite for specific due dates and the [Lab index]({% link labs/index.md %})
 
 ### Homework
 
-Homework assignments are written, scripted, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable such as a gap analysis, a hardening checklist, a policy document, or an Ansible playbook (Cyber Track), or an architecture design, an ITSM workflow, a risk assessment, or a cloud audit (IT Track). Homework follows the same GitHub PR workflow as labs: commit any supporting files, open a pull request. Assignments are due on Tuesdays at 11:59 PM. See the Schedule in Learning Suite for specific due dates and the [Homework index]({% link homework/index.md %}) for which weeks are shared vs. split by track.
+Homework assignments are written, scripted, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable building on the recently learned principles, such as a hardening checklist or policy document. Homework follows the same GitHub PR workflow as labs: commit any supporting files, open a pull request. Assignments are due on Tuesdays at 11:59 PM. See the Schedule in Learning Suite for specific due dates and the [Homework index]({% link homework/index.md %}) for which weeks are shared vs. split by track.
 
 ### Midterm Exam
 
@@ -177,7 +178,7 @@ Attendance at both lecture and lab is expected. If you need to miss a class, ple
 
 Lectures will **not** be recorded as a general practice. Recordings may be made on a case-by-case basis for university-excused absences (e.g., documented illness, university travel); contact the instructor before the missed session to arrange this.
 
-Attendance is not a graded component of the course; however, missing lecture and lab sessions will put you at a significant disadvantage. Course material builds week over week, lab work cannot easily be replicated outside of scheduled sessions, and in-class discussions and walkthroughs are not captured elsewhere. Frequent absences will likely be reflected in your overall performance.
+Attendance is not a graded component of the course; however, missing lecture and lab sessions will put you at a significant disadvantage. Course material builds week over week, lab work cannot easily be replicated outside of scheduled sessions, and in-class discussions and walkthroughs are not captured elsewhere. Frequent absences will likely be reflected in your overall performance. You cannot expect to utilize the instructor and TA as a substitute for class attendance, since hours are extremely limited for both outside of class time.
 
 ### Late Work
 
@@ -212,7 +213,9 @@ What is not permitted is using AI to produce the substance of your work. Submitt
 
 The practical test: if you could not explain what you submitted to the instructor on request, line by line for a script or paragraph by paragraph for a written response, you have likely crossed the line.
 
-When in doubt, disclose. Add a brief note at the end of your submission describing how you used AI (e.g., "used Claude to look up the auditd rule syntax in Step 3"). Voluntary disclosure will not be held against you; undisclosed use that surfaces during review will be treated as an academic honesty violation.
+You are responsible for disclosing all of your use of AI in each lab. This mirrors many jobs, since AI use is typically monitored, reported, and charged (since it usually costs money to your organization). Add a brief note at the end of your submission describing how you used AI (e.g., "used Claude to look up the auditd rule syntax in Step 3" or "used ChatGPT to explain Windows domain configuration"). Voluntary disclosure will not be held against you UNLESS it is in violation of the above rules; undisclosed use that surfaces during review will be treated as an academic honesty violation.
+
+If a submission is deemed to have used AI beyond the given confines above, it will be graded as a 0 and resubmission will not be allowed. You are allowed to ask why your submission was marked as such, but without significant evidence showing that you completed the assignment yourself, the decision will be final.
 
 ### Communication
 
