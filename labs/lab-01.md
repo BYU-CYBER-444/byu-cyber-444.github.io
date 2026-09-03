@@ -80,7 +80,7 @@ Don't run the full package upgrade yet - that's Part 6, done deliberately *after
 
 Proxmox VE's cluster setup is fully GUI-driven - no CLI needed:
 
-Before creating the cluster, set static IPs on **`ens19`**, **`ens20`**, **`ens21`**, and **`ens20`** on all 3 nodes - these two interfaces will serve as your cluster's **ring 0** and **ring 1** (Corosync's primary and redundant links), so they need working addresses before you point cluster communication at them. On each node: **System → Network**, select `ens19`, edit it, assign it a static IP, and repeat for the rest. Also make sure that AutoStart is turned on and that the MTU is set to 1496 (You can see the MTU setting if you check the Advanced Option). Apply the configuration on each node before moving on.
+Before creating the cluster, set static IPs on **`ens19`**, **`ens20`**, **`ens21`**, and **`ens22`** on all 3 nodes - these two interfaces will serve as your cluster's **ring 0** and **ring 1** (Corosync's primary and redundant links), so they need working addresses before you point cluster communication at them. On each node: **System → Network**, select `ens19`, edit it, assign it a static IP, and repeat for the rest. Also make sure that AutoStart is turned on and that the MTU is set to 1496 (You can see the MTU setting if you check the Advanced Option). Apply the configuration on each node before moving on.
 
 Use a private `10.x` range dedicated to cluster traffic, with a different host octet per node, e.g.:
 
