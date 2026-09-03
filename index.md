@@ -20,7 +20,6 @@ permalink: /
 | [Labs]({% link labs/index.md %}) | 12 hands-on lab exercises |
 | [Final Project (Cyber Track)]({% link final-project-cyber/index.md %}) | Multi-week infrastructure build (Cyber) |
 | [Final Project (IT Track)]({% link final-project-it/index.md %}) | Multi-week infrastructure build (IT) |
-| [Resources]({% link resources/index.md %}) | Tools, downloads, and references |
 
 ## Course Description
 
