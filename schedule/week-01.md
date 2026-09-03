@@ -17,8 +17,7 @@ nav_order: 1
 ---
 
 ## Slides
-
-[Introduction and Environment Setup]({{ site.baseurl }}/lectures/CYBER_444_Week01_Introduction_and_Environment_Setup.pptx)
+[Introduction and Environment Setup]({{ site.baseurl }}/lectures/CYBER444_Week01_Introduction_and_Environment_Setup.pptx)
 
 ---
 
