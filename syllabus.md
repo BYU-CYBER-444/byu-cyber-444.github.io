@@ -33,12 +33,12 @@ nav_order: 2
 
 | Time | Monday | Tuesday | Wednesday | Thursday | Friday |
 |---|---|---|---|---|---|
-| 9:00 - 10:00 AM | | | | | |
-| 10:00 - 11:00 AM | | | | | |
-| 11:00 AM - 12:00 PM | | | | | |
+| 9:00 - 10:00 AM |  | | | | |
+| 10:00 - 11:00 AM | Sebastian | | Sebastian | | |
+| 11:00 AM - 12:00 PM | Sebastian  | | Sebastian | | |
 | 12:00 - 1:00 PM | | | | | |
-| 1:00 - 2:00 PM | | Sebastian | | Sebastian | |
-| 2:00 - 3:00 PM | | Sebastian | | Sebastian | |
+| 1:00 - 2:00 PM | |  | |  | |
+| 2:00 - 3:00 PM | |  | |  | |
 | 3:00 - 4:00 PM | | | |  | |
 | 4:00 - 5:00 PM | | | | | |
 | 5:00 - 6:00 PM | | Sebastian | | Sebastian  | |
