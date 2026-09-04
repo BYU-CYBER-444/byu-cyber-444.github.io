@@ -457,33 +457,4 @@ Include a screenshot of a passing GitHub Actions run in your submission, or prov
 
 ---
 
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### Supply Chain Security & External Validation
-
-**Supply Chain Risk Analysis (15 pts)**
-
-Enumerate every external dependency introduced by your Ansible role and produce a formal **Supply Chain Risk Assessment** (`lab10-supply-chain.md`):
-
-1. **Dependency Inventory:** List every Galaxy collection, OS package, pip module, and external URL your role touches during execution. For each, record: source, current version, last updated, maintainer/publisher, download count (as a proxy for vetting), and whether a known CVE exists against it.
-
-2. **Risk Rating:** Rate each dependency Low/Medium/High based on: (a) whether it runs as root, (b) whether its integrity is verified (hash/signature), (c) whether you could substitute it with a first-party alternative.
-
-3. **Mitigations:** For each High-rated dependency, propose a specific mitigation - e.g., hash pinning in `requirements.yml`, hosting a private Ansible Galaxy mirror, using `get_url` with `checksum`, or replacing with a built-in Ansible module. Implement at least 2 of these mitigations in your role and demonstrate them working in your Molecule tests.
-
-**Delegated External Validation Test (15 pts)**
-
-Extend your Molecule test suite with a **delegated validator** scenario: add a second container (`validator`) to your `molecule.yml` that is NOT the target of your role. After the role converges on the target, write a Molecule verify step that runs from the `validator` container and attempts:
-
-- SSH login to the target with a password (should fail - verify exit code 1)
-- Connection to a port that should be firewalled (should be refused)
-- Fetching `/etc/shadow` via an HTTP server that should not be running (should be refused)
-
-Document each test with the expected and actual output. The goal is to prove your hardening works from an external attacker's perspective, not just from localhost.
-
----
-
 [← Back to Labs]({{ site.baseurl }}/labs/)

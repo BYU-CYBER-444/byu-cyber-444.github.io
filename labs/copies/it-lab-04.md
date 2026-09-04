@@ -350,43 +350,5 @@ Rate each domain's email security posture: Strong / Moderate / Weak. Justify eac
 | Third-party domain assessment | 10 |
 | **Total** | **100** |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### Extension A - DNSSEC Key Rollover Automation
-
-Manual DNSSEC key rollovers are error-prone and commonly cause outages. Implement automated key rollover using BIND9's built-in KASP (Key and Signing Policy) or `dnssec-policy`:
-
-1. Configure a `dnssec-policy` block in `/etc/named.conf`:
-   ```
-   dnssec-policy "lab-policy" {
-       dnskey-ttl 3600;
-       keys {
-           ksk lifetime unlimited algorithm rsasha256 2048;
-           zsk lifetime 90d algorithm rsasha256 1024;
-       };
-       signatures-refresh 5d;
-       signatures-validity 14d;
-   };
-   ```
-2. Apply the policy to your zone and monitor the key state: `rndc dnssec -status lab.internal`
-3. Force an accelerated ZSK rollover: `rndc dnssec -rollover -key [keyid] lab.internal`
-4. Document the rollover states: `omnipresent → rumoured → unretentive → hidden`
-5. Verify the new ZSK is published before the old one is removed.
-
-### Extension B - Email Security Policy and Vendor Assessment Framework
-
-As an email security architect, develop a vendor assessment checklist for evaluating whether third-party email services (e.g., marketing platforms, CRMs, ticketing systems) can be safely authorized in your SPF record:
-
-1. List 10 evaluation criteria (DKIM signing support, dedicated sending IPs, IP reputation scoring, abuse reporting, SPF include chain depth, DMARC alignment support, etc.)
-2. Apply the framework to assess two specific vendor services (e.g., Mailchimp, Salesforce Marketing Cloud, SendGrid - use their public documentation)
-3. For each vendor: Can they sign with your domain's DKIM key? Do they support DMARC alignment? What are the SPF implications?
-4. Write a 250-word recommendation memo on whether to authorize each vendor and any conditions required.
-
-Submit KASP configuration and rollover state documentation, plus the vendor assessment checklist and recommendation memo.
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

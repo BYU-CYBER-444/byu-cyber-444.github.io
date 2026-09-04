@@ -85,23 +85,5 @@ Open a PR titled `CYBER HW 12 - Audit Log Analysis` and submit your repo link on
 {: .tip }
 Save the excerpt to a file on your lab VM (e.g. `AuditLog_Exercise.txt`), then `ausearch -i -f AuditLog_Exercise.txt` can help parse the records. The `-i` flag translates numeric UIDs and syscall numbers to human-readable names.
 
----
-
----
-
-##  Graduate Extension - Graduate Students Only
-
-### Part 5 - STIX 2.1 Threat Intelligence Report (30 pts)
-
-Using the attack chain you reconstructed in Part 2, produce a formal **STIX 2.1 Bundle** (`cyber-hw-12-stix-bundle.json`) containing the following STIX Domain Objects:
-
-- `threat-actor` - the attributed or suspected actor (use "Unknown" with appropriate confidence level if attribution is uncertain; document your reasoning)
-- `campaign` - the overall intrusion campaign with first/last seen timestamps from your log analysis
-- `attack-pattern` - one object per MITRE ATT&CK technique in your reconstruction (use STIX's `external_references` to link to ATT&CK technique IDs)
-- `indicator` - one object per IOC you extracted (IP, domain, file hash), with `valid_from`, `pattern` (STIX patterning language), and `confidence` score
-- `relationship` objects linking the above (e.g., `threat-actor` → `uses` → `attack-pattern`, `indicator` → `indicates` → `campaign`)
-
-Validate your bundle using the `stix2-validator` Python package (`pip install stix2-validator`). Submit a screenshot of a clean validation run.
-
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

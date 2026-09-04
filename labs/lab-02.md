@@ -291,7 +291,7 @@ Chrony gets this lab's DNS/log-correlation/Kerberos-skew needs comfortably, but 
 
 The reason this lab configures chrony and not PTP: PTP's accuracy advantage depends on hardware timestamping support in the NIC and switches along the path, which a lab VM's virtual NIC doesn't provide - running `ptp4l` here would fall back to software timestamping and land in roughly the same accuracy range as NTP anyway, without teaching the thing that actually makes PTP worth deploying. In your notes, write a short paragraph (3-5 sentences) comparing PTP and NTP and explaining, in your own words, why this lab's stratum-2 chrony server is the right tool for DNS/Kerberos/log-correlation time sync, and under what circumstances you'd reach for PTP instead.
 
-It's also worth knowing chrony isn't the only NTP implementation. The older `ntpd` (from the reference `ntp` package) was the standard for decades and is still common on legacy systems, but it struggles with the exact conditions a modern host actually lives in: intermittent connectivity, VMs that get paused/resumed, and networks that only reach an upstream server occasionally. Chrony was designed for those cases - it converges faster after a long gap and steps the clock more gracefully - which is exactly why Rocky (like most current distros) ships it as the default instead of `ntpd`. Separately, note that neither protocol as configured here authenticates *who* it's syncing time from - a spoofed NTP source can quietly skew a host's clock. NTS (Network Time Security) is the newer standard that adds that authentication on top of NTP, conceptually the same problem TSIG solves for DNS zone transfers in the Graduate Extension below.
+It's also worth knowing chrony isn't the only NTP implementation. The older `ntpd` (from the reference `ntp` package) was the standard for decades and is still common on legacy systems, but it struggles with the exact conditions a modern host actually lives in: intermittent connectivity, VMs that get paused/resumed, and networks that only reach an upstream server occasionally. Chrony was designed for those cases - it converges faster after a long gap and steps the clock more gracefully - which is exactly why Rocky (like most current distros) ships it as the default instead of `ntpd`. Separately, note that neither protocol as configured here authenticates *who* it's syncing time from - a spoofed NTP source can quietly skew a host's clock. NTS (Network Time Security) is the newer standard that adds that authentication on top of NTP, conceptually the same problem TSIG solves for DNS zone transfers.
 
 ---
 
@@ -347,6 +347,21 @@ Consider: carol has read-only POSIX ACL access to `/var/named`. Describe a scena
 
 ---
 
+### Part 5 - Diagnose and Repair
+
+A second host, `lab2-debug`, has already been provisioned on the same network as your main VM. It starts from a working baseline - the same DNS, chrony, sudo, and ACL setup you just built by hand in Parts 1-4 - except one thing is broken in each of those four areas. What's broken, and how, is randomized per student; nothing about it is disclosed here, and the logs/history on the box have been cleared, so you can't shortcut this by grepping for what changed. Diagnosing it is the point.
+
+Log into `lab2-debug` the same way you logged into your main VM. For each of the four areas below, find the fault and fix it, then confirm - using the same kind of live check you already used in Parts 1-4 (a `dig` query, `chronyc tracking`/`sources`, `sudo -l -U`, an actual read/write attempt) - that it's actually working again, not just that the config file looks right:
+
+- **DNS** - `www.lab.internal` should resolve correctly against the local server.
+- **NTP** - `chronyd` should be running and synchronized.
+- **Sudo** - your own account's sudo policy should resolve cleanly, with no `sudoers` parse error and your expected grant intact.
+- **ACLs** - your own account's access to the shared path should work as expected.
+
+Treat this like a real incident, not a checklist: use the same diagnostic instincts you'd use on a production host you didn't build - check whether the service is even running before assuming the config is wrong, check the obvious log/status output before guessing, and change one thing at a time so you actually know what fixed it.
+
+---
+
 ## Deliverables
 
 Submit a single Markdown document at `labs/lab-02.md` logging every command you ran across Parts 1-4, in order, along with your own notes on what happened, and open a PR called `Grade: lab-2`. This is where every "record," "document," and "explain" prompt in the Procedure above ends up - the notes file *is* the report. Your hands-on configuration work itself is autograded directly against the live system, so the notes file doesn't need separate screenshots or copy-pasted proof of success - it needs the command history and your reasoning.
@@ -357,6 +372,7 @@ At minimum, your notes should capture:
 - Results of every access-control verification test (sudo and ACL) from Parts 1 and 4
 - The broken-serial DNS behavior you observed in Part 2.5, and your explanation of why DNS caching causes it
 - Your written answers from Part 3: why NTP accuracy matters for Kerberos/forensics/TLS, and the PTP vs NTP comparison paragraph
+- For each of Part 5's four faults: what was actually wrong, how you diagnosed it, and how you fixed it. Grading for Part 5 is fully automated against the live host - these notes aren't what earns the points, but they're your own record of the diagnosis, and part of what a real incident writeup looks like
 
 ---
 
@@ -366,11 +382,11 @@ Autograded from your live system and submitted notes file - the point values bel
 
 | Item | Points |
 |------|--------|
-| BIND DNS - forward zone with all record types | 15 |
-| BIND DNS - reverse zone and broken-serial diagnosis | 10 |
-| Chrony - configuration/synchronization evidence, and PTP vs NTP comparison | 20 |
-| Sudo policy - least-privilege roles verified | 25 |
-| ACLs - role-based access across zone/data paths verified | 30 |
+| BIND DNS - enabled at boot, recursion disabled, forward zone, reverse zone (live `dig` queries) | 20 |
+| Chrony - configuration present, live synchronization evidence | 15 |
+| Sudo policy - least-privilege roles verified (`sudo -l -U`) | 20 |
+| ACLs - role-based access across zone/data paths verified (live read/write tests) | 25 |
+| Part 5 - Diagnose and Repair (DNS, NTP, sudo, ACLs on `lab2-debug`) | 20 |
 | **Total** | **100** |
 
 

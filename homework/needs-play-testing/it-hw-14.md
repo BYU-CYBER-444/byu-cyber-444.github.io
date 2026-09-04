@@ -104,36 +104,5 @@ Open a PR titled `IT HW 14 - AI Inference Server Proposal` and submit your repo 
 | AUP + governance | 10 |
 | 3-year TCO + cloud comparison | 10 |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-### Part 7 - NIST AI RMF Assessment & AI System Card (30 pts)
-
-**NIST AI Risk Management Framework Assessment (15 pts)**
-
-Assess your proposed AI inference deployment against the **NIST AI RMF 1.0** four core functions. For each function, identify at least 3 specific actions your deployment plan does or should take:
-
-| Function | Action | Current State | Gap |
-|---|---|---|---|
-| **GOVERN** | Establish AI risk management policies | Draft policy in Part 5 | No approval process defined |
-| **MAP** | Identify AI risks and impacts | ... | ... |
-| **MEASURE** | Analyze and assess AI risks | ... | ... |
-| **MANAGE** | Prioritize and address AI risks | ... | ... |
-
-For each gap identified, propose a specific remediation with an estimated implementation effort (days/weeks of work). Prioritize your top 3 gaps by risk and justify why they are highest priority.
-
-**AI System Card (15 pts)**
-
-Produce a formal **AI System Card** (`it-hw-14-system-card.md`) for your proposed model following the Hugging Face Model Card / Mitchell et al. (2019) format, extended for organizational deployment:
-
-1. **Model Details** - architecture, version, training data provenance (what was it trained on, by whom, under what license), intended use cases, and out-of-scope uses
-2. **Intended Users** - who will use this system, what their technical sophistication is, and what guardrails exist to prevent misuse
-3. **Data Provenance** - for your use case's inference inputs, where does the data come from, who owns it, and what data classification does it carry?
-4. **Performance Metrics** - what metrics will you use to evaluate model performance in production (accuracy, latency, drift), at what thresholds will you trigger a model update or rollback?
-5. **Bias & Fairness** - what populations or edge cases might your model underperform on, and what testing will you do before deployment?
-6. **Incident Reporting** - how would a user report a model error or harmful output, who triages it, and what is the escalation path if the error is systematic?
-7. **Limitations** - what can this model definitively NOT do, and how will you prevent users from relying on it for those tasks?
-
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

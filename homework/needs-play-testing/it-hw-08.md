@@ -94,27 +94,6 @@ Open a PR titled `IT HW 8 - Data Center Risk Assessment` and submit your repo li
 {: .tip }
 The Uptime Institute publishes tier availability targets (Tier I = 99.671%, Tier II = 99.741%, Tier III = 99.982%, Tier IV = 99.995%). Use these for your calculations.
 
----
-
----
-
-##  Graduate Extension - Graduate Students Only
-
-### Part 6 - Monte Carlo Downtime Simulation (30 pts)
-
-Using the failure probabilities and MTTR values from your risk register, implement a **Monte Carlo simulation** of annual downtime for your data center. Submit `it-hw-08-montecarlo.py`:
-
-1. For each of your identified failure scenarios, define:
-   - Annual failure rate (λ = 1/MTTF, derived from your risk register probabilities)
-   - MTTR distribution (use a lognormal distribution with your estimated MTTR as the median and a reasonable σ - justify your σ choice)
-2. Simulate 10,000 years of operation. For each simulated year:
-   - For each failure scenario, use a Poisson process to determine how many failures occur
-   - For each failure, sample repair time from your MTTR distribution
-   - Sum total downtime hours, accounting for concurrent failures (overlapping repair windows count as single downtime)
-3. Produce and save a histogram of annual downtime hours (`it-hw-08-downtime-histogram.png`)
-4. Report: mean annual downtime, standard deviation, 50th/95th/99th percentile, and the probability of exceeding your SLA threshold (define what SLA threshold you're evaluating against)
-5. For your top 3 risks from your risk register, calculate how much each individual risk contributes to total expected downtime (run the simulation with that risk removed and compare)
-6. Produce a **Risk Prioritization Table** ranking risks by their marginal contribution to expected annual downtime - this should drive your remediation roadmap sequence
 
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

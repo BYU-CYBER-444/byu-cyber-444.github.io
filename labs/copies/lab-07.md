@@ -226,25 +226,5 @@ Write a formal rollback procedure (`lab07-rollback.md`) that a different enginee
 | Rollback procedure (Part 7) | 15 |
 | **Total** | **100** |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### Patch Pipeline Automation
-
-Write `lab07-patch-pipeline.sh` - a script that implements a fully automated patch assessment pipeline:
-
-1. **Pre-patch snapshot:** Use Proxmox's snapshot mechanism (`qm snapshot <vmid> "pre-patch-$(date +%Y%m%d)"`, run from the hypervisor node, or the equivalent `pvesh`/API call if scripting from inside the guest) to programmatically take a pre-patch snapshot before any changes are made
-2. **Vulnerability export:** Use the OpenVAS/Nessus API (or `dnf check-update`/`dnf list --upgrades` output) to enumerate packages with security fixes available and output structured JSON: `[{"package": "openssl", "installed": "3.0.2", "available": "3.0.2-1", "cve": ["CVE-2024-XXXX"], "cvss": 9.8}]`
-3. **Patch prioritization:** Sort the JSON output by CVSS score descending and apply only packages with CVSS ≥ 7.0 in the first pass
-4. **AIDE pre/post comparison:** Run `aide --init` before, `dnf upgrade` for the selected packages, then `aide --check` after, and parse the output to separate expected changes (updated package binaries) from unexpected changes (config files, new binaries not from the package)
-5. **Report generation:** Write a JSON patch report to `/var/log/patch-pipeline/YYYY-MM-DD.json` with: packages patched, CVEs closed, AIDE unexpected findings, total duration
-
-The script must be idempotent - running it a second time the same day should detect there's nothing new to patch and exit cleanly. Submit the script and a screenshot of it running end-to-end.
-
----
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

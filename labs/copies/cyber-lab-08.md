@@ -206,38 +206,5 @@ echo "0 3 * * * root /usr/bin/aide --check | mail -s 'AIDE Daily Report' root" |
 | Written reflection - AIDE vs. compliance score | 5 |
 | **Total** | **100** |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### Automated CIS Compliance Dashboard
-
-Extend your remediation script into a full compliance tracking tool:
-
-Write `cyber-lab08-compliance-tracker.py` that:
-1. Parses the CIS-CAT JSON report output (`cyber-lab08-baseline.json` and `cyber-lab08-post-remediation.json`)
-2. Produces a structured comparison output:
-   ```json
-   {
-     "assessment_date": "2025-01-15",
-     "baseline_score": 45.2,
-     "post_remediation_score": 58.7,
-     "delta": 13.5,
-     "controls_remediated": 5,
-     "controls_remaining_failed": 47,
-     "top_risk_sections": [
-       {"section": "5 - Access Authentication", "fail_count": 12, "mitre_techniques": ["T1110", "T1078"]},
-       {"section": "4 - Logging", "fail_count": 8, "mitre_techniques": ["T1562.002"]}
-     ]
-   }
-   ```
-3. Outputs a plain-text executive summary suitable for a non-technical manager: overall posture grade (A/B/C/D/F based on score), one sentence per failing section describing the risk in business terms (not technical terms), and the top 3 recommended next remediations by ATT&CK technique impact.
-
-Run the script against your actual JSON reports and submit the output.
-
----
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

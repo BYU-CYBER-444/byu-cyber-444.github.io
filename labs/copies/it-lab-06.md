@@ -245,45 +245,5 @@ Add 3 more policies with appropriate trigger events. Explain why "trigger events
 | Policy maintenance calendar | 10 |
 | **Total** | **100** |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### Extension A - Policy Maturity Assessment (15 pts)
-
-The CMMI (Capability Maturity Model Integration) framework can be applied to policy management. Develop a **Policy Maturity Assessment** model with 5 maturity levels:
-
-- Level 1 (Initial): Policies exist informally, not documented
-- Level 2 (Managed): Policies documented but inconsistently enforced
-- Level 3 (Defined): Standardized policy framework, regular reviews
-- Level 4 (Quantitatively Managed): Compliance metrics tracked, reported to leadership
-- Level 5 (Optimizing): Continuous improvement, automated compliance monitoring
-
-For each level, define: observable evidence that an organization is at that level, key activities required to advance to the next level, and a sample metric.
-
-Apply the model to assess Meridian Financial Services based on the organization profile in Part 1 and the policies and gap analysis you produced in Parts 1-3. Where do they fall? What are the top 3 improvements needed to advance one level?
-
-Write a 500-word **Policy Maturity Report** formatted as a consulting deliverable.
-
-### Extension B - Regulatory Compliance Mapping Matrix (15 pts)
-
-Large organizations must comply with multiple regulations simultaneously. Build a **Cross-Regulation Policy Mapping Matrix** for Meridian Financial Services, which is subject to PCI-DSS v4.0, HIPAA Technical Safeguards, SOX ITGC, and ISO 27001.
-
-For the Password and Authentication Policy you wrote in Part 1, map each policy requirement to the specific control identifier(s) in each regulation it satisfies:
-
-| Policy Section | PCI-DSS v4.0 | HIPAA (45 CFR) | SOX ITGC | ISO 27001 A.5.17 |
-|----------------|--------------|----------------|----------|------------------|
-| Complexity requirements | Req 8.3.6 | §164.312(d) | CC6.1 | A.5.17 |
-| MFA requirement | Req 8.4.2 | §164.312(d) | CC6.1 | A.5.17 |
-| ... | ... | ... | ... | ... |
-
-Complete the matrix for all 6 policy statement subsections.
-
-Identify any gaps: Are there regulatory requirements not covered by your policy? Propose additions.
-
-Submit the Policy Maturity Report and completed Cross-Regulation Mapping Matrix.
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

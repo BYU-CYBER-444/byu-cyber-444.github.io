@@ -215,45 +215,5 @@ Run Policy Analyzer one final time and compare against the initial screenshot fr
 | Written reflection - Mimikatz and Credential Guard | 10 |
 | **Total** | **100** |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### Windows Event Forwarding (WEF) Centralized Collection
-
-Configure Windows Event Forwarding to centralize security events from `cyber-lab04-win01` to a collector:
-
-1. **Configure WinRM on both machines** (if not already enabled from AD setup):
-   ```powershell
-   winrm quickconfig -y
-   winrm set winrm/config/client '@{TrustedHosts="*"}'
-   ```
-
-2. **On the collector (`lab03-dc01`, your domain controller):** Create a new event subscription:
-   ```powershell
-   wecutil cs "C:\cyber-lab04-subscription.xml"
-   ```
-   Where `cyber-lab04-subscription.xml` defines:
-   - Subscription name and type (Source Initiated)
-   - Event queries for: Security log Event IDs 4624, 4625, 4648, 4672, 4720, 4732 (logon events, privilege use, group changes)
-   - Delivery mode: Minimize Latency
-
-3. **On the source (`cyber-lab04-win01`):** Register the subscription and configure the event log to forward:
-   ```powershell
-   winrm set winrm/config/client/auth '@{Kerberos="true"}'
-   gpupdate /force
-   ```
-
-4. **Verify:** After 5 minutes, log out and back in on the source machine, then check the **Forwarded Events** log on the collector:
-   ```powershell
-   Get-WinEvent -LogName "ForwardedEvents" | Select-Object -First 5 | Format-List
-   ```
-
-Document the subscription XML, the verification event, and explain why centralizing Windows security events matters for incident response (what information is lost if logs are only stored locally on a compromised machine?).
-
----
 
 [← Back to Labs]({{ site.baseurl }}/labs/)
