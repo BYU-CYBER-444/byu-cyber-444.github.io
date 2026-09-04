@@ -145,7 +145,7 @@ Do not run this on all 3 nodes at once. Rebooting more than one node at a time c
 
 ## Deliverables
 
-Submit a single Markdown document at `labs/lab-01.md` containing any notes you made and open a PR called `Grade: lab-1`
+This lab has no direct deliverables, aside from your "optional" notes being uploaded to your GitHub repo. All of the grading is reflective of your completion of the lab assignments
 
 ---
 

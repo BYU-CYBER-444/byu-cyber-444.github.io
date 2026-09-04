@@ -90,7 +90,6 @@ Regardless of track, upon successful completion of this course students will be 
 1. Build and maintain a hardened Linux and Windows Server lab environment suitable for production-grade work.
 1. Apply Active Directory and Group Policy fundamentals to manage a small Windows Domain.
 1. Operate a basic patch management pipeline and certificate / PKI infrastructure.
-1. Document using a GitHub-based pull request workflow.
 1. Design, implement, and present a multi-week capstone infrastructure project.
 
 ### Cyber Track outcomes
@@ -146,17 +145,16 @@ Students completing the IT Track will additionally be able to:
 
 ### Labs
 
-Labs are the core of this course and are submitted GitHub Pull Requests (PRs). At the start of the semester you will create a GitHub repository from the course template. Each lab is submitted as a PR to your site, reviewed by the Teaching Assistant, and merged into your main branch, a similar workflow as used by some operations teams. You will be able to find your grade and comments as an attached comment on that submitted PR.
+Labs are the core of this course and are submitted via Discord. At the start of the semester you will create a blank GitHub repository that will hold your homework and submissions for Lab assignments. You will be able to submit a lab using a discord bot in the `#444` channel on the Discord. Just type `/grade` into the message bar, press enter when you see the autocomplete work, and then specify the lab you are submitting. You will be able to find your grade and comments attached to a response message. Please note that this is under construction and a last minute grading change, so have patience and know that the interface could slightly change as homeworks are absorbed into this grading format.
 
 **Workflow for each lab:**
 
-1. Create a branch from `main` named `lab-NN-short-description` (e.g., `lab-03-windows-hardening`)
-2. Follow the instructions in the lab to edit and add any relevant files for the lab, which can include items such as config files, scripts, scan outputs, etc. Make sure all relevant files are committed and included in your PR
-4. Open a pull request to `main` with the title `Grade: lab-NN`
-5. The Autograder will leave feedback on your PR in the next few hours; address any requested changes with additional commits
-6. Once you have the grade you want or the deadline has passed, merge the PR; your report goes live on your main branch
+1. Follow the instructions for the lab
+2. Use the discord slash command to submit your lab
+3. The Autograder will respond immediately with whether your lab is being graded, and after a short wait it will update that message with your feedback and score
+4. Rinse and repeat until you have the grade that you want.
 
-Your repository site will grow throughout the semester into a technical reference you can share with employers. By the final week it will contain scripts and configs for each lab and your final project documentation.
+Your repository site will grow throughout the semester into a technical reference you can share with employers. By the final week, if you have been diligent in note-taking and upkeep, it will contain scripts and configs for each lab and your final project documentation.
 
 As you complete these labs, we strongly suggest that you document the commands used in each lab (failures, successes, etc) in a markdown file in the lab. This will not be graded, but if you get into the habit of keeping strong notes as you work, it will be a huge benefit during the class and as you enter the workforce.
 
@@ -164,7 +162,7 @@ See the Schedule in Learning Suite for specific due dates.
 
 ### Homework
 
-Homework assignments are written, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable building on the recently learned principles, such as a hardening checklist or policy document. Homework follows the same GitHub PR workflow as labs: commit any supporting files, open a pull request. Assignments are due on Tuesdays at 11:59 PM. See the Schedule in Learning Suite for specific due dates.
+Homework assignments are written, or analysis-based tasks that extend the week's lecture material. They typically involve producing a deliverable building on the recently learned principles, such as a hardening checklist or policy document. Homework will likely follow the same discord workflow as labs (subject to minor change): commit any supporting files to your repo, use the discord slash command. Assignments are due on Tuesdays at 11:59 PM. See the Schedule in Learning Suite for specific due dates.
 
 ### Midterm Exam
 
