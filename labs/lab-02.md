@@ -52,7 +52,7 @@ None of this is invented for the classroom. The role separation in Part 1 and th
 
 ## Procedure
 
-Three accounts already exist on this host with the following roles - you'll spend the rest of the lab scoping their actual access to match:
+The account you will be logging into is your own account with which you log into proxmox, and this will be the default if no credentials are provided for the rest of the labs, too. Outside of that account, there are three accounts that already exist on this host with the following roles - you'll spend the rest of the lab scoping their actual access to match:
 
 - **alice** - full sysadmin for this host.
 - **bob** - the day-to-day operator responsible for DNS specifically. Notably, his role does **not** extend to storage administration - that's a deliberate boundary you'll enforce in Parts 1 and 4, modeling how a real organization separates "network services operator" from "storage administrator" even when one person could technically do both.
@@ -372,23 +372,6 @@ Autograded from your live system and submitted notes file - the point values bel
 | Sudo policy - least-privilege roles verified | 25 |
 | ACLs - role-based access across zone/data paths verified | 30 |
 | **Total** | **100** |
-
----
-
-## Graduate Extension - Graduate Students Only
-
-### TSIG-Secured DNS Zone Transfer
-
-In production, DNS zone transfers between primary and secondary servers must be authenticated to prevent zone data exfiltration. Configure TSIG (Transaction Signature) authentication for a simulated zone transfer:
-
-1. Generate a TSIG key: `tsig-keygen -a hmac-sha256 transfer-key`
-2. Add the key to both `named.conf` files (primary and secondary, or simulate with two named instances on different ports).
-3. Restrict zone transfers: `allow-transfer { key transfer-key; };`
-4. Test authenticated transfer: `dig -y hmac-sha256:transfer-key:... AXFR lab.internal @127.0.0.1`
-5. Test unauthenticated transfer (should be refused): `dig AXFR lab.internal @127.0.0.1`
-
-Document the output of both transfer attempts and explain how TSIG prevents DNS cache poisoning attacks compared to IP-based restrictions alone.
-
 
 
 [← Back to Labs]({{ site.baseurl }}/labs/)
