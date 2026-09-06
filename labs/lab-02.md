@@ -94,7 +94,7 @@ sudo visudo -c -f /etc/sudoers.d/20-operators
 
 **Verify restrictions work:**
 
-Confirm, as each user, that the policy actually does what it claims: bob can manage the DNS service, bob cannot restart an unrelated service (e.g. chronyd), bob cannot escape to a root shell, and carol cannot sudo at all. Record each test in your notes - both the successes and the denials.
+Confirm, as each user, that the policy actually does what it claims: bob can manage the DNS service, bob cannot restart an unrelated service (e.g. chronyd), bob cannot escape to a root shell, and carol cannot sudo at all.
 
 **Alternatives to sudoers-based privilege management**
 
@@ -107,8 +107,6 @@ Per-host `sudoers.d` files are the right tool for a single, standalone box like 
 | Centralized sudo via FreeIPA / Red Hat IdM | Fleet-wide | Sudo rules live in LDAP and apply consistently across every enrolled host - one change, every server updates | Adds a hard dependency on directory-service availability; a single host now has a network dependency for a decision it used to make locally |
 | PAM-gated sudo (MFA) | Per-host or fleet | Requires a second factor before granting elevation - meaningfully raises the bar for a stolen password | Enrollment/recovery overhead, and a new failure mode: a locked-out MFA device can lock a sysadmin out of their own elevation path |
 | Commercial PAM/PIM (CyberArk, BeyondTrust) | Fleet-wide | Session recording, just-in-time elevation, credential vaulting - full accountability for every privileged action | Cost and operational complexity that's hard to justify below a certain fleet size |
-
-Consider: at what point does this lab's per-host `sudoers.d` approach stop being appropriate for a real organization, and what specific operational pain (not just "it doesn't scale" in the abstract) forces the move to something centralized?
 
 ---
 
@@ -206,13 +204,11 @@ sudo firewall-cmd --reload
 
 **2.4 Test resolution**
 
-Verify that every record you configured actually resolves against your own server: the `www` A record, the `mail` MX record, the `ftp` CNAME, the reverse (PTR) lookup for `10.0.0.10`, and the TXT records. Record the output of all five checks in your notes, and confirm the CNAME resolves to `www.lab.internal.` and the PTR lookup returns `www.lab.internal.`.
+Verify that every record you configured actually resolves against your own server: the `www` A record, the `mail` MX record, the `ftp` CNAME, the reverse (PTR) lookup for `10.0.0.10`, and the TXT records. Confirm the CNAME resolves to `www.lab.internal.` and the PTR lookup returns `www.lab.internal.`.
 
 **2.5 Introduce and diagnose an error**
 
 Temporarily break the zone: change the SOA serial to a lower value than the current serial (e.g., `2020010101`). Reload named, then query the `www` record again and observe what happens.
-
-Document the behavior in your notes. Explain why DNS caching can cause stale records to persist even after a zone file correction.
 
 Restore the correct serial and reload again.
 
@@ -229,8 +225,6 @@ BIND is what this lab runs, but it's one of several production-grade authoritati
 | CoreDNS | Authoritative/recursive via plugin chain | Go-based, the default DNS server for Kubernetes, easy to extend with plugins | Assumes a containerized/cloud-native operational model; less natural fit for a traditional zone-file-driven enterprise host |
 
 Notice this server's config sets `recursion no;`. That's not incidental - an authoritative server that also answers arbitrary recursive queries for anyone who asks becomes two attack surfaces instead of one: it's a target for cache-poisoning (recursive resolvers cache and trust answers in a way authoritative-only servers don't) and it can be abused as a DNS amplification reflector in a DDoS against a third party. Splitting the authoritative role (this box) from the recursive-resolver role (something like Unbound, running separately for actual client resolution) is a deliberate hardening boundary, not an accident of this config.
-
-Consider: what specific attack gets easier if this server also had `recursion yes;` and answered recursive queries from any client on the internet?
 
 ---
 
@@ -269,13 +263,11 @@ sudo firewall-cmd --reload
 
 **3.2 Verify synchronization**
 
-Verify chrony is actually synchronized and serving time correctly. Record in your notes: Reference ID, Stratum, System time offset, RMS offset, Frequency error.
+Verify chrony is actually synchronized and serving time correctly.
 
 **3.3 Test client synchronization**
 
-If you have access to a second VM, verify it can sync against your server at 10.0.0.1. If not, note in your notes file how you'd confirm a remote client is syncing against this server without physical access to that client.
-
-Explain in your notes why NTP accuracy matters for: (a) Kerberos authentication, (b) log forensics, (c) TLS certificate validation.
+If you have access to a second VM, verify it can sync against your server at 10.0.0.1.
 
 **3.4 PTP vs NTP**
 
@@ -289,7 +281,7 @@ Chrony gets this lab's DNS/log-correlation/Kerberos-skew needs comfortably, but 
 | Hardware requirements | None - runs on any NIC | Needs PTP-aware NICs/switches for hardware timestamping to realize its accuracy advantage; software-only PTP loses most of the benefit |
 | Common use cases | General enterprise time sync: Kerberos, TLS validity, log correlation, cron | Financial trading (MiFID II timestamp requirements), telecom (5G/LTE base station sync), industrial control systems, broadcast/AV sync |
 
-The reason this lab configures chrony and not PTP: PTP's accuracy advantage depends on hardware timestamping support in the NIC and switches along the path, which a lab VM's virtual NIC doesn't provide - running `ptp4l` here would fall back to software timestamping and land in roughly the same accuracy range as NTP anyway, without teaching the thing that actually makes PTP worth deploying. In your notes, write a short paragraph (3-5 sentences) comparing PTP and NTP and explaining, in your own words, why this lab's stratum-2 chrony server is the right tool for DNS/Kerberos/log-correlation time sync, and under what circumstances you'd reach for PTP instead.
+The reason this lab configures chrony and not PTP: PTP's accuracy advantage depends on hardware timestamping support in the NIC and switches along the path, which a lab VM's virtual NIC doesn't provide - running `ptp4l` here would fall back to software timestamping and land in roughly the same accuracy range as NTP anyway, without teaching the thing that actually makes PTP worth deploying.
 
 It's also worth knowing chrony isn't the only NTP implementation. The older `ntpd` (from the reference `ntp` package) was the standard for decades and is still common on legacy systems, but it struggles with the exact conditions a modern host actually lives in: intermittent connectivity, VMs that get paused/resumed, and networks that only reach an upstream server occasionally. Chrony was designed for those cases - it converges faster after a long gap and steps the clock more gracefully - which is exactly why Rocky (like most current distros) ships it as the default instead of `ntpd`. Separately, note that neither protocol as configured here authenticates *who* it's syncing time from - a spoofed NTP source can quietly skew a host's clock. NTS (Network Time Security) is the newer standard that adds that authentication on top of NTP, conceptually the same problem TSIG solves for DNS zone transfers.
 
@@ -328,7 +320,7 @@ Verify the ACLs landed the way you intended on each path.
 
 **Verify access controls work:**
 
-Confirm bob can write a zone file, and carol cannot write anywhere. Document each test result in your notes.
+Confirm bob can write a zone file, and carol cannot write anywhere.
 
 **POSIX ACLs vs. the alternatives**
 
@@ -342,8 +334,6 @@ ACLs aren't the only way to solve "three people need three different levels of a
 | NFSv4 ACLs | DAC (network) | Finer-grained than POSIX ACLs, with Windows-ACL-style inheritance semantics | Requires an NFSv4-aware export and filesystem - moot for this lab since it no longer exports anything over the network |
 
 The distinction between the top two rows and SELinux matters more than it looks: DAC (discretionary access control - plain permissions and ACLs alike) is controlled by the resource's owner, which means anything running *as* alice, bob, or root can grant itself more access. MAC (mandatory access control - SELinux) is controlled by policy that even the owner can't override. This lab's zone-file directory already carries an SELinux context (`named_zone_t`, from Part 2) alongside the ACLs you just set - the two layers are complementary, not redundant, and a hardened production host relies on both rather than treating ACLs as sufficient on their own.
-
-Consider: carol has read-only POSIX ACL access to `/var/named`. Describe a scenario where that DAC-layer protection alone is insufficient, and only a MAC-layer control like SELinux would actually stop the threat.
 
 ---
 
@@ -364,15 +354,14 @@ Treat this like a real incident, not a checklist: use the same diagnostic instin
 
 ## Deliverables
 
-Submit a single Markdown document at `labs/lab-02.md` logging every command you ran across Parts 1-4, in order, along with your own notes on what happened, and open a PR called `Grade: lab-2`. This is where every "record," "document," and "explain" prompt in the Procedure above ends up - the notes file *is* the report. Your hands-on configuration work itself is autograded directly against the live system, so the notes file doesn't need separate screenshots or copy-pasted proof of success - it needs the command history and your reasoning.
+Submit a single Markdown document at `labs/lab-02.md` logging every command you ran across Parts 1-4, in order, and open a PR called `Grade: lab-2`. Your hands-on configuration work itself is autograded directly against the live system, so the notes file doesn't need separate screenshots or copy-pasted proof of success - it needs the command history.
 
 At minimum, your notes should capture:
 
-- The sudoers file contents for `10-sysadmins`, `20-operators`, and `30-auditors`, with a line-by-line explanation of what each rule does
+- The sudoers file contents for `10-sysadmins`, `20-operators`, and `30-auditors`
 - Results of every access-control verification test (sudo and ACL) from Parts 1 and 4
-- The broken-serial DNS behavior you observed in Part 2.5, and your explanation of why DNS caching causes it
-- Your written answers from Part 3: why NTP accuracy matters for Kerberos/forensics/TLS, and the PTP vs NTP comparison paragraph
-- For each of Part 5's four faults: what was actually wrong, how you diagnosed it, and how you fixed it. Grading for Part 5 is fully automated against the live host - these notes aren't what earns the points, but they're your own record of the diagnosis, and part of what a real incident writeup looks like
+- The broken-serial DNS behavior you observed in Part 2.5
+- For each of Part 5's four faults: what was actually wrong and how you fixed it. Grading for Part 5 is fully automated against the live host.
 
 ---
 
