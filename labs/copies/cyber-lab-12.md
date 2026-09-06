@@ -216,28 +216,5 @@ Screenshot the alert in the Graylog Alerts page showing status **Triggered**.
 | Written analysis - detection blind spot | 10 |
 | **Total** | **100** |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### Graylog Correlation Alert: Attack Chain Detection
-
-Implement a **correlation alert** that detects a multi-stage attack sequence:
-
-**Scenario:** An attacker logs in via SSH (Event ID: sshd in syslog) → reads `/etc/shadow` (key=identity) → adds a cron job (key=cron_change) within a 10-minute window.
-
-In Graylog, create a correlation alert:
-1. Create three individual Event Definitions (one per stage above)
-2. Create a **Correlation** event that fires when all three events occur within 10 minutes with the same source IP or username
-3. Add a notification that logs to a dedicated `high-priority-alerts` stream
-
-Demonstrate the alert by manually triggering all three events in sequence and showing the correlation alert firing.
-
-Write a brief analysis (1 page): How does correlation alerting differ from threshold alerting? What are the false positive and false negative trade-offs of your correlation window (10 minutes)? Would you set it longer or shorter for a production environment - and why?
-
----
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

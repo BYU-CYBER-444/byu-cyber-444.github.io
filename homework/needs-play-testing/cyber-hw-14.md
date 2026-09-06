@@ -82,24 +82,4 @@ Open a PR titled `CYBER HW 14 - Container Security` and submit your repo link on
 
 
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-### Part 4 - Container Security Policy (30 pts)
-
-
-
-
-
-Write a formal **Container Security Policy** (`cyber-hw-14-security-policy.md`) suitable for adoption by a DevSecOps team. The policy must cover:
-
-1. **Approved Base Images** - list of approved base image registries and tags, process for adding new base images, and mandatory review cadence
-2. **SBOM Requirements** - when an SBOM must be generated, where it must be stored, and how long it must be retained
-3. **Image Signing** - requirement for Cosign/Sigstore signing before images are promoted to production, including who holds signing keys and how keys are rotated
-4. **Runtime Security Requirements** - minimum required Falco rules, mandatory seccomp profiles, disallowed capabilities, and required read-only filesystem configuration
-5. **Incident Response** - procedure for a container compromise: isolation steps, forensic artifact collection from a running container (`docker export`, `kubectl debug`), and escalation path
-6. **Supply Chain Threat Model** - a brief STRIDE analysis of your container build pipeline (from developer commit to production deployment) identifying the top 3 threats and mitigations
-
-
 [← Back to Homework]({{ site.baseurl }}/homework/)

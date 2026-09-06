@@ -90,21 +90,5 @@ Open a PR titled `IT HW 6 - Policy Package` and submit your repo link on Learnin
 {: .tip }
 Read one real AUP from a public institution (BYU's or your previous employer's) and one from a bank or credit union before writing yours. Notice how specific the language is in the prohibition section - that specificity is what makes a policy enforceable.
 
----
-
----
-
-##  Graduate Extension - Graduate Students Only
-
-### Part 5 - Policy Governance Framework & Regulatory Mapping (30 pts)
-
-Map your three policies (AUP, Data Classification, Vendor Access) against **ISO/IEC 27001:2022 Annex A** controls. For each Annex A control domain:
-
-1. Identify which of your policies (if any) satisfies or partially satisfies it
-2. For domains where none of your three policies provide coverage, note the gap
-3. Produce a heatmap-style coverage table showing which domains are: Fully Covered, Partially Covered, Not Covered
-
-Identify your top 3 coverage gaps and write a brief policy stub (title, scope, 3 key requirements) for each gap policy you would need to write to achieve ISO 27001 certification readiness.
-
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

@@ -91,28 +91,5 @@ Open a PR titled `CYBER HW 4 - Windows Hardening` and submit your repo link on L
 {: .tip }
 When writing your "How to Verify" column, favor a specific registry value or a named `Get-*`/`auditpol` command over "check in the GUI" - it's more precise, and it's exactly the kind of detail a real audit checklist needs even without an actual script attached.
 
----
-
----
-
-##  Graduate Extension - Graduate Students Only
-
-### Part 4 - Assume-Breach Detection Layer (30 pts)
-
-Your hardening controls reduce attack surface but assume prevention is sufficient. Graduate students must design a complementary **detection layer** assuming an attacker has already obtained valid credentials. This is a design exercise - describe the detection logic in prose/tables, not as executable rule syntax.
-
-**Detection Approach Design (30 pts)**
-
-Choose **2 of the following 5** post-exploitation TTPs and design a detection approach for each:
-
-1. **Lateral Movement** - Pass-the-Hash or Overpass-the-Hash (NTLM authentication from an unusual source process)
-2. **Credential Access** - LSASS memory access (Mimikatz pattern: a process opening LSASS with `PROCESS_VM_READ`)
-3. **Persistence** - a new scheduled task created by a non-SYSTEM, non-admin process
-4. **Defense Evasion** - PowerShell with a Base64-encoded command longer than 500 characters
-5. **Discovery** - `net user /domain`, `net group "Domain Admins"`, or an equivalent LDAP enumeration burst (5+ queries in 60 seconds from one host)
-
-For each of your 2 chosen TTPs, document: the specific log source and event ID(s) you'd query, the exact condition/pattern that indicates this technique, why that condition would **not** also match ordinary administrative activity, the MITRE ATT&CK technique ID, and at least one realistic false-positive scenario.
-
-
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

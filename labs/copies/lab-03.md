@@ -32,7 +32,6 @@ nav_order: 3
 
 - Your instructor has provisioned a Windows Server 2022 VM for this lab, `lab03-dc01`, with **AD DS already installed and the forest already promoted** - you don't need to run `Install-ADDSForest` yourself (see Part 1)
 - A second provisioned VM, `lab03-radius01` (Ubuntu 22.04), for the FreeRADIUS deployment in Part 8
-- A third provisioned VM, `lab03-device01` (Ubuntu 22.04), standing in for a network device admin console in the Graduate Extension
 - Group Policy Management Console (GPMC)
 - Active Directory Users & Computers (ADUC)
 - Active Directory Administrative Center (ADAC)
@@ -250,9 +249,6 @@ radtest testuser testpass123 localhost 0 testing123
 
 Capture the full debug output showing the Access-Request coming in and the Access-Accept going out. Identify in your write-up: which line shows the shared secret being validated, and which line shows the final accept/reject decision.
 
-{: .note }
-Wiring FreeRADIUS to authenticate against your AD domain itself (rather than the local flat-file test above), plus standing up a second "network device" client VM, privilege mapping, and packet-level analysis, are covered in the Graduate Extension below.
-
 ---
 
 ## Deliverables
@@ -284,90 +280,5 @@ Wiring FreeRADIUS to authenticate against your AD domain itself (rather than the
 | FreeRADIUS local deployment and debug analysis (Part 8) | 15 |
 | **Total** | **100** |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### Extension A - AdminSDHolder & Protected Users Security Group (10 pts)
-
-1. **AdminSDHolder protection:** Move `enovak-adm` into the `Domain Admins` group (already done), then verify that AdminSDHolder has propagated its ACL to the account within 60 minutes. Run `Get-ADUser enovak-adm -Properties nTSecurityDescriptor` and compare the ACL to a standard user's ACL. Document which permissions are different and explain what attack AdminSDHolder protection prevents.
-
-2. **Protected Users group:** Add `enovak-adm` to the **Protected Users** security group:
-   ```powershell
-   Add-ADGroupMember -Identity "Protected Users" -Members "enovak-adm"
-   ```
-   Test the impact: attempt to authenticate `enovak-adm` via NTLM (use a tool like `runas` on a non-domain machine if available, or document the limitation). Document exactly which authentication protocols Protected Users blocks and why this matters for Pass-the-Hash / Pass-the-Ticket attacks. Reference the specific MITRE ATT&CK technique(s) this control mitigates.
-
-3. **Delegation audit:** Run this query and document which service accounts have unconstrained Kerberos delegation enabled:
-   ```powershell
-   Get-ADComputer -Filter {TrustedForDelegation -eq $true} | Select-Object Name
-   Get-ADUser -Filter {TrustedForDelegation -eq $true} | Select-Object Name
-   ```
-   Explain why unconstrained delegation is dangerous and what a Kerberos delegation attack (S4U2Proxy, S4U2Self) looks like.
-
-### Extension B - Full RADIUS/LDAP Backend Integration (20 pts)
-
-4. **Point FreeRADIUS at the directory.** Configure the `ldap` module (`/etc/freeradius/3.0/mods-available/ldap`, symlinked into `mods-enabled`) to bind to your AD domain:
-{% raw %}
-   ```
-   ldap {
-       server = '<dc-host>'
-       identity = '<bind-dn>'
-       password = '<bind-password>'
-       base_dn = '<base-dn>'
-       user {
-           base_dn = "${..base_dn}"
-           filter  = "(uid=%{%{Stripped-User-Name}:-%{User-Name}}))"
-       }
-       group {
-           base_dn = "${..base_dn}"
-           filter  = '(objectClass=groupOfNames)'
-       }
-   }
-   ```
-{% endraw %}
-
-   Switch the default `authorize` and `authenticate` sections in `/etc/freeradius/3.0/sites-available/default` to use `ldap`. Restart in debug mode and re-run `radtest` with a **real directory account**. Paste the debug output and identify the specific line where FreeRADIUS performs the LDAP bind.
-
-   {: .tip }
-   If the LDAP bind fails, the most common causes are: wrong base DN, a bind account without read access to the user subtree, or needing to bind as `user@domain.fqdn` rather than a full DN. Debug output will tell you exactly which LDAP operation failed.
-
-5. **Authenticate a "network device" logon via RADIUS.** On `lab03-device01` (standing in for a router/switch admin console), install and configure `pam_radius_auth`:
-   ```bash
-   sudo apt install libpam-radius-auth -y
-   echo "<freeradius-host> <shared-secret> 3" | sudo tee /etc/pam_radius_auth.conf
-   ```
-   Edit `/etc/pam.d/sshd` to insert RADIUS **before** standard Unix authentication:
-   ```
-   auth    sufficient    pam_radius_auth.so
-   auth    include       common-auth
-   ```
-   Add the FreeRADIUS host as a known client in `/etc/freeradius/3.0/clients.conf`. SSH into the device VM using a directory account's credentials - **the account should not exist as a local Linux user on this VM.** Then intentionally lock the directory account and attempt the SSH logon again. Capture the rejection in both the SSH client output and the FreeRADIUS debug log, and explain which component made the reject decision - FreeRADIUS, the directory, or PAM.
-
-6. **Group-to-privilege mapping.** Configure FreeRADIUS to return a `Filter-Id` based on directory group membership, so members of `NetworkAdmins` get a different value than everyone else:
-   ```
-   if (LDAP-Group == "NetworkAdmins") {
-       update reply {
-           Filter-Id := "admin-profile"
-       }
-   }
-   else {
-       update reply {
-           Filter-Id := "readonly-profile"
-       }
-   }
-   ```
-   Test with two different accounts and show the differing `Filter-Id` in each Access-Accept.
-
-7. **Read the wire.** Capture a single authentication attempt with `tcpdump -i any -w radius-capture.pcap port 1812 or port 1813`. Identify, by name, at least 6 distinct RADIUS attribute-value pairs (AVPs) present across the Access-Request and Access-Accept packets. For 2 of them, explain what the attribute is for.
-
-8. **TACACS+ comparison.** Install `tac_plus` alongside your FreeRADIUS setup and configure an equivalent policy with the same two privilege tiers. Write a 1-page comparison covering transport (UDP vs. TCP), encryption scope (RADIUS encrypts only the password by default vs. TACACS+ encrypting the full body), and command-level authorization (TACACS+ can authorize individual commands per session, RADIUS cannot natively). Give one concrete scenario where command-level authorization matters operationally.
-
-9. **802.1X port-based authentication (optional, if hardware/GNS3 available).** Configure `dot1x` port-based authentication on one switch port backed by your FreeRADIUS server, or a `wpa_supplicant`-configured Linux host acting as the supplicant. Capture the EAP exchange and explain how 802.1X's EAP-over-LAN differs from the username/password RADIUS flow above. If hardware isn't available, write a detailed sequence diagram (supplicant → authenticator/switch → RADIUS server) for the handshake instead.
-
----
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

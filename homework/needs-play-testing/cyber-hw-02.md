@@ -103,29 +103,5 @@ Open a PR titled `CYBER HW 2 - Linux Security Audit Suite` and submit your repo 
 | Part 2 - cross-machine risk ranking and prioritization | 15 |
 | Part 3 - whitelist scaling, undetectable attack, false-positive tuning & triage priority | 35 |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-
-### Part 4 - CVSS Environmental Scoring (30 pts)
-
-Make a copy of `cyber-hw-02-audit.sh` and extend it to calculate a **CVSS v3.1 Environmental Score** for each CRITICAL finding. For each finding, the JSON output must include a `cvss` object with:
-
-```json
-{
-  "base_vector": "AV:L/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
-  "base_score": 6.7,
-  "modified_attack_vector": "L",
-  "confidentiality_requirement": "H",
-  "integrity_requirement": "H",
-  "availability_requirement": "M",
-  "environmental_score": 7.2,
-  "severity": "High"
-}
-```
-
-You must implement the Environmental score calculation in bash (no external tools). Run your extended script against the same 3 target machines from Part 1 and use those real CRITICAL findings as your scoring examples - don't invent hypothetical findings. Document your scoring rationale for each one in your write-up - explain why you assigned the Confidentiality/Integrity/Availability Requirements you did.
-
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

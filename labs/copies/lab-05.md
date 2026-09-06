@@ -319,38 +319,5 @@ Review the report for any HIGH or CRITICAL findings. Fix any issues (typically w
 | Written reflection - two-tier CA rationale | 5 |
 | **Total** | **100** |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### OCSP Responder & Certificate Transparency
-
-1. **OCSP Responder:** Configure an OpenSSL OCSP responder for the Intermediate CA:
-   ```bash
-   openssl ocsp -port 2560 -text      -index ~/pki/intermediate-ca/index.txt      -CA ~/pki/intermediate-ca/certs/ca-chain.cert.pem      -rkey ~/pki/intermediate-ca/private/intermediate.key.pem      -rsigner ~/pki/intermediate-ca/certs/intermediate.cert.pem      -ndays 7 &
-   ```
-   Issue a new server certificate (re-create the server cert after revoking the first one). Add the OCSP URI to the certificate using the `authorityInfoAccess` extension in your OpenSSL config:
-   ```
-   [server_cert]
-   authorityInfoAccess = OCSP;URI:http://lab5.local:2560
-   ```
-   Then test real-time OCSP checking:
-   ```bash
-   openssl ocsp -CAfile ~/pki/intermediate-ca/certs/ca-chain.cert.pem      -url http://lab5.local:2560      -issuer ~/pki/intermediate-ca/certs/intermediate.cert.pem      -cert ~/pki/server/certs/server.cert.pem
-   ```
-   Document the difference between CRL and OCSP: what are the staleness, privacy, and availability trade-offs?
-
-2. **OCSP Stapling:** Configure Nginx to staple the OCSP response so clients don't need to contact the OCSP responder directly:
-   ```nginx
-   ssl_stapling on;
-   ssl_stapling_verify on;
-   ssl_trusted_certificate /etc/nginx/ssl/ca-chain.crt;
-   ```
-   Verify stapling is working: `openssl s_client -connect lab5.local:443 -status 2>&1 | grep "OCSP Response"`
-
----
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

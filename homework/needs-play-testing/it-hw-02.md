@@ -78,41 +78,7 @@ Open a PR titled `IT HW 2 - Linux Network Services` and submit your repo link on
 | Security hardening (3+ per service, specific) | 5 |
 | Reflection - production reasoning, not lab reasoning | 15 |
 
----
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-### Part 4 - DNS High-Availability Architecture & ADR (30 pts)
-
-**HA Architecture Design (15 pts)**
-
-Design a high-availability version of the DNS service suitable for a production environment with 500 clients and a 99.9% uptime SLA. Choose **one** approach and justify it over the other:
-
-- An **anycast design** - justify when anycast is appropriate vs. overkill for an environment this size, and what routing infrastructure (BGP, IGP) it presupposes that a 500-client organization may or may not already run.
-- An **active-passive failover** using `keepalived` + VRRP - specify the VIP, the failover trigger condition, and the exact health-check configuration that decides when to fail over.
-
-
-Produce a network architecture diagram (ASCII or linked image) showing both DNS nodes, the VIP or anycast address, and the failure domain each node sits in.
-
-**Architecture Decision Record (15 pts)**
-
-Write a formal **Architecture Decision Record (ADR)** for your chosen HA approach using the Nygard ADR format:
-
-```
-# ADR-NNN: [Title]
-Date: YYYY-MM-DD
-Status: Proposed | Accepted | Deprecated | Superseded
-Context: [Why this decision is needed]
-Decision: [What we decided]
-Alternatives Considered: [Other options evaluated with pros/cons]
-Consequences: [What becomes easier, harder, or riskier]
-```
-
-The ADR should be genuinely analytical - "that's just how it was configured" is not acceptable. Reference specific failure modes, cost tradeoffs, or operational complexity considerations that drove your choice, and treat the "Alternatives Considered" section as a real comparison against the approach you didn't pick, not a formality.
-
-Submit as `it-hw-02-dns-ha-adr.md`.
 
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

@@ -211,53 +211,5 @@ Overall score delta and explanation of the largest improvements.
 | Written reflection - unpinned role risk | 5 |
 | **Total** | **100** |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### Molecule Testing for the Role
-
-Set up Molecule to test the dev-sec role in an isolated Docker container, so you can verify behavior without touching your lab VM:
-
-```bash
-pip3 install molecule molecule-docker docker --break-system-packages
-mkdir -p ~/lab11-molecule && cd ~/lab11-molecule
-molecule init scenario --driver-name docker
-```
-
-Edit `molecule/default/molecule.yml` to use Ubuntu 22.04:
-```yaml
-platforms:
-  - name: ubuntu-2204
-    image: "geerlingguy/docker-ubuntu2204-ansible"
-    command: /lib/systemd/systemd
-    privileged: true
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
-    cgroupns_mode: host
-    pre_build_image: true
-```
-
-Edit `molecule/default/converge.yml` to apply the role with your `site_vars.yml`.
-
-Edit `molecule/default/verify.yml` to add at least 5 assertions:
-```yaml
-- name: Verify sshd PermitRootLogin
-  ansible.builtin.assert:
-    that: "'PermitRootLogin no' in lookup('file', '/etc/ssh/sshd_config')"
-# Add 4 more assertions...
-```
-
-Run Molecule:
-```bash
-molecule test   # full cycle: create → converge → verify → destroy
-```
-
-Submit the Molecule config files and a screenshot of the full `molecule test` run passing all verifications.
-
----
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

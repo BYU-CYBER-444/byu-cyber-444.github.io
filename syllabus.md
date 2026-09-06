@@ -33,12 +33,12 @@ nav_order: 2
 
 | Time | Monday | Tuesday | Wednesday | Thursday | Friday |
 |---|---|---|---|---|---|
-| 9:00 - 10:00 AM | | | | | |
-| 10:00 - 11:00 AM | | | | | |
-| 11:00 AM - 12:00 PM | | | | | |
+| 9:00 - 10:00 AM |  | | | | |
+| 10:00 - 11:00 AM | Sebastian | | Sebastian | | |
+| 11:00 AM - 12:00 PM | Sebastian  | | Sebastian | | |
 | 12:00 - 1:00 PM | | | | | |
-| 1:00 - 2:00 PM | | Sebastian | | Sebastian | |
-| 2:00 - 3:00 PM | | Sebastian | | Sebastian | |
+| 1:00 - 2:00 PM | |  | |  | |
+| 2:00 - 3:00 PM | |  | |  | |
 | 3:00 - 4:00 PM | | | |  | |
 | 4:00 - 5:00 PM | | | | | |
 | 5:00 - 6:00 PM | | Sebastian | | Sebastian  | |
@@ -90,7 +90,6 @@ Regardless of track, upon successful completion of this course students will be 
 1. Build and maintain a hardened Linux and Windows Server lab environment suitable for production-grade work.
 1. Apply Active Directory and Group Policy fundamentals to manage a small Windows Domain.
 1. Operate a basic patch management pipeline and certificate / PKI infrastructure.
-1. Document using a GitHub-based pull request workflow.
 1. Design, implement, and present a multi-week capstone infrastructure project.
 
 ### Cyber Track outcomes

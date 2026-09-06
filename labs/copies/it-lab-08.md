@@ -281,46 +281,4 @@ If you try this, capture the `sensor list` and `sel list` output and note one wa
 | Out-of-band management findings (4+, structured) | 12 |
 | **Total** | **100** |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### Extension A - Monte Carlo Availability Simulation (12 pts)
-
-Uptime Institute Tier availability targets are theoretical; actual availability depends on component MTBF, MTTR, and the probability distribution of failure events.
-
-Using Python with `numpy` and `scipy`:
-
-1. Model the following components with exponential failure distributions:
-   - Single utility feed: MTBF = 8,760 hr/year (one outage/year on average)
-   - UPS (each unit): MTBF = 43,800 hr (one failure per 5 years)
-   - Generator: MTBF = 8,760 hr, MTTR = 4 hr
-   - CRAC unit (each): MTBF = 26,280 hr (one failure per 3 years)
-
-2. Run a Monte Carlo simulation (10,000 iterations, 1-year horizon) to estimate:
-   - Annual downtime probability with current single utility feed
-   - Annual downtime probability after adding a second utility feed
-   - Expected downtime minutes/year for each scenario
-
-3. Plot the results as a histogram of annual downtime (minutes) for both scenarios.
-
-4. Calculate the financial impact: Meridian processes $40M/day in transactions. What is the expected annual loss from each scenario at 100% revenue impact during downtime?
-
-### Extension B - Regulatory Compliance Mapping (9 pts)
-
-Financial institutions must comply with FFIEC IT Examination Handbook guidelines for data center resilience. Map Meridian's gaps to specific FFIEC controls:
-
-1. Download the FFIEC IT Examination Handbook - Business Continuity Management booklet (publicly available).
-2. For each of the 5 most critical gaps you identified, cite the specific FFIEC control reference, describe how Meridian fails to meet it, and state the regulatory consequence (examination finding, MRA, or enforcement action).
-3. Identify which gaps would constitute a Material Weakness under SOX Section 404 if Meridian were a public company.
-
-Submit your Monte Carlo Python script with output plot and the FFIEC compliance mapping table.
-
-### Extension C - Out-of-Band Management Network Design (9 pts)
-
-Meridian's iDRAC interfaces currently share a VLAN with production traffic. Design a proper out-of-band management network: a dedicated physical or VLAN-isolated management network, jump-host/bastion access pattern (no direct internet exposure to any BMC), and a credential-rotation policy for the shared local accounts every BMC ships with. Diagram the proposed network (management VLAN, jump host, firewall rules permitting only bastion→BMC traffic) and write a 1-page justification citing what specific attack this isolation prevents (lateral movement from a compromised production host to every server's BMC in one hop).
-
 [← Back to Labs]({{ site.baseurl }}/labs/)

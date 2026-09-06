@@ -92,20 +92,4 @@ Open a PR titled `CYBER HW 6 - SSH CA & MFA Deployment Design` and submit your r
 | PAM MFA design - publickey+TOTP, service account bypass, sshd_config design | 30 |
 
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-### Part 4 - Cryptographic Standards Policy (30 pts)
-
-Write a formal **Cryptographic Standards Policy** aligned with NIST SP 800-131A Rev 2. The policy must specify:
-
-- Approved and disallowed algorithms for: symmetric encryption, asymmetric encryption, digital signatures, key agreement, and hashing
-- Minimum key lengths for each approved algorithm and the date after which shorter keys are prohibited
-- Certificate validity periods and renewal requirements (align with current CA/Browser Forum Baseline Requirements for any public-facing certs)
-- Key storage requirements: when hardware (HSM, TPM, YubiKey) is mandatory vs. when software key storage is acceptable
-- Key rotation schedules: SSH host keys, SSH user CAs, TLS certificates, code signing keys, and secrets/API keys
-- Algorithm deprecation process: how the organization will transition away from an algorithm when NIST deprecates it (e.g., the transition from SHA-1)
-
-
 [← Back to Homework]({{ site.baseurl }}/homework/)

@@ -102,21 +102,4 @@ Open a PR titled `IT HW 4 - Windows Server Infrastructure Design` and submit you
 {: .tip }
 "Create a Users OU" is not a design - explain why that OU exists at that level in the hierarchy and what GPOs link to it. Think about delegation: who can create objects in each OU?
 
----
-
----
-
-##  Graduate Extension - Graduate Students Only
-
-### Part 7 - FERPA Compliance Assessment Report (30 pts)
-
-Write a 3-4 page **FERPA Compliance Assessment Report** (`it-hw-04-ferpa-report.md`) written as if presenting to the district's School Board and legal counsel:
-
-1. **Scope** - which systems, applications, and processes (EduTrack SIS access, the GPOs from Part 2, backups, etc.) are in scope for this assessment
-2. **Control Environment** - overall assessment of the control environment maturity (CMMI-style 1-5 rating with justification for each control domain: Access Management, Change Management, Availability). For each domain, cite the specific Windows control from Part 6 and the exact evidence artifact it produces (e.g., the PowerShell command or report that would demonstrate the control is operating, not just configured)
-3. **Deficiencies** - identify at least 2 control deficiencies in your design (be honest - no design is perfect) and classify each by severity (Minor, Significant, or Material, using your own defensible criteria - FERPA doesn't prescribe PCAOB-style categories, so define what each severity level means for student-data risk)
-4. **Management's Response** - for each deficiency, write a response the IT Director could give the School Board, acknowledging the finding and committing to a remediation timeline
-5. **Conclusion** - whether you believe your controls are sufficient to protect student education records under FERPA (and the caveats)
-
-
 [← Back to Homework]({{ site.baseurl }}/homework/)

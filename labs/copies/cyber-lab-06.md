@@ -256,31 +256,5 @@ Test: `ssh bob@localhost` should ONLY show disk usage output - any other command
 | Written reflection - certificates vs. authorized_keys at scale | 5 |
 | **Total** | **100** |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### Automated Certificate Issuance Script & Break-Glass Procedure
-
-1. **Automated Issuance Script:** Write `cyber-lab06-issue-cert.sh` - a script a CA operator would run to issue a new user certificate. The script must:
-   - Accept arguments: `--user`, `--principal`, `--validity`, `--source-ip` (optional)
-   - Validate that the user's public key is provided as input
-   - Sign the certificate with the correct options
-   - Log the issuance to `/var/log/ssh-ca/issuance.log`: `DATE | OPERATOR | USER | PRINCIPAL | VALIDITY | KEY_FINGERPRINT | SERIAL`
-   - Verify the certificate after signing (`ssh-keygen -L` and check validity)
-   - Print the certificate fingerprint and serial number for the operator's records
-
-2. **Break-Glass Emergency Access:** Design a documented break-glass procedure for when the CA key is unavailable (key lost, CA machine down) and an admin needs emergency access to a critical server. The procedure must:
-   - Define who can authorize break-glass access (role, not person)
-   - Document the temporary authorized_keys method to use (with time limit)
-   - Include the auditd rule to detect authorized_keys modifications: `-w /root/.ssh/authorized_keys -p wa -k emergency_access`
-   - Define the cleanup procedure (remove emergency key, update CA to issue proper cert, log the incident)
-
-Submit the script, the issuance log from at least 2 test runs, and the break-glass procedure document.
-
----
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

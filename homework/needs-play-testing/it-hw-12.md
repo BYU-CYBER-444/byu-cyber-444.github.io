@@ -84,23 +84,5 @@ Open a PR titled `IT HW 12 - Monitoring Architecture` and submit your repo link 
 | Runbooks - 3 complete, actionable at 2 AM | 30 |
 | SLO design - targets justified, error budget calculated, burn rate alerts | 15 |
 
----
-
----
-
-##  Graduate Extension - Graduate Students Only
-
-### Part 5 - Decision-Tree Runbook Library (30 pts)
-
-Extend each of your 3 runbooks with a **diagnostic decision tree** that guides an on-call engineer who has never seen this system before. Each decision tree must:
-
-1. Start from a single entry point: the PagerDuty/alerting system alert title
-2. Branch based on observable conditions (command output, dashboard state, log patterns) - not assumptions
-3. Lead to one of 4 terminal outcomes: `RESOLVED` (with remediation step), `ESCALATE` (with escalation path), `INVESTIGATE_FURTHER` (with next data source to examine), or `FALSE_POSITIVE` (with suppression procedure)
-4. Cover at least 8 decision nodes per runbook
-5. Be formatted in Mermaid flowchart syntax (rendered in your markdown)
-
-Include the exact command to run at each diagnostic step and what the output means (both healthy and unhealthy patterns). For each terminal `ESCALATE` outcome, name the specific escalation contact/role and the maximum time-to-escalate. For each terminal `FALSE_POSITIVE` outcome, write the exact Alertmanager silence/suppression command you'd run, including a bounded duration.
-
 
 [← Back to Homework]({{ site.baseurl }}/homework/)

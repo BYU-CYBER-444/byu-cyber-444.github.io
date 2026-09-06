@@ -387,41 +387,5 @@ Write a 200-word explanation of the error budget burn rate alerting strategy:
 | Alert rules + burn rate explanation | 15 |
 | **Total** | **100** |
 
----
-
-##  Graduate Extension - Graduate Students Only
-
-{: .callout-grad }
-> **Required for students enrolled in the graduate section. Undergraduate students skip this section. Graduate work is worth an additional 30 points added to this assignment.**
-
-### Extension A - Custom Exporter Development (15 pts)
-
-Prometheus exporters expose metrics from applications that don't natively speak Prometheus. `it-lab12-node01` has BIND9 pre-installed and running with its statistics channel enabled specifically for this exercise. Write a custom Python exporter that monitors it:
-
-1. Use the `prometheus_client` Python library.
-2. Expose the following metrics by parsing BIND9's statistics channel (`curl http://it-lab12-node01:8080/xml/v3`):
-   - `bind_queries_total` (counter, by query type: A, AAAA, MX, etc.)
-   - `bind_resolver_cache_hits_total` (counter)
-   - `bind_zone_serial` (gauge, by zone name)
-3. Run the exporter on port 9119 and add it to Prometheus scrape config.
-4. Build a Grafana panel showing DNS query rate by type over the last hour.
-
-### Extension B - Multi-Window SLO Dashboard (15 pts)
-
-Implement the Google SRE multi-window, multi-burn-rate alerting approach for a web service SLO:
-
-1. Define an SLO: 99.9% of requests must return HTTP 2xx within 500ms.
-
-2. Implement four Prometheus alerting rules covering all four quadrants:
-   - Fast burn (1h/5m windows): 14× burn rate → page immediately
-   - Fast burn (6h/30m windows): 6× burn rate → page
-   - Slow burn (1d/2h windows): 3× burn rate → ticket
-   - Slow burn (3d/6h windows): 1× burn rate → review
-
-3. Create a Grafana dashboard showing: current error rate, remaining error budget (%), projected budget exhaustion time at current rate.
-
-4. Write a 300-word explanation of why the multi-window approach reduces both false positive rate (compared to single-window fast burn) and detection delay (compared to single-window slow burn).
-
-Submit Python exporter code + Grafana DNS panel screenshot, and SLO alerting rules YAML + multi-window dashboard screenshot + 300-word explanation.
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

@@ -70,22 +70,5 @@ Open a PR titled `CYBER HW 8 - CIS Benchmark Gap Analysis` and submit your repo 
 | Remediation runbook - tested commands + verification for all Tier 1/2 | 65 |
 
 
----
-
-
-##  Graduate Extension - Graduate Students Only
-
-### Part 5 - FAIR Quantitative Risk Analysis (30 pts)
-
-
-Using the FAIR ontology, define and estimate values for your top gap:
-
-- **Threat Event Frequency (TEF):** How often does the threat community attempt this attack against similar organizations? Cite a data source (Verizon DBIR, MITRE ATT&CK prevalence data, or similar).
-- **Vulnerability (Vuln):** Given a threat event occurs, what is the probability it succeeds given your current control state? Justify with the control gap specifics.
-- **Primary Loss Magnitude (PLM):** Estimate productivity loss, response costs, and data breach costs if the threat succeeds. Use Ponemon or equivalent benchmarks.
-- **Risk Range:** Calculate Loss Event Frequency (LEF = TEF × Vuln) and expected annual loss range (minimum, most likely, maximum). A Monte Carlo simulation is not required but earns extra credit if implemented.
-
-Submit as `cyber-hw-08-fair-analysis.md`.
-
 
 [← Back to Homework]({{ site.baseurl }}/homework/)
