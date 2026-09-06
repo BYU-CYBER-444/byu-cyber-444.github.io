@@ -52,7 +52,7 @@ None of this is invented for the classroom. The role separation in Part 1 and th
 
 ## Procedure
 
-The account you will be logging into is your own account with which you log into proxmox, and this will be the default if no credentials are provided for the rest of the labs, too. Outside of that account, there are three accounts that already exist on this host with the following roles - you'll spend the rest of the lab scoping their actual access to match:
+The account you will be logging into is your own account with which you log into proxmox, and this will be the default if no credentials are provided for the rest of the labs, too. Your username is your Net ID, and your password is the one emailed to you that was attached to your Net ID. Outside of that account, there are three accounts that already exist on this host with the following roles - you'll spend the rest of the lab scoping their actual access to match:
 
 - **alice** - full sysadmin for this host.
 - **bob** - the day-to-day operator responsible for DNS specifically. Notably, his role does **not** extend to storage administration - that's a deliberate boundary you'll enforce in Parts 1 and 4, modeling how a real organization separates "network services operator" from "storage administrator" even when one person could technically do both.
@@ -352,18 +352,6 @@ Treat this like a real incident, not a checklist: use the same diagnostic instin
 
 ---
 
-## Deliverables
-
-Submit a single Markdown document at `labs/lab-02.md` logging every command you ran across Parts 1-4, in order, and open a PR called `Grade: lab-2`. Your hands-on configuration work itself is autograded directly against the live system, so the notes file doesn't need separate screenshots or copy-pasted proof of success - it needs the command history.
-
-At minimum, your notes should capture:
-
-- The sudoers file contents for `10-sysadmins`, `20-operators`, and `30-auditors`
-- Results of every access-control verification test (sudo and ACL) from Parts 1 and 4
-- The broken-serial DNS behavior you observed in Part 2.5
-- For each of Part 5's four faults: what was actually wrong and how you fixed it. Grading for Part 5 is fully automated against the live host.
-
----
 
 ## Grading
 
