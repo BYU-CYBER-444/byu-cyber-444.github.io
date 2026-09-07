@@ -339,14 +339,14 @@ The distinction between the top two rows and SELinux matters more than it looks:
 
 ### Part 5 - Diagnose and Repair
 
-A second host, `lab2-debug`, has already been provisioned on the same network as your main VM. It starts from a working baseline - the same DNS, chrony, sudo, and ACL setup you just built by hand in Parts 1-4 - except one thing is broken in each of those four areas. What's broken, and how, is randomized per student; nothing about it is disclosed here, and the logs/history on the box have been cleared, so you can't shortcut this by grepping for what changed. Diagnosing it is the point.
+A second host, `lab2-debug`, has already been provisioned on the same network as your main VM. It starts from a working baseline covering the same four categories as Parts 1-4 - DNS, NTP, sudo, and ACLs - except one thing is broken in each. This is a different, smaller setup than your main VM, not a copy of it: there's no alice/bob/carol here, no `/etc/named.conf` zone data for you to rebuild, no `/data` tree - just your own account and a single shared directory, already built and already populated, with one fault planted per category on top. Don't recreate anything from Parts 1-4 here; everything you need already exists on this host. What's broken, and how, is randomized per student; nothing about it is disclosed here, and the logs/history on the box have been cleared, so you can't shortcut this by grepping for what changed. Diagnosing it is the point.
 
 Log into `lab2-debug` the same way you logged into your main VM. For each of the four areas below, find the fault and fix it, then confirm - using the same kind of live check you already used in Parts 1-4 (a `dig` query, `chronyc tracking`/`sources`, `sudo -l -U`, an actual read/write attempt) - that it's actually working again, not just that the config file looks right:
 
 - **DNS** - `www.lab.internal` should resolve correctly against the local server.
 - **NTP** - `chronyd` should be running and synchronized.
 - **Sudo** - your own account's sudo policy should resolve cleanly, with no `sudoers` parse error and your expected grant intact.
-- **ACLs** - your own account's access to the shared path should work as expected.
+- **ACLs** - `/srv/shared` already exists on this host with an ACL grant for your own account - confirm you can actually write to it (`touch /srv/shared/test`). If you can't, the ACL itself is what's broken (check `getfacl /srv/shared`); fix it in place rather than recreating the directory.
 
 Treat this like a real incident, not a checklist: use the same diagnostic instincts you'd use on a production host you didn't build - check whether the service is even running before assuming the config is wrong, check the obvious log/status output before guessing, and change one thing at a time so you actually know what fixed it.
 
