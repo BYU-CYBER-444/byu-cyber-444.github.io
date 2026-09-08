@@ -72,7 +72,7 @@ Design (do not build) the PAM-based TOTP MFA layer for SSH logins:
 
 2. Describe the corresponding `/etc/ssh/sshd_config` design that enables `AuthenticationMethods` to require `publickey,keyboard-interactive` for the general sysadmin tier and `publickey` only for the `svcaccount` group.
 
-3. Describe the fallback path for emergency break-glass access if public key authentication fails (password + TOTP) - who can use it and how it differs operationally from Part 4's break-glass procedure.
+3. Describe the fallback path for emergency break-glass access if public key authentication fails (password + TOTP) - who can use it and how it differs operationally from routine sysadmin access.
 
 4. Describe how you would automate TOTP enrollment for a new sysadmin: what tool generates the secret/QR code, where the enrollment link is sent (using the AD-integrated identity from the Environment Profile), and what a new hire's first-login experience looks like end to end.
 
