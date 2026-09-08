@@ -57,6 +57,7 @@ EXPECTED_SUID_SGID=(
   "/usr/bin/chfn"
   "/usr/bin/gpasswd"
   "/usr/bin/newgrp"
+  "/usr/bin/chage"
   "/usr/bin/mount"
   "/usr/bin/umount"
   "/usr/bin/crontab"
@@ -208,7 +209,7 @@ check_bad_permissions() {
         "${file} owned by ${actual_owner}, expected ${expected_owner}" \
         "$(build_details path "$file" actual_owner "$actual_owner" expected_owner "$expected_owner")"
     fi
-    if [[ "$actual_mode" != "$expected_mode" ]]; then
+    if [[ $((8#$actual_mode)) -ne $((8#$expected_mode)) ]]; then
       add_finding "CRITICAL" "filesystem" "bad_permissions" \
         "${file} has mode ${actual_mode}, expected ${expected_mode}" \
         "$(build_details path "$file" actual_mode "$actual_mode" expected_mode "$expected_mode")"
