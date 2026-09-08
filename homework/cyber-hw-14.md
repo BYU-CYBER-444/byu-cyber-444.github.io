@@ -19,7 +19,7 @@ nav_order: 14
 
 ## Description
 
-### Part 1 - Dockerfile Audit (30 pts)
+### Part 1 - Dockerfile Audit (40 pts)
 
 A vulnerable Dockerfile is provided: [Acme Widgets Co. - Vulnerable Dockerfile]({% link homework/description-files/cyber-hw-14-dockerfile.md %}). Identify and fix every security issue.
 
@@ -33,7 +33,7 @@ Issue types to look for: running as root, unpinned base image (floating tag), se
 
 You must find **at least 8 issues**. Provide the full corrected Dockerfile as a deliverable.
 
-### Part 2 - Docker Compose Security Audit (30 pts)
+### Part 2 - Docker Compose Security Audit (35 pts)
 
 A Docker Compose file is provided: [Acme Widgets Co. - Vulnerable Docker Compose Stack]({% link homework/description-files/cyber-hw-14-docker-compose.md %}). It defines a 3-service stack: web (Nginx), app (Python), and database (PostgreSQL). For each of the **10 security improvements** you identify, document:
 

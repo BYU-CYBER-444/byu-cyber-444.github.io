@@ -40,6 +40,12 @@ HOSTNAME_VAL="$(hostname)"
 # as stale (passed to `lastlog -b`).
 STALE_LOGIN_DAYS=90
 
+# Known infrastructure/admin accounts intentionally excluded from the
+# stale-privileged-account check - e.g. a shared TA/grading account that
+# legitimately sits unused for long stretches by design, not a student-
+# introduced risk.
+EXCLUDED_PRIVILEGED_ACCOUNTS=("ta")
+
 # How many entries in a single account's authorized_keys before it's
 # flagged as worth a human look.
 AUTHORIZED_KEYS_THRESHOLD=5
@@ -267,13 +273,18 @@ check_empty_password() {
 # *supplementary* wheel membership via getent - an account using wheel as
 # its primary group would not be listed here, a known simplification.
 check_stale_privileged_accounts() {
-  local members member stale_users
+  local members member stale_users excluded w
   members="$(getent group wheel 2>/dev/null | awk -F: '{print $4}')" || true
   [[ -z "$members" ]] && return 0
   stale_users="$(lastlog -b "$STALE_LOGIN_DAYS" 2>/dev/null | tail -n +2 | awk '{print $1}')" || true
   IFS=',' read -ra member_list <<< "$members"
   for member in "${member_list[@]}"; do
     [[ -z "$member" ]] && continue
+    excluded=0
+    for w in "${EXCLUDED_PRIVILEGED_ACCOUNTS[@]}"; do
+      [[ "$member" == "$w" ]] && excluded=1 && break
+    done
+    [[ "$excluded" -eq 1 ]] && continue
     if grep -qx "$member" <<< "$stale_users" 2>/dev/null; then
       add_finding "WARNING" "accounts" "stale_privileged_account" \
         "wheel-group member '${member}' has not logged in within ${STALE_LOGIN_DAYS} days (or never)" \

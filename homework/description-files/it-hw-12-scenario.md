@@ -46,9 +46,9 @@ Valley Medical Group runs one cloud-hosted, non-clinical-data system: a public p
 | `vmg-scheduling-web` | EC2 (t3.medium, Auto Scaling group, 2-4 instances) | Runs the scheduling portal application |
 | `vmg-scheduling-db` | RDS PostgreSQL (db.t3.medium, Multi-AZ) | Backs the scheduling portal only - not connected to MedFlow's on-prem database |
 
-## Business Cost of Downtime (for Part 5's SLO justification)
+## Business Cost of Downtime (for Part 4's SLO justification)
 
-Industry estimates for unplanned EHR/EMR downtime at an ambulatory practice of Valley Medical Group's size put the cost at roughly **$8,000/hour during business hours** (7 AM-7 PM: lost visit-documentation and billing throughput, plus idle clinical and administrative staff time) and **$500/hour outside business hours** (after-hours on-call clinical access only, no scheduled-visit throughput at risk). Use these two figures - not a single flat rate - when justifying your availability/latency/error-rate SLO targets and calculating your error budget in Part 5.
+Industry estimates for unplanned EHR/EMR downtime at an ambulatory practice of Valley Medical Group's size put the cost at roughly **$8,000/hour during business hours** (7 AM-7 PM: lost visit-documentation and billing throughput, plus idle clinical and administrative staff time) and **$500/hour outside business hours** (after-hours on-call clinical access only, no scheduled-visit throughput at risk). Use these two figures - not a single flat rate - when justifying your availability/latency/error-rate SLO targets and calculating your error budget in Part 4.
 
 ---
 
