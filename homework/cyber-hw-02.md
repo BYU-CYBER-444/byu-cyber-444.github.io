@@ -30,9 +30,9 @@ Your instructor has provisioned **four Rocky 9 VMs** for this assignment - one k
 ### Part 1 - Run the Audit (20 pts)
 
 1. Save the script as `cyber-hw-02-audit.sh` and `chmod +x` it.
-2. **Before touching the target VMs:** run it against the **HW 2 baseline VM** and compare your output against the Sample Audit Output reference. Confirm the report file passes `jq empty` and its schema matches. Don't skip this step: if the script isn't behaving correctly on a machine you understand, you can't trust its results on one you don't.
+2. **Before touching the target VMs:** run it against the **HW 2 baseline VM** and compare your output against the Sample Audit Output reference. Don't skip this step: if the script isn't behaving correctly on a machine you understand, you can't trust its results on one you don't.
 3. Run `sudo ./cyber-hw-02-audit.sh` against each of the 3 target VMs. Do not modify the script or the target machines - the script is read-only and safe to run more than once if you need to re-check something.
-4. Save each run's report with a name that identifies which machine it came from, e.g. `cyber-hw-02-target1.json`, `cyber-hw-02-target2.json`, `cyber-hw-02-target3.json`. Confirm all three pass `jq empty` before moving on.
+4. Save each run's report with a name that identifies which machine it came from, e.g. `cyber-hw-02-target1.json`, `cyber-hw-02-target2.json`, `cyber-hw-02-target3.json`.
 
 ### Part 2 - Findings Analysis & Remediation (45 pts)
 
@@ -60,7 +60,7 @@ Then, across all 3 machines:
 {: .note }
 The finding `check` and `severity` values below are exactly what appears in each finding's JSON - useful for Part 2 when you're cross-referencing your 3 target machines' reports.
 
-| Category | `check` | Severity | What it means |
+| Category | check | Severity | What it means |
 |---|---|---|---|
 | `filesystem` | `unexpected_suid` | WARNING | SUID/SGID binary not on the script's whitelist |
 | `filesystem` | `world_writable` | WARNING | World-writable file/dir under `/etc`, `/usr`, or `/home` |
