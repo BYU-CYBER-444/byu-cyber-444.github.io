@@ -72,7 +72,7 @@ timedatectl status
 
 If the clocks do not agree you will have to sync them before you can move onto part 3
 
-Don't run the full package upgrade yet - that's Part 6, done deliberately *after* the cluster and Ceph are live, using a rolling procedure that won't be safe to skip.
+Don't run the full package upgrade yet - that's Part 5, done deliberately *after* the cluster and Ceph are live, using a rolling procedure that won't be safe to skip.
 
 ---
 
@@ -112,7 +112,7 @@ repeat for nodes 2 and 3
 
 **4.2 Create monitors and managers on all 3 nodes**
 
-Ceph monitors need an odd number for their own quorum logic - 3 matches your node count exactly. On any node: **Ceph → Monitor → Create**, then **Ceph → Manager → Create**.
+Ceph monitors need an odd number for their own quorum logic - 3 matches your node count exactly. On **each** node: **Ceph → Monitor → Create**, then **Ceph → Manager → Create**.
 
 **4.3 Add OSDs**
 
