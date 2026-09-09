@@ -52,7 +52,7 @@ None of this is invented for the classroom. The role separation in Part 1 and th
 
 ## Procedure
 
-The account you will be logging into is your own account with which you log into proxmox, and this will be the default if no credentials are provided for the rest of the labs, too. Your username is your Net ID, and your password is the one emailed to you that was attached to your Net ID. Outside of that account, there are three accounts that already exist on this host with the following roles - you'll spend the rest of the lab scoping their actual access to match:
+You can deploy the machines in discord using `/deploy` and selecting this assignment. The account you will be logging into is your own account with which you log into proxmox, and this will be the default if no credentials are provided for the rest of the labs, too. Your username is your Net ID, and your password is the one emailed to you that was attached to your Net ID. Outside of that account, there are three accounts that already exist on this host with the following roles - you'll spend the rest of the lab scoping their actual access to match:
 
 - **alice** - full sysadmin for this host.
 - **bob** - the day-to-day operator responsible for DNS specifically. Notably, his role does **not** extend to storage administration - that's a deliberate boundary you'll enforce in Parts 1 and 4, modeling how a real organization separates "network services operator" from "storage administrator" even when one person could technically do both.
