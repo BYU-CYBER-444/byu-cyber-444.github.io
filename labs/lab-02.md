@@ -31,11 +31,11 @@ nav_order: 2
 
 ## Tools Required
 
-- Packages: `bind`, `bind-utils`, `chrony`, `acl`
+- Packages: `bind`, `bind-utils`, `chrony`, `acl`, `firewalld`
 - `firewalld` (enabled by default on a Rocky 9 Server install - if it isn't running, `sudo systemctl enable --now firewalld`)
 
 ```bash
-sudo dnf install -y bind bind-utils chrony acl
+sudo dnf install -y bind bind-utils chrony acl firewalld
 ```
 
 ---
@@ -52,7 +52,7 @@ None of this is invented for the classroom. The role separation in Part 1 and th
 
 ## Procedure
 
-The account you will be logging into is your own account with which you log into proxmox, and this will be the default if no credentials are provided for the rest of the labs, too. Your username is your Net ID, and your password is the one emailed to you that was attached to your Net ID. Outside of that account, there are three accounts that already exist on this host with the following roles - you'll spend the rest of the lab scoping their actual access to match:
+You can deploy the machines in discord using `/deploy` and selecting this assignment. The account you will be logging into is your own account with which you log into proxmox, and this will be the default if no credentials are provided for the rest of the labs, too. Your username is your Net ID, and your password is the one emailed to you that was attached to your Net ID. Outside of that account, there are three accounts that already exist on this host with the following roles - you'll spend the rest of the lab scoping their actual access to match:
 
 - **alice** - full sysadmin for this host.
 - **bob** - the day-to-day operator responsible for DNS specifically. Notably, his role does **not** extend to storage administration - that's a deliberate boundary you'll enforce in Parts 1 and 4, modeling how a real organization separates "network services operator" from "storage administrator" even when one person could technically do both.
@@ -198,19 +198,30 @@ sudo named-checkconf
 sudo named-checkzone lab.internal /var/named/lab.internal.zone
 sudo named-checkzone 0.0.10.in-addr.arpa /var/named/10.0.0.rev
 sudo systemctl enable --now named
+```
+
+On any device, you should have a host firewall blocking everything but required ports in. For RHEL, the default firewall is `firewalld`, which we installed as a prerequisite to this lab. Since we just installed it, we likely will have to start it before we add rules. The default is to block all incoming traffic, so we just need to add our DNS service as allowed.
+```bash
+sudo systemctl enable --now firewalld
 sudo firewall-cmd --permanent --add-service=dns
 sudo firewall-cmd --reload
 ```
+
+Each firewall has its own quirks in how it adds and activates rules. For `firewalld`, any new rules added *without* the `--permanent` flag are activated immediately but go away when the firewall is reloaded or restarted. When you add a rule *with* the `--permanent` flag, it is not activated immediately, so you need to reload the firewall to enable it.
 
 **2.4 Test resolution**
 
 Verify that every record you configured actually resolves against your own server: the `www` A record, the `mail` MX record, the `ftp` CNAME, the reverse (PTR) lookup for `10.0.0.10`, and the TXT records. Confirm the CNAME resolves to `www.lab.internal.` and the PTR lookup returns `www.lab.internal.`.
 
-**2.5 Introduce and diagnose an error**
+Obviously, there is no way for us to verify whether you have independently verified your config. However, troubleshooting a broken configuration is Part 5 of this lab. If you don't figure out how to verify your work up to this point, you're going to need to learn it then anyways and it'll be way trickier.
 
-Temporarily break the zone: change the SOA serial to a lower value than the current serial (e.g., `2020010101`). Reload named, then query the `www` record again and observe what happens.
+<!-- **2.5 Diagnose an error** -->
 
-Restore the correct serial and reload again.
+<!-- Temporarily break the zone: change the SOA serial to a lower value than the current serial (e.g., `2020010101`). Reload named, then query the `www` record again and observe what happens. -->
+
+<!-- You have a second box on your machines with the same zones pre-loaded. However, on this machine the DNS isn't working. Fix the DNS and verify that it is working as intended on this new box. -->
+
+<!-- Restore the correct serial and reload again. -->
 
 **Alternative DNS server implementations**
 
@@ -355,7 +366,7 @@ Treat this like a real incident, not a checklist: use the same diagnostic instin
 
 ## Grading
 
-Autograded from your live system and submitted notes file - the point values below reflect what's checked automatically, not a manual rubric.
+The point values below reflect what's checked automatically from your live systems rather than being a manually graded rubric.
 
 | Item | Points |
 |------|--------|

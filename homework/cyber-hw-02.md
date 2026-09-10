@@ -25,7 +25,7 @@ You are provided:
 - [`cyber-hw-02-audit.sh`]({% link homework/description-files/cyber-hw-02-audit-script.md %}) - the audit script itself
 - [Sample Audit Output]({% link homework/description-files/cyber-hw-02-sample-output.md %}) - reference clean-run and planted-issue output, for calibrating that the script is working correctly on your system
 
-Your instructor has provisioned **four Rocky 9 VMs** for this assignment - one known-clean **HW 2 baseline VM**, plus **three target VMs** - connection details are on Learning Suite. Your username on each is your Net ID, and your password is the one emailed to you at the start of the semester. You are not told in advance what, if anything, is wrong on any of the three targets; that's the point of running an audit rather than being handed a list of known issues.
+Your instructor has provisioned **four Rocky 9 VMs** for this assignment - one known-clean **HW 2 baseline VM**, plus **three target VMs** - You can deploy the machines in discord using `/deploy` and selecting this assignment. Your username on each is your Net ID, and your password is the one emailed to you at the start of the semester. You are not told in advance what, if anything, is wrong on any of the three targets; that's the point of running an audit rather than being handed a list of known issues.
 
 ### Part 1 - Run the Audit (20 pts)
 
