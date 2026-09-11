@@ -30,8 +30,8 @@ nav_order: 3
 
 ## Tools Required
 
-- Your instructor has provisioned a Windows Server 2022 VM for this lab, `lab03-dc01`, with **AD DS already installed and the forest already promoted** - you don't need to run `Install-ADDSForest` yourself (see Part 1)
-- A second provisioned VM, `lab03-radius01` (Ubuntu 22.04), for the FreeRADIUS deployment in Part 8
+- This lab reuses `hw03-addc`, the Windows Server 2022 domain controller you built in HW 3 - **AD DS is already installed and the forest already promoted** (domain `lab.local`) - no new VM needed, and you don't need to run `Install-ADDSForest` yourself (see Part 1). Same login as HW 3: your Net ID, and the password emailed to you at the start of the semester.
+- A newly provisioned VM, `lab03-radius01` (Ubuntu 22.04), for the FreeRADIUS deployment in Part 8. Your username on it is your Net ID, and your password is the one emailed to you at the start of the semester.
 - Group Policy Management Console (GPMC)
 - Active Directory Users & Computers (ADUC)
 - Active Directory Administrative Center (ADAC)
@@ -49,13 +49,13 @@ Active Directory is the trust anchor for most enterprise Windows environments - 
 
 ### Part 1 - Verify the Domain Controller
 
-Your VM template ships with AD DS already installed and the forest already promoted - you don't need to run `Install-ADDSForest` yourself. Start by confirming the domain is healthy:
+`hw03-addc`, the domain controller you already built in HW 3, ships with AD DS already installed and the forest already promoted - you don't need to run `Install-ADDSForest` yourself. Start by confirming the domain is healthy:
    ```powershell
    Get-ADDomain
    dcdiag /test:replications /test:dns /test:netlogon
    netlogon /query
    ```
-   All dcdiag tests must pass. Document any failures.
+   All dcdiag tests must pass.
 
 ### Part 2 - OU Structure Design
 
@@ -98,7 +98,7 @@ $ous = @(
 foreach ($ou in $ous) { New-ADOrganizationalUnit -Path $ou.Split(",",2)[1] -Name $ou.Split("=")[1].Split(",")[0] }
 ```
 
-Adjust the logic as needed for correct parent paths. Screenshot the final OU tree in ADUC.
+Adjust the logic as needed for correct parent paths.
 
 ### Part 3 - User and Group Creation
 
@@ -129,7 +129,7 @@ Create two security groups: `GRP-IT-Staff` and `GRP-Finance-Staff`. Add users to
 
 ### Part 4 - Security Baseline GPO
 
-Create a **Security-Baseline** GPO linked to the domain root. Configure via PowerShell using `secedit` or manually via GPMC - document all settings:
+Create a **Security-Baseline** GPO linked to the domain root. Configure via PowerShell using `secedit` or manually via GPMC:
 
 ```powershell
 $gpo = New-GPO -Name "Security-Baseline" -Comment "CIS L1 password and lockout baseline"
@@ -201,7 +201,7 @@ Start-Process C:\gpresult.html
 # Test lockout: attempt 6 failed logins for ajohnson, verify account locks
 # (Do NOT do this for enovak-adm - the PSO locks after 3 attempts)
 for ($i=1; $i -le 6; $i++) {
-  runas /user:labjohnson /noprofile cmd 2>&1
+  runas /user:ajohnson /noprofile cmd 2>&1
 }
 Get-ADUser ajohnson -Properties LockedOut | Select-Object SamAccountName, LockedOut
 
@@ -220,13 +220,11 @@ Your domain isn't just used by desktop logons - network infrastructure (routers,
 
 1. Find every user whose `sAMAccountName` belongs to a group called `NetworkAdmins` (create this group first and put 2 test users in it):
    ```
-   ldapsearch -x -H ldap://<dc-host> -D "<bind-dn>" -W \
-     -b "<base-dn>" "(&(objectClass=person)(memberOf=cn=NetworkAdmins,...))"
+   ldapsearch -x -H ldap://hw03-addc -D "<bind-dn>" -W \
+     -b "DC=lab,DC=local" "(&(objectClass=person)(memberOf=cn=NetworkAdmins,...))"
    ```
 2. Find every account that is **disabled** (bit 2 set in `userAccountControl` - use filter `(userAccountControl:1.2.840.113556.1.4.803:=2)`).
 3. Find every account whose password has expired or is locked - tie this back to your PSO-protected `enovak-adm` account, and confirm the filter actually returns it after you intentionally lock it.
-
-For each query, write 1-2 sentences explaining **why** that filter syntax produces that result (e.g., what the `:1.2.840.113556.1.4.803:` matching-rule OID means, or why `memberOf` requires the group's full DN rather than its short name).
 
 **Minimal FreeRADIUS deployment:**
 
@@ -247,24 +245,10 @@ In a second terminal, on the same host:
 radtest testuser testpass123 localhost 0 testing123
 ```
 
-Capture the full debug output showing the Access-Request coming in and the Access-Accept going out. Identify in your write-up: which line shows the shared secret being validated, and which line shows the final accept/reject decision.
+Confirm the debug output shows the Access-Request coming in and an Access-Accept going out.
 
 ---
 
-## Deliverables
-
-- `gpresult.html` - GPO application report (attach file)
-- ADUC screenshot showing complete OU structure
-- Security-Baseline GPO settings screenshot (all required settings visible)
-- Audit-Policy GPO advanced audit settings screenshot
-- Lockout test: `Get-ADUser` output showing `LockedOut: True` then `LockedOut: False` after unlock
-- Security event log screenshot showing Event ID 4625 (failed logon) entries from the lockout test
-- PSO verification: `Get-ADUserResultantPasswordPolicy` output for `enovak-adm` vs. `ajohnson`
-- Written reflection (3-4 sentences): Why does the tiered admin model (separate `enovak` and `enovak-adm` accounts) reduce risk compared to a single all-powerful admin account?
-- LDAP filters and outputs for all 3 Part 8 queries, with explanations
-- FreeRADIUS local flat-file debug output (Part 8)
-
----
 
 ## Grading
 
@@ -276,7 +260,7 @@ Capture the full debug output showing the Access-Request coming in and the Acces
 | Audit Policy GPO (Part 5) | 10 |
 | Fine-Grained Password Policy / PSO (Part 6) | 10 |
 | Verification - lockout test, audit events (Part 7) | 13 |
-| LDAP filters with explanations (Part 8) | 15 |
+| LDAP filters and query outputs (Part 8) | 15 |
 | FreeRADIUS local deployment and debug analysis (Part 8) | 15 |
 | **Total** | **100** |
 
