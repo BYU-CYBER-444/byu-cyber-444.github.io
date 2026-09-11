@@ -22,7 +22,7 @@ nav_order: 2
 
 ## Slides
 
-[Linux Administration Fundamentals]({{ site.baseurl }}/lectures/CYBER_444_Week02_Linux_Administration_Fundamentals.pptx)
+[Linux Administration Fundamentals]({{ site.baseurl }}/lectures/CYBER444_Week02_Linux_Administration_Fundamentals.pptx)
 
 ---
 
