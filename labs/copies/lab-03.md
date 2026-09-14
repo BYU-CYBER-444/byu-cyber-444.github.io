@@ -30,12 +30,14 @@ nav_order: 3
 
 ## Tools Required
 
-- This lab reuses `hw03-addc`, the Windows Server 2022 domain controller you built in HW 3 - **AD DS is already installed and the forest already promoted** (domain `lab.local`) - no new VM needed, and you don't need to run `Install-ADDSForest` yourself (see Part 1). Same login as HW 3: your Net ID, and the password emailed to you at the start of the semester.
+- A dedicated VM, `lab03-addc` (Windows Server 2022), for this lab's domain controller - **AD DS is already installed and the forest already promoted** (domain `lab.local`) - you don't need to run `Install-ADDSForest` yourself (see Part 1). Your username is your Net ID, and your password is the one emailed to you at the start of the semester.
 - A newly provisioned VM, `lab03-radius01` (Ubuntu 22.04), for the FreeRADIUS deployment in Part 8. Your username on it is your Net ID, and your password is the one emailed to you at the start of the semester.
 - Group Policy Management Console (GPMC)
 - Active Directory Users & Computers (ADUC)
 - Active Directory Administrative Center (ADAC)
 - `ldapsearch` (from `ldap-utils` / `openldap-clients`)
+
+> **Note on RDP access:** `lab03-addc` is reachable via RDP (Remote Desktop Protocol) on port 3389. Connect using your OS's RDP client (Microsoft Remote Desktop on macOS, the built-in Remote Desktop Connection app on Windows, or Remmina/xfreerdp on Linux), pointing it at the VM's hostname or IP address. Log in with your Net ID and the password emailed to you at the start of the semester. `lab03-radius01` is Ubuntu, so you'll access it over SSH rather than RDP.
 
 ---
 
@@ -49,7 +51,7 @@ Active Directory is the trust anchor for most enterprise Windows environments - 
 
 ### Part 1 - Verify the Domain Controller
 
-`hw03-addc`, the domain controller you already built in HW 3, ships with AD DS already installed and the forest already promoted - you don't need to run `Install-ADDSForest` yourself. Start by confirming the domain is healthy:
+`lab03-addc`, this lab's own domain controller, ships with AD DS already installed and the forest already promoted - you don't need to run `Install-ADDSForest` yourself. Start by confirming the domain is healthy:
    ```powershell
    Get-ADDomain
    dcdiag /test:replications /test:dns /test:netlogon
@@ -61,80 +63,82 @@ Active Directory is the trust anchor for most enterprise Windows environments - 
 
 Design your OU hierarchy to support delegation - each OU represents an administrative boundary. Create the following structure:
 
-```
-lab.local
- OU=Tier0           ← Domain Controllers, privileged admin workstations
-    OU=AdminAccts  ← Tier 0 admin accounts only
- OU=Servers
-    OU=Production
-    OU=Development
- OU=Workstations
-    OU=IT
-    OU=Users
- OU=UserAccounts
-     OU=IT
-     OU=Finance
-     OU=Disabled    ← Accounts pending deletion
+Make this a diagram and not something they can just use
+
+```mermaid
+flowchart TD
+    ROOT["lab.local"]
+    DC["OU=DomainControllers<br/><small>Tier 0</small>"]
+    SRV["OU=Servers<br/><small>Tier 1</small>"]
+    WS["OU=Workstations<br/><small>Tier 2</small>"]
+    UA["OU=UserAccounts<br/><small>Tier 2</small>"]
+
+    ADMIN["OU=AdminAccts<br/><small>Tier 0 admin accounts only</small>"]
+    PROD["OU=Production"]
+    DEV["OU=Development"]
+    ITW["OU=IT"]
+    USR["OU=Users"]
+    ITA["OU=IT"]
+    FIN["OU=Finance"]
+    DIS["OU=Disabled<br/><small>accounts pending deletion</small>"]
+
+    ROOT --> DC
+    ROOT --> SRV
+    ROOT --> WS
+    ROOT --> UA
+
+    DC --> ADMIN
+    SRV --> PROD
+    SRV --> DEV
+    WS --> ITW
+    WS --> USR
+    UA --> ITA
+    UA --> FIN
+    UA --> DIS
+
+    classDef root fill:#1e293b,color:#fff,stroke:#0f172a,stroke-width:1px;
+    classDef tier0 fill:#b45309,color:#fff,stroke:#92400e,stroke-width:1px;
+    classDef tier1 fill:#1d4ed8,color:#fff,stroke:#1e40af,stroke-width:1px;
+    classDef tier2 fill:#0f766e,color:#fff,stroke:#115e59,stroke-width:1px;
+    classDef tier2b fill:#6d28d9,color:#fff,stroke:#5b21b6,stroke-width:1px;
+    classDef disabled fill:#7f1d1d,color:#fff,stroke:#991b1b,stroke-width:1px,stroke-dasharray: 5 3;
+
+    class ROOT root;
+    class DC,ADMIN tier0;
+    class SRV,PROD,DEV tier1;
+    class WS,ITW,USR tier2;
+    class UA,ITA,FIN tier2b;
+    class DIS disabled;
 ```
 
-Create this structure via PowerShell (not GUI - this is a senior course):
 
-```powershell
-$domain = "DC=lab,DC=local"
-$ous = @(
-  "OU=Tier0,$domain",
-  "OU=AdminAccts,OU=Tier0,$domain",
-  "OU=Servers,$domain",
-  "OU=Production,OU=Servers,$domain",
-  "OU=Development,OU=Servers,$domain",
-  "OU=Workstations,$domain",
-  "OU=IT,OU=Workstations,$domain",
-  "OU=Users,OU=Workstations,$domain",
-  "OU=UserAccounts,$domain",
-  "OU=IT,OU=UserAccounts,$domain",
-  "OU=Finance,OU=UserAccounts,$domain",
-  "OU=Disabled,OU=UserAccounts,$domain"
-)
-foreach ($ou in $ous) { New-ADOrganizationalUnit -Path $ou.Split(",",2)[1] -Name $ou.Split("=")[1].Split(",")[0] }
-```
+Create the above structure on your Domain Controller
 
-Adjust the logic as needed for correct parent paths.
 
 ### Part 3 - User and Group Creation
 
-Create test accounts representing different privilege tiers:
-
-```powershell
-# Standard users
-$users = @(
-  @{Name="Alice Johnson"; Sam="ajohnson"; OU="OU=IT,OU=UserAccounts,$domain"; Title="IT Analyst"},
-  @{Name="Bob Martinez"; Sam="bmartinez"; OU="OU=Finance,OU=UserAccounts,$domain"; Title="Financial Analyst"},
-  @{Name="Carol Kim"; Sam="ckim"; OU="OU=Finance,OU=UserAccounts,$domain"; Title="CFO"},
-  @{Name="Dave Singh"; Sam="dsingh"; OU="OU=IT,OU=UserAccounts,$domain"; Title="Help Desk"},
-  @{Name="Eve Novak"; Sam="enovak"; OU="OU=IT,OU=UserAccounts,$domain"; Title="Systems Admin"}
-)
-foreach ($u in $users) {
-  New-ADUser -Name $u.Name -SamAccountName $u.Sam -Path $u.OU -Title $u.Title `
-    -AccountPassword (ConvertTo-SecureString "Lab@444Temp!" -AsPlainText -Force) -Enabled $true
-}
-
-# Privileged admin account for Eve (Tier 0 - separate from her daily-use account)
-New-ADUser -Name "Eve Novak (Admin)" -SamAccountName "enovak-adm" `
-  -Path "OU=AdminAccts,OU=Tier0,$domain" `
-  -AccountPassword (ConvertTo-SecureString "Admin@444Complex#99" -AsPlainText -Force) -Enabled $true
-Add-ADGroupMember -Identity "Domain Admins" -Members "enovak-adm"
-```
+Also just give a table of accounts to create and the details not the commands to run
 
 Create two security groups: `GRP-IT-Staff` and `GRP-Finance-Staff`. Add users to appropriate groups.
 
+Create test accounts representing different privilege tiers:
+
+
+| Name | SamAccountName | OU/Path | Title | Password | Enabled | Notes |
+|---|---|---|---|---|---|---|
+| Alice Johnson | ajohnson | OU=IT,OU=UserAccounts,$domain | IT Analyst | Lab@444Temp! | True | — |
+| Bob Martinez | bmartinez | OU=Finance,OU=UserAccounts,$domain | Financial Analyst | Lab@444Temp! | True | — |
+| Carol Kim | ckim | OU=Finance,OU=UserAccounts,$domain | CFO | Lab@444Temp! | True | — |
+| Dave Singh | dsingh | OU=IT,OU=UserAccounts,$domain | Help Desk | Lab@444Temp! | True | — |
+| Eve Novak | enovak | OU=IT,OU=UserAccounts,$domain | Systems Admin | Lab@444Temp! | True | Standard/daily-use account |
+| Eve Novak (Admin) | enovak-adm | OU=AdminAccts,OU=Tier0,$domain | — | Admin@444Complex#99 | True | Tier 0 privileged account; added to **Domain Admins** group |
+
+
+
+
 ### Part 4 - Security Baseline GPO
 
-Create a **Security-Baseline** GPO linked to the domain root. Configure via PowerShell using `secedit` or manually via GPMC:
-
-```powershell
-$gpo = New-GPO -Name "Security-Baseline" -Comment "CIS L1 password and lockout baseline"
-New-GPLink -Name "Security-Baseline" -Target $domain
-```
+Create a **Security-Baseline** GPO linked to the domain root.
 
 Required settings (Computer Configuration → Windows Settings → Security Settings):
 
@@ -152,10 +156,7 @@ Required settings (Computer Configuration → Windows Settings → Security Sett
 ### Part 5 - Audit Policy GPO
 
 Create a separate **Audit-Policy** GPO and link it to the domain root. Configure Advanced Audit Policy (not legacy):
-
-```
-Computer Config → Windows Settings → Security Settings → Advanced Audit Policy
-```
+ 
 
 | Category | Subcategory | Setting |
 |---|---|---|
@@ -178,16 +179,21 @@ auditpol /get /category:* | Select-String "Account Logon|Account Management|Logo
 
 Standard domain password policy applies to all users. Create a stricter PSO for admin accounts:
 
-```powershell
-New-ADFineGrainedPasswordPolicy -Name "PSO-AdminAccts" -Precedence 10 `
-  -MinPasswordLength 20 -ComplexityEnabled $true -PasswordHistoryCount 24 `
-  -MaxPasswordAge "90.00:00:00" -MinPasswordAge "1.00:00:00" `
-  -LockoutThreshold 3 -LockoutDuration "00:30:00" `
-  -LockoutObservationWindow "00:30:00" -ProtectedFromAccidentalDeletion $true
+| Setting | Value | Explanation |
+|---|---|---|
+| Policy Name | PSO-AdminAccts | Identifier for this Fine-Grained Password Policy (FGPP) object. |
+| Precedence | 10 | Determines which PSO wins if a user is subject to more than one. **Lower number = higher priority.** |
+| Min Password Length | 20 | Minimum number of characters required in the password. |
+| Complexity Enabled | True | Requires the password to mix at least 3 of: uppercase, lowercase, digits, symbols — and disallows the username/parts of it. |
+| Password History Count | 24 | Number of previous passwords remembered per user; prevents reusing any of the last 24 passwords. |
+| Max Password Age | 90 days | How long a password can be used before AD forces a change. |
+| Min Password Age | 1 day | Minimum time that must pass before the password can be changed again — stops someone from cycling through history 24 times in a row to reuse an old password immediately. |
+| Lockout Threshold | 3 attempts | Number of failed logon attempts allowed before the account locks out. |
+| Lockout Duration | 30 minutes | How long the account stays locked before automatically unlocking (or requires admin unlock if set to 0). |
+| Lockout Observation Window | 30 minutes | The rolling time window during which failed attempts are counted toward the lockout threshold. Resets after this period with no failures. |
+| Protected From Accidental Deletion | True | Sets `ProtectedFromAccidentalDeletion` on the AD object so it can't be deleted without first removing that protection flag. |
+| Applied To (Subject) | enovak-adm | The user/group this PSO is linked to via `Add-ADFineGrainedPasswordPolicySubject`. Only subjects explicitly added receive this policy. |
 
-Add-ADFineGrainedPasswordPolicySubject -Identity "PSO-AdminAccts" -Subjects "enovak-adm"
-Get-ADUserResultantPasswordPolicy -Identity "enovak-adm"
-```
 
 Verify the PSO is applied by checking the resultant password policy for `enovak-adm` vs. a standard user.
 
@@ -218,11 +224,24 @@ Your domain isn't just used by desktop logons - network infrastructure (routers,
 
 **LDAP filters (write and run against your domain with `ldapsearch`):**
 
+
+Here's a worked example using a generic setup — with different placeholder values than your lab so it illustrates the pattern without solving your specific exercise:
+
+```
+ldapsearch -x -H ldap://dc01.example.com -D "cn=svc-ldapquery,ou=ServiceAccounts,dc=example,dc=com" -W \
+  -b "dc=example,dc=com" "(&(objectClass=person)(memberOf=cn=Finance-Admins,ou=Groups,dc=example,dc=com))"
+```
+
+| Part of the example | What it maps to |
+|---|---|
+| `dc01.example.com` | A stand-in LDAP server hostname |
+| `cn=svc-ldapquery,ou=ServiceAccounts,dc=example,dc=com` | A stand-in bind DN — a service account with read rights, sitting in a `ServiceAccounts` OU |
+| `dc=example,dc=com` | The search base — root of the fictional `example.com` domain |
+| `cn=Finance-Admins,ou=Groups,dc=example,dc=com` | A stand-in group DN — shows the group living under a `Groups` OU |
+
+
+
 1. Find every user whose `sAMAccountName` belongs to a group called `NetworkAdmins` (create this group first and put 2 test users in it):
-   ```
-   ldapsearch -x -H ldap://hw03-addc -D "<bind-dn>" -W \
-     -b "DC=lab,DC=local" "(&(objectClass=person)(memberOf=cn=NetworkAdmins,...))"
-   ```
 2. Find every account that is **disabled** (bit 2 set in `userAccountControl` - use filter `(userAccountControl:1.2.840.113556.1.4.803:=2)`).
 3. Find every account whose password has expired or is locked - tie this back to your PSO-protected `enovak-adm` account, and confirm the filter actually returns it after you intentionally lock it.
 

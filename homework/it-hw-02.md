@@ -43,7 +43,7 @@ A colleague already built and deployed this environment on a Rocky Linux 9 host:
 For each service (DNS/BIND, DHCP/ISC, NFS):
 
 1. **Architecture decision record** - why this service is configured the way it is. Include at least one alternative design you considered and why you rejected it. ("That's just how it was configured" is not acceptable.)
-2. **Key configuration explained** - annotate the provided config file inline, explaining the purpose of every non-default setting. Paste the annotated config directly in the write-up.
+2. **Key configuration explained** - annotate the provided config file inline, explaining the purpose of every non-default setting. Paste the annotated config directly in the write-up, and also commit it under `homework/assets/` per the Deliverables list below.
 3. **Verification runbook** - the exact commands an admin would run to verify the service is healthy from scratch, with the expected output for each command.
 4. **Security hardening applied** - list every hardening decision reflected in the provided configuration, with the specific config line responsible. Minimum 3 per service.
 5. **Failure mode analysis** - for the two most likely failure scenarios for each service: describe the symptom a user would report, the diagnostic commands you would run (in order), and what each command's output would tell you.
@@ -58,14 +58,17 @@ The environment in Part 2 put `/exports` on an LVM volume from the start rather 
 
 ## Deliverable(s)
 
-In your GitHub repo write your full report in `homework/it-hw-02.md`. Commit your working (corrected) configs to `homework/assets/`:
+In your GitHub repo write your full report in `homework/it-hw-02.md` - a single file covering Parts 1, 2, and 3. Commit the following to `homework/assets/`:
 
-- `it-hw-02-named.conf` - corrected, annotated BIND config
-- `it-hw-02-lab.internal.zone` - corrected forward zone file
-- `it-hw-02-10.0.0.rev` - corrected reverse zone file
-- `it-hw-02-dhcpd.conf` - corrected DHCP config
-- `it-hw-02-exports` - corrected NFS exports file
 - `it-hw-02-audit.md` - your config audit table (Part 1)
+- `it-hw-02-named.conf` - the Part 2 BIND config, annotated
+- `it-hw-02-lab.internal.zone` - the Part 2 forward zone file, annotated
+- `it-hw-02-10.0.0.rev` - the Part 2 reverse zone file, annotated
+- `it-hw-02-dhcpd.conf` - the Part 2 DHCP config, annotated
+- `it-hw-02-exports` - the Part 2 NFS exports file, annotated
+
+{: .note }
+The annotated configs above are the **Part 2** working environment's files with your inline annotations added - not fixed versions of the intentionally-broken Part 1 files. Part 1 is graded entirely on the audit table; you are not asked to submit corrected versions of the broken configs.
 
 Open a PR titled `IT HW 2 - Linux Network Services` and submit the assignment to be graded through the discord bot using `/grade`.
 

@@ -17,7 +17,7 @@ Slide decks are provided as PowerPoint (.pptx) files.
 | Week | Topic |
 |---|---|
 | [1]({% link schedule/week-01.md %}) | [Introduction & Environment Setup]({{ site.baseurl }}/lectures/CYBER444_Week01_Introduction_and_Environment_Setup.pptx) | 
-| [2]({% link schedule/week-02.md %}) | [Linux Administration Fundamentals]({{ site.baseurl }}/lectures/CYBER444_Week02_Linux_Administration_and_Security.pptx) | 
+| [2]({% link schedule/week-02.md %}) | [Linux Administration Fundamentals]({{ site.baseurl }}/lectures/CYBER444_Week02_Linux_Administration_Fundamentals.pptx) | 
 | [3]({% link schedule/week-03.md %}) | [Windows Server Administration]({{ site.baseurl }}/lectures/CYBER444_Week03_Windows_Server_Administration.pptx) | 
 | [4]({% link schedule/week-04.md %}) | [Windows Hardening & Email Security]({{ site.baseurl }}/lectures/CYBER444_Week04_Windows_Hardening_and_email_security.pptx) | 
 | [5]({% link schedule/week-05.md %}) | [PKI & Certificate Management]({{ site.baseurl }}/lectures/CYBER444_Week05_PKI_and_Certificate_Mnagement.pptx)  | 
