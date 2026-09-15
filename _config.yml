@@ -40,6 +40,13 @@ defaults:
 # Heading anchor links
 heading_anchors: true
 
+# Mermaid diagram support (just-the-docs native integration) - without
+# this, a ```mermaid fenced block just renders as a literal code block
+# (Kramdown emits <pre><code class="language-mermaid">...), since nothing
+# loads the mermaid.js runtime or calls mermaid.initialize() otherwise.
+mermaid:
+  version: "9.4.3"
+
 # Footer links
 #footer_content: "CYBER 444 · Advanced System Administration &amp; Hardening · <a href='https://github.com/[your-username]/cyb4400'>View on GitHub</a>"
 
