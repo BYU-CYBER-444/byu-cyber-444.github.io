@@ -30,14 +30,16 @@ nav_order: 3
 
 ## Tools Required
 
-- A dedicated VM, `lab03-addc` (Windows Server 2022), for this lab's domain controller - **AD DS is already installed and the forest already promoted** (domain `lab.local`) - you don't need to run `Install-ADDSForest` yourself (see Part 1). Your username is your Net ID, and your password is the one emailed to you at the start of the semester.
+- A dedicated VM, `lab03-addc` (Windows Server 2022), for this lab's domain controller - **AD DS is already installed and the forest already promoted** (domain `lab3.local`) - you don't need to run `Install-ADDSForest` yourself (see Part 1). Your username is your Net ID, and your password is the one emailed to you at the start of the semester.
 - A newly provisioned VM, `lab03-radius01` (Rocky Linux 9), for the FreeRADIUS deployment in Part 8. Your username on it is your Net ID, and your password is the one emailed to you at the start of the semester.
 - Group Policy Management Console (GPMC)
 - Active Directory Users & Computers (ADUC)
 - Active Directory Administrative Center (ADAC)
 - `ldapsearch` (from `ldap-utils` / `openldap-clients`)
 
-> **Note on RDP access:** `lab03-addc` is reachable via RDP (Remote Desktop Protocol) on port 3389. Connect using your OS's RDP client (Microsoft Remote Desktop on macOS, the built-in Remote Desktop Connection app on Windows, or Remmina/xfreerdp on Linux), pointing it at the VM's hostname or IP address. Log in with your Net ID and the password emailed to you at the start of the semester. `lab03-radius01` is Rocky Linux, so you'll access it over SSH rather than RDP.
+> **Note on RDP access:** `lab03-addc` is reachable via RDP, at `172.19.x.14`, where `x` is the third octet of your own nested subnet (the same one your `pve1`/`pve2`/`pve3` VMs live on). Connect using your OS's RDP client (Microsoft Remote Desktop on macOS, the built-in Remote Desktop Connection app on Windows, or Remmina/xfreerdp on Linux). Log in with your Net ID and the password emailed to you at the start of the semester. You might see a black screen for a minute or two the first time you connect while it sets up your profile.
+>
+> `lab03-radius01` is Rocky Linux, so you'll access it over SSH rather than RDP, at `172.19.x.13`.
 
 ---
 
@@ -260,7 +262,7 @@ Confirm the debug output shows the Access-Request coming in and an Access-Accept
 
 A flat file doesn't scale past one box, and it isn't "centralized" AAA - the whole point is authenticating against the same directory your desktops already trust. FreeRADIUS ships an `ldap` module (`/etc/raddb/mods-available/ldap`, from the `freeradius-ldap` package installed above) that can look a user up in a directory and validate their password against it. To wire it to `lab03-addc`:
 
-- Point the module's `server`/`base_dn` directives at `lab03-addc` and `DC=lab,DC=local`, and give it a bind identity with rights to search the directory (your own domain-admin-equivalent login works fine for lab purposes - a dedicated low-privilege service account would be the production-grade choice).
+- Point the module's `server`/`base_dn` directives at `lab03-addc` (`172.19.x.14` - use the IP, not the hostname, since a bare Rocky box has no way to resolve a Windows machine's name on its own) and `DC=lab,DC=local`, and give it a bind identity with rights to search the directory (your own domain-admin-equivalent login works fine for lab purposes - a dedicated low-privilege service account would be the production-grade choice).
 - Symlink the module from `mods-available/` into `mods-enabled/` so FreeRADIUS actually loads it.
 - Reference `ldap` from the `default` site's `authorize {}` section, so a username FreeRADIUS doesn't recognize in the local `users` file falls through to a directory lookup.
 - Add an `Auth-Type LDAP { ldap }` block to `authenticate {}` - AD only supports validating a password via a full LDAP simple-bind *as that user*, not a hash comparison, so this has to be an explicit authentication method, not just a lookup.
@@ -288,13 +290,13 @@ If the first `radtest` doesn't return Access-Accept, check the debug window for 
 3. In `/etc/pam.d/sshd`, add the RADIUS PAM module - but guard it with a `pam_succeed_if` check so it only ever applies **when the login is for `ajohnson`**. This is the important part: an unscoped change here would route every SSH login on the box (including your own, and the TA account graded logins use) through RADIUS, and any mistake in your RADIUS config would lock everyone out, not just this one test account.
 4. Confirm `sshd_config` has PAM-based authentication actually enabled (`UsePAM yes`, plus `KbdInteractiveAuthentication yes` - or `ChallengeResponseAuthentication yes` on older OpenSSH versions).
 
-Verify with a real login - not `testuser`, and not from the domain controller (SSH from your own machine, or from a second session into `lab03-radius01`):
+Verify with a real login - not `testuser`, and not from the domain controller (SSH from your own machine, or from a second session into `lab03-radius01`). Use the IP (`172.19.x.13`, same `x` as Tools Required) rather than the hostname - your own machine has no way to resolve `lab03-radius01` on its own:
 
 ```bash
-ssh ajohnson@lab03-radius01
+ssh ajohnson@172.19.x.13
 # password prompt: enter Lab@444Temp! (ajohnson's real AD password) - should succeed
 
-ssh ajohnson@lab03-radius01
+ssh ajohnson@172.19.x.13
 # password prompt: enter anything wrong - should be rejected
 ```
 
@@ -312,10 +314,10 @@ If this works, you've just logged into a Linux machine using nothing but an Acti
 | Audit Policy GPO (Part 5) | 10 |
 | Fine-Grained Password Policy / PSO (Part 6) | 10 |
 | Verification - lockout test, audit events (Part 7) | 13 |
-| LDAP filters and query outputs (Part 8) | 15 |
-| FreeRADIUS local deployment and debug analysis (Part 8) | 15 |
-| FreeRADIUS authentication backed by Active Directory via LDAP (Part 8) | 15 |
-| A real RADIUS-gated SSH login, scoped safely to one account (Part 8) | 15 |
-| **Total** | **130** |
+| LDAP filters and query outputs (Part 8) | 8 |
+| FreeRADIUS local deployment and debug analysis (Part 8) | 7 |
+| FreeRADIUS authentication backed by Active Directory via LDAP (Part 8) | 8 |
+| A real RADIUS-gated SSH login, scoped safely to one account (Part 8) | 7 |
+| **Total** | **100** |
 
 [← Back to Labs]({{ site.baseurl }}/labs/)
