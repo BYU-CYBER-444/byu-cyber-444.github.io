@@ -30,16 +30,16 @@ nav_order: 3
 
 ## Tools Required
 
-- A dedicated VM, `lab03-addc` (Windows Server 2022), for this lab's domain controller - **AD DS is already installed and the forest already promoted** (domain `lab.local`) - you don't need to run `Install-ADDSForest` yourself (see Part 1). Your username is your Net ID, and your password is the one emailed to you at the start of the semester.
+- A dedicated VM, `lab03-addc` (Windows Server 2022), for this lab's domain controller - **AD DS is already installed and the forest already promoted** (domain `lab3.local`) - you don't need to run `Install-ADDSForest` yourself (see Part 1). Your username is your Net ID, and your password is the one emailed to you at the start of the semester.
 - A newly provisioned VM, `lab03-radius01` (Rocky Linux 9), for the FreeRADIUS deployment in Part 8. Your username on it is your Net ID, and your password is the one emailed to you at the start of the semester.
 - Group Policy Management Console (GPMC)
 - Active Directory Users & Computers (ADUC)
 - Active Directory Administrative Center (ADAC)
 - `ldapsearch` (from `ldap-utils` / `openldap-clients`)
 
-> **Note on RDP access:** `lab03-addc` is reachable via RDP (Remote Desktop Protocol) on port 3389, at `172.19.x.14`, where `x` is the third octet of your own nested subnet (the same one your `pve1`/`pve2`/`pve3` VMs live on). Connect using your OS's RDP client (Microsoft Remote Desktop on macOS, the built-in Remote Desktop Connection app on Windows, or Remmina/xfreerdp on Linux). Log in with your Net ID and the password emailed to you at the start of the semester. You might see a black screen for a minute or two the first time you connect while it sets up your profile.
+> **Note on RDP access:** `lab03-addc` is reachable via RDP, at `172.19.x.14`, where `x` is the third octet of your own nested subnet (the same one your `pve1`/`pve2`/`pve3` VMs live on). Connect using your OS's RDP client (Microsoft Remote Desktop on macOS, the built-in Remote Desktop Connection app on Windows, or Remmina/xfreerdp on Linux). Log in with your Net ID and the password emailed to you at the start of the semester. You might see a black screen for a minute or two the first time you connect while it sets up your profile.
 >
-> `lab03-radius01` is Rocky Linux, so you'll access it over SSH rather than RDP, at `172.19.x.13` (same `x` as above).
+> `lab03-radius01` is Rocky Linux, so you'll access it over SSH rather than RDP, at `172.19.x.13`.
 
 ---
 
