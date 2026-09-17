@@ -24,7 +24,7 @@ nav_order: 3
 - Implement a security baseline GPO and a separate audit policy GPO
 - Configure Fine-Grained Password Policy (PSO) for privileged accounts
 - Test and verify policy application, account lockout, and audit logging
-- Write and test LDAP search filters against the domain, and deploy a minimal FreeRADIUS instance backed by it
+- Deploy a minimal FreeRADIUS instance that authenticates against the domain, scoped to a specific admin group
 
 ---
 
@@ -124,7 +124,7 @@ Create the following test accounts, representing different privilege tiers:
 | Eve Novak | enovak | OU=IT,OU=UserAccounts,DC=lab3,DC=local | Systems Admin | Lab@444Temp! | True | Standard/daily-use account |
 | Eve Novak (Admin) | enovak-adm | OU=AdminAccts,OU=Tier0,DC=lab3,DC=local | — | Admin@444Complex#99 | True | Tier 0 privileged account; added to **Domain Admins** group |
 
-Then create two security groups, `GRP-IT-Staff` and `GRP-Finance-Staff`, and add each user to the group matching their department: `ajohnson`, `dsingh`, and `enovak` → `GRP-IT-Staff`; `bmartinez` and `ckim` → `GRP-Finance-Staff`. `enovak-adm` is a Tier 0 credential and shouldn't go in either staff group.
+Then create three security groups - `GRP-IT-Staff`, `GRP-Finance-Staff`, and `NetworkAdmins` (this last one comes back in Part 8 to actually restrict who FreeRADIUS lets authenticate) - and add each user to the group(s) matching their role: `ajohnson`, `dsingh`, and `enovak` → `GRP-IT-Staff`; `bmartinez` and `ckim` → `GRP-Finance-Staff`; `ajohnson` and `dsingh` also go in `NetworkAdmins`. `enovak-adm` is a Tier 0 credential and shouldn't go in any of these.
 
 ### Part 4 - Security Baseline GPO
 
@@ -211,9 +211,9 @@ Unlock-ADAccount -Identity ajohnson
 Get-WinEvent -LogName Security | Where-Object {$_.Id -eq 4625} | Select-Object -First 5 | Format-List
 ```
 
-### Part 8 - Centralized AAA: LDAP Queries & RADIUS
+### Part 8 - Centralized AAA via RADIUS
 
-Your domain isn't just used by desktop logons - network infrastructure (routers, switches, VPN concentrators) authenticates administrators against a central directory too, using RADIUS instead of Kerberos/NTLM. This part gives you hands-on time with the query language itself and a minimal RADIUS deployment backed by your domain, in four steps: write LDAP filters against your domain, get a local RADIUS instance running, back it with AD instead of a flat file, then gate a real login behind it.
+Your domain isn't just used by desktop logons - network infrastructure (routers, switches, VPN concentrators) authenticates administrators against a central directory too, using RADIUS instead of Kerberos/NTLM. This part gives you hands-on time with a minimal RADIUS deployment that authenticates directly against your domain.
 
 #### RADIUS/AAA Basics
 
@@ -242,29 +242,6 @@ sequenceDiagram
     end
 ```
 
-Map this back to what you actually built: `radtest` plays the Switch's role, your `ldap` module config is what makes the RADIUS→AD arrow real, and the LDAP simple-bind step is exactly why AD login attempts, expired passwords, and lockouts all show up the way they do in your `radtest` results.
-
-#### LDAP Filters
-
-Write and run these against your domain with `ldapsearch`, from `lab03-radius01`. Here's a worked example using a generic setup — with different placeholder values than your lab so it illustrates the pattern without solving your specific exercise:
-
-```
-ldapsearch -x -H ldap://dc01.example.com -D "cn=svc-ldapquery,ou=ServiceAccounts,dc=example,dc=com" -W \
-  -b "dc=example,dc=com" "(&(objectClass=person)(memberOf=cn=Finance-Admins,ou=Groups,dc=example,dc=com))"
-```
-
-| Part of the example | What it maps to |
-|---|---|
-| `dc01.example.com` | A stand-in LDAP server hostname |
-| `cn=svc-ldapquery,ou=ServiceAccounts,dc=example,dc=com` | A stand-in bind DN — a service account with read rights, sitting in a `ServiceAccounts` OU |
-| `dc=example,dc=com` | The search base — root of the fictional `example.com` domain |
-| `cn=Finance-Admins,ou=Groups,dc=example,dc=com` | A stand-in group DN — shows the group living under a `Groups` OU |
-
-Three filters to write and run for real, checking your own output against what each should return:
-
-1. Find every user whose `sAMAccountName` belongs to a group called `NetworkAdmins` (create this group first and put 2 test users in it) - your results should be exactly those 2 accounts, no more, no fewer.
-2. Find every account that is **disabled**. AD exposes a special LDAP matching-rule OID, `1.2.840.113556.1.4.803`, for testing whether a specific bit is set in a numeric attribute like `userAccountControl` - look up Microsoft's `userAccountControl` flag reference to find which decimal value corresponds to the "account disabled" bit, then build the filter yourself. `krbtgt` is a built-in account that's always disabled by default in every AD domain - if your filter doesn't return it, the filter is wrong, not the domain.
-3. Find every account whose password has expired or is locked - tie this back to your PSO-protected `enovak-adm` account: run the filter once before locking it (should NOT appear), intentionally lock it (Part 7's lockout technique works fine here too), then run the same filter again (now it should appear).
 
 #### FreeRADIUS Backed by Active Directory
 
@@ -282,6 +259,7 @@ FreeRADIUS ships an `ldap` module (`/etc/raddb/mods-available/ldap`, from the `f
 - Reference `ldap` from the `default` site's `authorize {}` section, so a submitted username gets looked up via a directory lookup.
 - Add an `Auth-Type LDAP { ldap }` block to `authenticate {}` - AD only supports validating a password via a full LDAP simple-bind *as that user*, not a hash comparison, so this has to be an explicit authentication method, not just a lookup.
 - Since that bind sends the password in the clear over the LDAP connection, keep the RADIUS client side on PAP (the default `radtest` uses) rather than CHAP/MSCHAP, which AD's LDAP bind can't validate this way.
+- Any domain account working isn't realistic - a real deployment gating switch/router logins would only let actual network admins in. Restrict who FreeRADIUS will even authenticate to members of your `NetworkAdmins` group (the one you built back in Part 3). The module's `user { filter = ... }` block already has a second, commented-out version of the lookup filter built for exactly this - built around AD's `LDAP_MATCHING_RULE_IN_CHAIN` OID rather than a plain `memberOf=` clause, which matters because it walks *nested* group membership too, not just direct members. Swap to that version and point its group reference at `NetworkAdmins` instead of the placeholder group name it ships with.
 
 With that in place, start it in debug mode:
 
@@ -291,29 +269,15 @@ sudo radiusd -X   # run in foreground debug mode, leave this terminal open
 
 Read the startup output before moving on - this command may not come up cleanly on the first try. That's expected: a couple of FreeRADIUS's default-enabled pieces need a bit of one-time setup on a fresh install before the daemon will fully start, and diagnosing *why* a service won't come up from its own startup log is a real skill, not a detour from the lab. Don't move on until `radiusd -X` reaches a steady "Ready to process requests" state with no errors above it.
 
-In a second terminal, on the same host, test against one of your own Part 3 domain accounts:
+In a second terminal, on the same host, test against your own Part 3 domain accounts:
 
 ```bash
-radtest ajohnson 'Lab@444Temp!' localhost 0 testing123    # expect Access-Accept
+radtest ajohnson 'Lab@444Temp!' localhost 0 testing123    # expect Access-Accept - ajohnson is in NetworkAdmins
 radtest ajohnson 'wrong-password' localhost 0 testing123  # expect Access-Reject - proves it's really checking AD, not accepting anything
+radtest bmartinez 'Lab@444Temp!' localhost 0 testing123   # expect Access-Reject - bmartinez's password is correct, but bmartinez isn't in NetworkAdmins
 ```
 
-If the first `radtest` doesn't return Access-Accept, check the debug window for an LDAP bind error before troubleshooting anything else - a bad bind DN/password or an unreachable `server` value is the most common cause.
-
-#### Gate a Real Login Behind RADIUS
-
-`radtest` only ever *simulates* a NAS talking to your RADIUS server - it never actually logs anyone into anything. To see this for real, make one SSH login on `lab03-radius01` itself require RADIUS.
-
-> **Safety first:** you're about to change how SSH authenticates on this box. Keep your current SSH session open while you test - don't log out until you've confirmed the change works, so a mistake can't lock you out. Scope the change to a single, dedicated account rather than your own login (see below) so there's no way this affects your own access or the TA account used for grading.
-
-1. Install FreeRADIUS's PAM client - it comes from EPEL, not the base repos, so you'll need to enable that first - and point its config at your own FreeRADIUS server, using the shared secret you're already using with `radtest`.
-2. Create a new local Linux user named `ajohnson` with **no local password** (a disabled/locked password, so there's nothing for it to fall back to) - this account exists purely so RADIUS has something to authenticate.
-3. In SSH's PAM configuration, add the RADIUS PAM module - but guard it so it only ever applies **when the login is for `ajohnson`**. This is the important part: an unscoped change here would route every SSH login on the box (including your own, and the TA account graded logins use) through RADIUS, and any mistake in your RADIUS config would lock everyone out, not just this one test account.
-4. Confirm SSH itself has PAM-based authentication actually enabled, and that it's actually reloaded/restarted after any config change - it won't pick up an edit on its own.
-
-Verify with a real login - not `testuser`, and not from the domain controller (SSH from your own machine, or from a second session into `lab03-radius01`, using the IP from Tools Required rather than the hostname, since your own machine has no way to resolve `lab03-radius01` on its own). Try it with `ajohnson`'s real AD password first - it should succeed - then try it again with a wrong password, which should be rejected.
-
-If this works, you've just logged into a Linux machine using nothing but an Active Directory credential, validated end to end through RADIUS and LDAP - the same mechanism a real switch or VPN concentrator relies on.
+If the first `radtest` doesn't return Access-Accept, check the debug window for an LDAP bind error before troubleshooting anything else - a bad bind DN/password or an unreachable `server` value is the most common cause. If the third one unexpectedly succeeds, your filter is still matching on password alone and isn't actually enforcing group membership.
 
 ---
 
@@ -322,14 +286,12 @@ If this works, you've just logged into a Linux machine using nothing but an Acti
 | Item | Points |
 |------|--------|
 | OU structure design and verification (Parts 1-2) | 15 |
-| User and group creation (Part 3) | 10 |
+| User and group creation (Part 3) | 13 |
 | Security Baseline GPO (Part 4) | 12 |
 | Audit Policy GPO (Part 5) | 10 |
 | Fine-Grained Password Policy / PSO (Part 6) | 10 |
 | Verification - lockout test, audit events (Part 7) | 13 |
-| LDAP filters and query outputs (Part 8) | 8 |
-| FreeRADIUS installed and authenticating against Active Directory via LDAP (Part 8) | 15 |
-| A real RADIUS-gated SSH login, scoped safely to one account (Part 8) | 7 |
+| FreeRADIUS installed and authenticating against Active Directory via LDAP, scoped to NetworkAdmins (Part 8) | 27 |
 | **Total** | **100** |
 
 [← Back to Labs]({{ site.baseurl }}/labs/)
