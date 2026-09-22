@@ -295,13 +295,13 @@ If the first `radtest` doesn't return Access-Accept, check the debug window for 
 
 | Item | Points |
 |------|--------|
-| OU structure design and verification (Parts 1-2) | 15 |
-| User and group creation (Part 3) | 13 |
-| Security Baseline GPO (Part 4) | 12 |
-| Audit Policy GPO (Part 5) | 10 |
-| Fine-Grained Password Policy / PSO (Part 6) | 10 |
-| Verification - lockout test, audit events (Part 7) | 13 |
-| FreeRADIUS installed and authenticating against Active Directory via LDAP, scoped to NetworkAdmins (Part 8) | 27 |
+| OU structure design and verification (Parts 1-2) | 20 |
+| User and group creation (Part 3) | 18 |
+| Security Baseline GPO (Part 4) | 16 |
+| Audit Policy GPO (Part 5) | 14 |
+| Fine-Grained Password Policy / PSO (Part 6) | 14 |
+| Verification - lockout test, audit events (Part 7) | 18 |
 | **Total** | **100** |
+| FreeRADIUS installed and authenticating against Active Directory via LDAP, scoped to NetworkAdmins (Part 8) | **27 (Extra Credit)** |
 
 [← Back to Labs]({{ site.baseurl }}/labs/)

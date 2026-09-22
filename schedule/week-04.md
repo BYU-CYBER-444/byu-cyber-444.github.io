@@ -23,7 +23,7 @@ nav_order: 4
 
 ## Slides
 
-[Windows Hardening and DNS/Email Security.pptx]({{ site.baseurl }}/lectures/CYBER_444_Week04_Windows_Hardening_and_DNS_Email_Security.pptx)
+[Windows Hardening and DNS/Email Security.pptx]({{ site.baseurl }}/lectures/CYBER444_Week04_Windows_Hardening_and_email_security.pptx)
 
 ---
 
