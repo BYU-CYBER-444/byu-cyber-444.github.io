@@ -251,13 +251,11 @@ On `lab03-radius01` (do not run this on the domain controller itself), install F
 sudo dnf install -y freeradius freeradius-utils freeradius-ldap
 ```
 
-FreeRADIUS ships an `ldap` module (`/etc/raddb/mods-available/ldap`, from the `freeradius-ldap` package you just installed) that can look a user up in a directory and validate their password against it. To wire it to `lab03-addc` (`172.19.x.14` - use the IP, not the hostname, since a bare Rocky box has no way to resolve a Windows machine's name on its own):
+FreeRADIUS ships an `ldap` module (`/etc/raddb/mods-available/ldap`, from the `freeradius-ldap` package you just installed) that can look a user up in a directory and validate their password against it. To wire it to the DC (use the IP of `172.19.x.14`, not the hostname, since you don't have any custom DNS set up. Though if you want to set up DNS instead of just pointing to an IP address, be my guest):
 
-- Create a dedicated account for FreeRADIUS's own bind/search first - a plain domain user is enough, not Domain Admin: AD's default permissions already let any authenticated account search and bind against the directory for this purpose. This is the account whose credentials end up sitting in a plaintext config file on `lab03-radius01`, so it should never be your own login or any other Domain Admin account - scope the blast radius of that config file to "can search/bind," nothing more.
+- Radius needs an account with which to "bind" (or connect) to the server, so first you need to create a new account. Call it whatever you want, just keep track of its password and username for later. This should be separate from any existing account with permissions, since the only permissions it needs is a valid login to the DC. This is the account whose credentials end up sitting in a plaintext config file on `lab03-radius01`, so it should never be your own login or any other Domain Admin account - scope the blast radius of that config file to "can search/bind," nothing more.
 
-  **Permissions this account actually needs: none beyond the default.** Don't add it to Domain Admins, don't delegate any OU rights to it, don't put it in any custom group at all - leave it exactly as `New-ADUser` creates it (a member of the built-in `Domain Users` group and nothing else). AD's own built-in ACLs already grant every `Authenticated Users` principal read access to the attributes a simple bind/search actually touches (`sAMAccountName`, `memberOf`, `userAccountControl`, and so on) - that's what makes "plain domain user" sufficient in the first place, not a delegation you have to set up yourself. If you find yourself granting this account anything beyond that, that's a sign something else about your filter/bind configuration is wrong, not that the account needs more rights.
-
-- Point the module's `server`/`base_dn` directives at `172.19.x.14` and `DC=lab3,DC=local`, and give it that new account as its bind identity. Here's what those four directives look like filled in for a generic setup - different placeholder values than your lab, so it illustrates the shape of the edit without solving it for you:
+- Point the module's `server`/`base_dn` directives at `172.19.x.14` and `DC=lab3,DC=local`, and give it that new account as its bind identity. Here's an example config for the four components you need to fill out:
 
   ```
   server = 'dc01.example.com'
@@ -267,9 +265,10 @@ FreeRADIUS ships an `ldap` module (`/etc/raddb/mods-available/ldap`, from the `f
   ```
 
 - Symlink the module from `mods-available/` into `mods-enabled/` so FreeRADIUS actually loads it.
-- Reference `ldap` from the `default` site's `authorize {}` section, so a submitted username gets looked up via a directory lookup.
-- Add an `Auth-Type LDAP { ldap }` block to `authenticate {}` - AD only supports validating a password via a full LDAP simple-bind *as that user*, not a hash comparison, so this has to be an explicit authentication method, not just a lookup.
-- Since that bind sends the password in the clear over the LDAP connection, keep the RADIUS client side on PAP (the default `radtest` uses) rather than CHAP/MSCHAP, which AD's LDAP bind can't validate this way.
+- Now that you have a functional "mod" for LDAP, there are edits that need to be made to the default "site" for Radius (`/etc/raddb/sites-available/default`):
+  - By default, `ldap` is referenced `authorize {}` section, so a submitted username gets looked up via a directory lookup. Currently, that looks like `-ldap`. Find that line, verify its existence, and figure out if it needs to be changed and why.
+  - Uncomment the default `Auth-Type LDAP { ldap }` block in `authenticate {}` - AD only supports validating a password via a full LDAP simple-bind *as that user*, not a hash comparison, so this has to be an explicit authentication method, not just a lookup.
+<!-- - Since that bind sends the password in the clear over the LDAP connection, keep the RADIUS client side on PAP (the default `radtest` uses) rather than CHAP/MSCHAP, which AD's LDAP bind can't validate this way. -->
 - Any domain account working isn't realistic - a real deployment gating switch/router logins would only let actual network admins in. Restrict who FreeRADIUS will even authenticate to members of your `NetworkAdmins` group (the one you built back in Part 3). The module's `user { filter = ... }` block already has a second, commented-out version of the lookup filter built for exactly this - built around AD's `LDAP_MATCHING_RULE_IN_CHAIN` OID rather than a plain `memberOf=` clause, which matters because it walks *nested* group membership too, not just direct members. Swap to that version and point its group reference at `NetworkAdmins` instead of the placeholder group name it ships with.
 
 With that in place, start it in debug mode:
