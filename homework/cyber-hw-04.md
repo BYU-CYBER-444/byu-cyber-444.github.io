@@ -25,9 +25,9 @@ This is a theoretical, written exercise - no VM, script, or lab environment requ
 
 Choose **15 of the 20 findings** from the [Configuration Snapshot]({% link homework/description-files/cyber-hw-04-server-config.md %}) and document each as a complete hardening control record:
 
-| Control # | CIS ID | DISA STIG Rule ID | Control Name | Default State | Hardened State | Implementation Method | Registry Path / GPO Path | How to Verify | Security Impact | Operational Impact |
-|---|---|---|---|---|---|---|---|---|---|---|
-| Ex. | CIS 2.3.7.1 *(example only - not one of the 20 findings; illustrates the expected format)* | WN22-SO-000200 | Interactive logon: Do not display last signed-in | Disabled (logon screen shows the last user's name) | Enabled (last signed-in username is hidden) | GPO: Computer Configuration > Windows Settings > Security Settings > Local Policies > Security Options > "Interactive logon: Do not display last signed-in" | `HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayLastUserName = 1` | Read the registry value and confirm it equals `1` | Confidentiality - prevents username harvesting via shoulder-surfing or a photographed logon screen (T1589 - Gather Victim Identity Information) | Minor - users who rely on a pre-filled username at the logon screen must now type it themselves |
+| Control # | Control Name | Default State | Hardened State | Implementation Method | Registry Path / GPO Path | How to Verify | Security Impact | Operational Impact |
+|---|---|---|---|---|---|---|---|---|
+| Ex. | Interactive logon: Do not display last signed-in | Disabled (logon screen shows the last user's name) | Enabled (last signed-in username is hidden) | GPO: Computer Configuration > Windows Settings > Security Settings > Local Policies > Security Options > "Interactive logon: Do not display last signed-in" | `HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayLastUserName = 1` | Read the registry value and confirm it equals `1` | Confidentiality - prevents username harvesting via shoulder-surfing or a photographed logon screen (T1589 - Gather Victim Identity Information) | Minor - users who rely on a pre-filled username at the logon screen must now type it themselves |
 
 **Default State** for each control comes directly from the Configuration Snapshot - use the stated current value, don't invent a different one.
 
@@ -87,7 +87,7 @@ Ground your write-up in the specifics of your own work: for hands-on assignments
 
 | Criterion | Points |
 |---|---|
-| 15 controls - CIS ID, STIG ID, registry/GPO path, ATT&CK mapping | 75 |
+| 15 controls - registry/GPO path, ATT&CK mapping | 75 |
 | Attack scenario analysis - specific event IDs, control mapping | 15 |
 | Compensating controls - equivalent intent, monitoring added | 10 |
 
