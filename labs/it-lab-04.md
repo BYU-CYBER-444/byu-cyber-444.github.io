@@ -305,7 +305,8 @@ flowchart TD
 
 **2.1 Create SPF record**
 
-For `lab.internal`, create a TXT record authorizing only your mail server (10.0.0.20). Reading the mechanisms left to right, the same order a receiving server would evaluate them in: `v=spf1` marks this as an SPF record, `ip4:10.0.0.20` is the one mechanism that should ever match, and `-all` is the catch-all for everything else - a hard fail, since nothing besides your own mail server should legitimately send as `lab.internal`. `/var/named/lab.internal.zone` already contains the placeholder SPF record (`v=spf1 mx ~all`). A domain must publish exactly one SPF record, and two make SPF evaluation fail with a permanent error. 
+For `lab.internal`, create a TXT record authorizing only your mail server (10.0.0.20). Reading the mechanisms left to right, the same order a receiving server would evaluate them in: `v=spf1` marks this as an SPF record, `ip4:10.0.0.20` is the one mechanism that should ever match, and `-all` is the catch-all for everything else - a hard fail, since nothing besides your own mail server should legitimately send as `lab.internal`. `/var/named/lab.internal.zone` already contains the placeholder SPF record (`v=spf1 mx ~all`). A domain must publish exactly one SPF record, and two make SPF evaluation fail with a permanent error.
+
 **2.2 Test SPF lookup**
 
 Confirm the record is live and syntactically what you expect before moving on - a typo here (a missing quote, a mistyped IP) fails silently until a real mail server tries to evaluate it against actual traffic:
