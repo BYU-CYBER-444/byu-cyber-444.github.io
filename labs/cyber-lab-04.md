@@ -31,13 +31,11 @@ nav_order: 4
 - Two instructor-provisioned VMs, both joined to `lab4.local`:
   - `cyber-lab04-dc` - the domain controller for `lab4.local`. This is where you **administer** the domain - GPO import/linking happens here, the way a real admin would manage AD/GPO centrally rather than configuring each machine by hand.
   - `cyber-lab04-win01` - Windows Server 2022, the hardening target. This is where you **test/verify** - everything Parts 2 and 3 check is effective state pulled down from the domain-wide policy you set up on the DC.
-- Your Net ID account and the semester lab password. The account is a lab Domain Admin account because the lab requires AD schema, GPO, and computer-object permissions.
+ - Your Net ID account and the semester lab password. The account is a lab Domain Admin account because the lab requires GPO and computer-object permissions.
 - The Microsoft Security Compliance Toolkit staged on `cyber-lab04-win01` at `C:\SCT`:
   - `C:\SCT\LGPO\LGPO.exe`
-  - `C:\SCT\PolicyAnalyzer\PolicyAnalyzer.exe`
   - `C:\SCT\Windows Server 2022 Security Baseline`
 - PowerShell 5.1 or later and Event Viewer. `cyber-lab04-dc` already has the Active Directory/Group Policy PowerShell modules (built into every domain controller) - no extra features to install there.
-- Instructor-provided Microsoft Sysinternals ProcDump, if available, for the controlled LSASS protection test. Do not download tools during the lab.
 
 > **Note on RDP access:** `cyber-lab04-dc` is reachable via RDP at `172.19.x.17`, and `cyber-lab04-win01` at `172.19.x.16` - where `x` is the third octet of your own nested subnet (the same one your `pve1`/`pve2`/`pve3` VMs live on). Connect using your OS's RDP client (Microsoft Remote Desktop on macOS, the built-in Remote Desktop Connection app on Windows, or Remmina/xfreerdp on Linux). Log in with your Net ID and the password emailed to you at the start of the semester. You might see a black screen for a minute or two the first time you connect while it sets up your profile. Both are domain-joined machines, so you'll need `lab4\<netid>` (not a bare netid) as the username when logging in.
 
@@ -45,11 +43,13 @@ nav_order: 4
 
 ## Background
 
-Windows hardening is a layered defense. ASR rules restrict process behaviors used by ransomware and macro-based malware; and protocol restrictions reduce legacy downgrade and compatibility paths. Real organizations deliver controls like these centrally - GPOs linked at the domain level, applied fleet-wide by default - rather than configuring each machine by hand, which doesn't scale and drifts out of sync the moment someone forgets a step on one box. This lab does the same: every control here is linked at the **domain root** of `lab4.local` as the default policy for every device, imported from Microsoft's own SCT baseline plus one small supplemental GPO for the handful of settings that baseline doesn't cover. `cyber-lab04-dc`'s own settings are then specifically overridden where they need to differ by a Domain-Controller-specific GPO linked to the built-in `Domain Controllers` OU - more specific scope wins over the domain-wide default, without needing any security filtering. `cyber-lab04-win01` never gets its own special GPO scope; it just gets the domain-wide default like any other member server would, then the lab verifies the resulting effective state rather than relying only on successful command execution.
+Windows hardening is a layered defense. ASR rules restrict process behaviors used by ransomware and macro-based malware, and protocol restrictions reduce legacy downgrade and compatibility paths. Real organizations deliver controls like these centrally - GPOs linked at the domain level, applied fleet-wide by default - rather than configuring each machine by hand, which doesn't scale and drifts out of sync the moment someone forgets a step on one box. This lab does the same: every control here is linked at the **domain root** of `lab4.local` as the default policy for every device, imported from Microsoft's own SCT baseline plus one small supplemental GPO for the handful of settings that baseline doesn't cover. `cyber-lab04-dc`'s own settings are then specifically overridden where they need to differ by a Domain-Controller-specific GPO linked to the built-in `Domain Controllers` OU - more specific scope wins over the domain-wide default, without needing any security filtering. `cyber-lab04-win01` gets the domain-wide default like any other member server, plus two win01-only settings (the host firewall and Restricted Admin RDP), then the lab verifies the resulting effective state rather than relying only on successful command execution.
 
 ---
 
 ## Procedure
+
+> **After finishing each part, run `gpupdate /force` on `cyber-lab04-win01`** (restart if asked) so the new policy is applied before you check it or move on.
 
 ### Part 1 - SCT Baseline Application
 
@@ -90,7 +90,7 @@ The baseline is applied at the **domain level**: linked at the domain root as th
 
 ### Part 2 - Attack Surface Reduction Rules
 
-ASR rules restrict process behaviors that ransomware and malicious macros rely on. The `MSFT Windows Server 2022 - Defender Antivirus` GPO you linked in Part 1 already enforces a set of them, including the LSASS credential-theft rule. Here you'll extend that domain-wide with your own GPO, `Lab4-ASR`, adding two rules the baseline doesn't set. Microsoft's [ASR rules reference](https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference) lists every rule with its GUID. The baseline GPO configurations turn on several ASR Rules by default. You will create two extra ASR Rules. 
+ASR rules restrict process behaviors that ransomware and malicious macros rely on. The `MSFT Windows Server 2022 - Defender Antivirus` GPO you linked in Part 1 already enforces a set of them, including the LSASS credential-theft rule. Here you'll extend that domain-wide with your own GPO, `Lab4-ASR`, adding two rules the baseline doesn't set. Microsoft's [ASR rules reference](https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference) lists every rule with its GUID.
 
 **On `cyber-lab04-dc`:**
 
@@ -107,15 +107,17 @@ ASR rules restrict process behaviors that ransomware and malicious macros rely o
 
 3. Select the **`lab4.local`** node > **Linked Group Policy Objects** tab, select `Lab4-ASR`, and click the up arrow until its **Link Order** is `1`. When two GPOs set the same rule list, Windows may apply only the higher-precedence GPO's list instead of merging them, so this makes sure `Lab4-ASR` is the one that counts.
 
-4. **On `cyber-lab04-win01` pull in the updates again.
+4. On `cyber-lab04-win01`, run `gpupdate /force`.
 
 
 ### Part 3 - Disable Legacy Protocols
 
 Part 1's baseline already disables SMBv1 and limits NTLM to v2 only. The stock baseline doesn't restrict Kerberos to AES, so add that in a new domain-wide GPO named `Lab4-Supplemental`, which you'll also use in later parts.
 
-1. Create and link a new GPO called `Lab4-Supplemental`, 
-1. Edit **Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options > Network security: Configure encryption types allowed for Kerberos** to **AES128_HMAC_SHA1** and **AES256_HMAC_SHA1** only (leave DES, RC4 and Future encryption types unchecked).
+**On `cyber-lab04-dc`:**
+
+1. Create and link a new GPO called `Lab4-Supplemental`.
+2. Edit **Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options > Network security: Configure encryption types allowed for Kerberos** to **AES128_HMAC_SHA1** and **AES256_HMAC_SHA1** only (leave DES, RC4 and Future encryption types unchecked).
 
 ### Part 4 - Restrict NTLM Authentication
 
@@ -135,7 +137,7 @@ Nothing in this lab has configured the host firewall yet. Unlike Parts 1 and 4, 
 
 1. Create and link a new GPO called `Lab4-Win01-Firewall`.
 
-2. Scope it to win01 only: select `Lab4-Win01-Firewall` under the domain node, and on the **Scope** tab under **Security Filtering**, select **Authenticated Users** and click **Remove**. Then click **Add...**, click **Object Types...**, check **Computers**, and add `cyber-lab04-win01` (It will have a different name). Confirm the filtering list shows only `cyber-lab04-win01`.
+2. Scope it to win01 only: select `Lab4-Win01-Firewall` under the domain node, and on the **Scope** tab under **Security Filtering**, select **Authenticated Users** and click **Remove**. Then click **Add...**, click **Object Types...**, check **Computers**, and add `cyber-lab04-win01` (its computer name is auto-generated and will be different for everyone). Confirm the filtering list shows only `cyber-lab04-win01`.
 
 3. Edit the GPO and browse to **Computer Configuration > Policies > Windows Settings > Security Settings > Windows Defender Firewall with Advanced Security**. Right-click **Windows Defender Firewall with Advanced Security - LDAP://...** > **Properties**. On each of the **Domain Profile**, **Private Profile**, and **Public Profile** tabs, set **Firewall state** to **On (recommended)**, **Inbound connections** to **Block (default)**, and **Outbound connections** to **Allow (default)**. Click **OK**.
 
@@ -159,12 +161,16 @@ Nothing in this lab has configured the host firewall yet. Unlike Parts 1 and 4, 
 Enhanced PowerShell logging is one of the highest-value, lowest-risk detection improvements you can make - it doesn't restrict anything, it just records what ran. Domain-wide via `Lab4-Supplemental` is safe here, including on `cyber-lab04-dc`.
 
 
+**On `cyber-lab04-dc`:**
+
 1. Edit the **`Lab4-Supplemental`** GPO and browse to **Computer Configuration > Policies > Administrative Templates > Windows Components > Windows PowerShell**.
-2. Open **Turn on PowerShell Script Block Logging**, select **Enabled**
+2. Open **Turn on PowerShell Script Block Logging**, select **Enabled**.
 3. Open **Turn on Module Logging**, select **Enabled**, click **Show...** next to Module Names, enter `*` as the value.
 
 
 ### Part 7 - Require Restricted Admin Mode for Incoming RDP
+
+**On `cyber-lab04-dc`:**
 
 
 1. Edit the **`Lab4-Win01-Firewall`** GPO and browse to **Computer Configuration > Policies > Administrative Templates > System > Credentials Delegation**.
@@ -184,7 +190,7 @@ Nothing to submit. Grading connects to `cyber-lab04-win01` directly over WinRM a
 
 | Item | What's actually checked | Points |
 |------|--------------------------|--------|
-| SCT baseline application (Part 1) | The three reference registry settings above match the baseline's expected values | 16 |
+| SCT baseline application (Part 1) | `LimitBlankPasswordUse = 1`, `NoLMHash = 1`, and `RequireSecuritySignature = 1` (the baseline's expected values) | 16 |
 | ASR rules (Part 2) | Each of these rule IDs is present with action `Enabled` (partial credit: LSASS 5, Webshell 6, drivers 5): the LSASS-credential-theft rule (`9E6C4E1F-7D60-472F-BA1A-A39EF669E4B2`) and your two custom rules, `A8F5898E-1DC8-49A9-9878-85004B8A61E6` (Webshell creation for Servers) and `56A863A9-875E-4185-98A7-B882C64B5CE5` (vulnerable signed drivers) | 16 |
 | Legacy protocols disabled (Part 3) | SMBv1 disabled, `LmCompatibilityLevel = 5`, Kerberos `SupportedEncryptionTypes = 24` | 16 |
 | NTLM restriction (Part 4) | `RestrictReceivingNTLMTraffic = 1` under `HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0` | 13 |
