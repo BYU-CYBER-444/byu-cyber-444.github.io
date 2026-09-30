@@ -303,40 +303,24 @@ Your `pve1`/`pve2`/`pve3` nodes live on the same subnet as `lab05-pki01`, at `17
 
 Copy the chain and key to each node and install with Proxmox's own `pvenode cert set`. Despite what its own docs say, `--force` doesn't reliably restart `pveproxy` for you - confirmed live, the cert file was correct but the service kept serving the old self-signed cert until manually restarted - so restart it explicitly:
 
-```bash
-for node in 172.19.x.2 172.19.x.3 172.19.x.4; do
-  scp ~/pki/server/certs/proxmox-chain.cert.pem root@$node:/tmp/proxmox-chain.pem
-  scp ~/pki/server/private/proxmox.key.pem root@$node:/tmp/proxmox.key.pem
-  ssh root@$node "pvenode cert set /tmp/proxmox-chain.pem /tmp/proxmox.key.pem --force && systemctl restart pveproxy && rm /tmp/proxmox-chain.pem /tmp/proxmox.key.pem"
-done
-```
 
-If a node's browser warning doesn't clear even after this, check what it's actually serving live (not just what's on disk) from your own machine or from `lab05-pki01`:
-```bash
-echo | openssl s_client -connect 172.19.x.2:8006 -servername 172.19.x.2 2>/dev/null | openssl x509 -noout -issuer
-```
-If that still shows `PVE Cluster Manager CA` instead of `CYBER444 Intermediate CA`, `pveproxy` hasn't picked up the change - `ssh root@172.19.x.2 systemctl restart pveproxy` again.
+If that still shows `PVE Cluster Manager CA` instead of `CYBER444 Intermediate CA`, `pveproxy` hasn't picked up the change restart pveproxy again.
 
 **Verify:** browse to `https://172.19.x.2:8006`, `https://172.19.x.3:8006`, and `https://172.19.x.4:8006`. Since your Root CA is already trusted in your browser from Part 6, all three should now show a trusted padlock with no warning - the same Root CA vouches for both `lab5.local` and all three Proxmox nodes, through the same Intermediate CA.
 
 ### Part 8 - Certificate Revocation (CRL)
 
-Revoke the server certificate (simulate a key compromise scenario):
+Every cert you've issued so far has an expiration date, but sometimes a cert needs to stop being trusted *before* that - the private key leaks, an employee with access leaves, a server gets compromised. That's what revocation is for. A **Certificate Revocation List (CRL)** is a CA's own signed, timestamped "blocklist": a list of serial numbers it has revoked, which clients can check against before trusting a cert - even one that's otherwise unexpired and chains correctly to a trusted root.
 
-```bash
-# Revoke the certificate (reason: keyCompromise)
-openssl ca -config ~/pki/root-ca/openssl-root.cnf   -keyfile ~/pki/intermediate-ca/private/intermediate.key.pem   -cert ~/pki/intermediate-ca/certs/intermediate.cert.pem   -revoke ~/pki/server/certs/server.cert.pem   -crl_reason keyCompromise
+Only the CA that *issued* a certificate can revoke it. Your `server.cert.pem` (the `lab5.local` leaf cert from Part 4) was issued by the **Intermediate CA**, so revoking it means signing a revocation entry with the Intermediate CA's own key and cert - the exact same `-keyfile`/`-cert` pair you used to *issue* the cert in the first place, just pointed at `openssl ca -revoke` instead of `openssl ca -in <csr>`. You are never revoking the Intermediate CA itself here; the Intermediate is the *issuer* doing the revoking, and the leaf cert is the *subject* being revoked. (If the Intermediate CA's own key were compromised, revoking *it* would be a Root CA operation instead - one level up the same pattern.)
 
-# Generate the CRL
-openssl ca -config ~/pki/root-ca/openssl-root.cnf   -keyfile ~/pki/intermediate-ca/private/intermediate.key.pem   -cert ~/pki/intermediate-ca/certs/intermediate.cert.pem   -gencrl -out ~/pki/intermediate-ca/crl/intermediate.crl.pem
+| Step | Action | Key details | Purpose |
+|---|---|---|---|
+| 1 | Revoke the server certificate | `openssl ca -revoke`, signed by the Intermediate CA's key/cert, with `-crl_reason keyCompromise` | Marks the leaf cert's serial number as revoked in the CA's database (`index.txt`) - the reason code becomes part of the public record other tools can read |
+| 2 | Generate the CRL | `openssl ca -gencrl`, signed by the same Intermediate CA key/cert, written to `intermediate-ca/crl/intermediate.crl.pem` | Publishes the current revocation state as a single signed file - the artifact clients actually check against, not the raw `index.txt` |
+| 3 | Confirm the certificate appears in the CRL | `openssl crl -noout -text` on the CRL file, filtered to the `Serial Number` section | Verifies the CRL you just generated actually lists your revoked cert's serial number, not just that the commands ran without error |
+| 4 | Test the revocation check | `openssl verify` with both `-CAfile` (the trust chain) and `-CRLfile` (your new CRL), plus `-crl_check`, against the leaf cert | Simulates what a revocation-aware client does: build the chain of trust *and* cross-reference the CRL. A cert that still chains fine to a trusted root should now fail with `error 23 at 0 depth lookup: certificate revoked` |
 
-# Verify the certificate now appears in the CRL
-openssl crl -noout -text -in ~/pki/intermediate-ca/crl/intermediate.crl.pem | grep -A3 "Serial"
-
-# Test revocation check
-openssl verify -CAfile ~/pki/intermediate-ca/certs/ca-chain.cert.pem   -CRLfile ~/pki/intermediate-ca/crl/intermediate.crl.pem   -crl_check ~/pki/server/certs/server.cert.pem
-# Expected: error 23 at 0 depth lookup: certificate revoked
-```
 
 ### Part 9 - TLS Validation with testssl.sh
 
