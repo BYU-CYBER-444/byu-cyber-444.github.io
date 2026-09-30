@@ -70,7 +70,7 @@ Write your full analysis in `homework/cyber-hw-12.md`. Commit to `homework/asset
 
 - `cyber-hw-12-iocs.csv` - your IOC table as a CSV
 
-Open a PR titled `CYBER HW 12 - Audit Log Analysis` and submit the assignment to be graded through the discord bot using `/grade`.
+Open a PR titled `CYBER HW 12 - Audit Log Analysis`. <!-- and submit the assignment to be graded through the discord bot using `/grade`. -->
 
 {: .note }
 Ground your write-up in the specifics of your own work: for hands-on assignments, cite the actual command output, timestamps, or values you personally observed; for design/policy assignments, ground every claim in the specific scenario/profile document provided rather than generic best-practice language. Write-ups that read as generic, could apply to any student's submission unchanged, or ignore the assigned scenario's specific details are sent back for manual review before any credit is given.

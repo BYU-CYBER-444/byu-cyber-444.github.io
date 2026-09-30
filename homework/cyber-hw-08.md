@@ -62,7 +62,7 @@ Format as a numbered remediation runbook - a junior admin should be able to run 
 
 Write your full gap analysis in `homework/cyber-hw-08.md`.
 
-Open a PR titled `CYBER HW 8 - CIS Benchmark Gap Analysis` and submit the assignment to be graded through the discord bot using `/grade`.
+Open a PR titled `CYBER HW 8 - CIS Benchmark Gap Analysis`. <!-- and submit the assignment to be graded through the discord bot using `/grade`. -->
 
 {: .note }
 Ground your write-up in the specifics of your own work: for hands-on assignments, cite the actual command output, timestamps, or values you personally observed; for design/policy assignments, ground every claim in the specific scenario/profile document provided rather than generic best-practice language. Write-ups that read as generic, could apply to any student's submission unchanged, or ignore the assigned scenario's specific details are sent back for manual review before any credit is given.

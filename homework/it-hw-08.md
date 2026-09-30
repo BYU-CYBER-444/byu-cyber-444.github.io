@@ -77,7 +77,7 @@ For the two highest-scoring power risks and one cooling risk:
 
 Write your full report in `homework/it-hw-08.md`.
 
-Open a PR titled `IT HW 8 - Data Center Risk Assessment` and submit the assignment to be graded through the discord bot using `/grade`.
+Open a PR titled `IT HW 8 - Data Center Risk Assessment`. <!-- and submit the assignment to be graded through the discord bot using `/grade`. -->
 
 {: .note }
 Ground your write-up in the specifics of your own work: for hands-on assignments, cite the actual command output, timestamps, or values you personally observed; for design/policy assignments, ground every claim in the specific scenario/profile document provided rather than generic best-practice language. Write-ups that read as generic, could apply to any student's submission unchanged, or ignore the assigned scenario's specific details are sent back for manual review before any credit is given.
