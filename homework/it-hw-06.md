@@ -74,7 +74,7 @@ The three policies above collectively implement pieces of a Zero Trust Architect
 
 Write all three policies in `homework/it-hw-06.md` (or as three linked sub-pages if you prefer). Each policy must be clearly delineated with a version number, effective date, owner, and approval signature block. Include the Zero Trust alignment write-up as a final section.
 
-Open a PR titled `IT HW 6 - Policy Package` and submit the assignment to be graded through the discord bot using `/grade`.
+Open a PR titled `IT HW 6 - Policy Package`. <!-- and submit the assignment to be graded through the discord bot using `/grade`. -->
 
 {: .note }
 Ground your write-up in the specifics of your own work: for hands-on assignments, cite the actual command output, timestamps, or values you personally observed; for design/policy assignments, ground every claim in the specific scenario/profile document provided rather than generic best-practice language. Write-ups that read as generic, could apply to any student's submission unchanged, or ignore the assigned scenario's specific details are sent back for manual review before any credit is given.
