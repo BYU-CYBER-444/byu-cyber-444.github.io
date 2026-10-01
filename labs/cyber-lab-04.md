@@ -29,8 +29,8 @@ nav_order: 4
 ## Tools and Environment
 
 - Two instructor-provisioned VMs, both joined to `lab4.local`:
-  - `cyber-lab04-dc` - the domain controller for `lab4.local`. This is where you **administer** the domain - GPO import/linking happens here, the way a real admin would manage AD/GPO centrally rather than configuring each machine by hand.
-  - `cyber-lab04-win01` - Windows Server 2022, the hardening target. This is where you **test/verify** - everything Parts 2 and 3 check is effective state pulled down from the domain-wide policy you set up on the DC.
+  - `cyber-lab04-dc` - the domain controller for `lab4.local`. This is where you **administer** the domain. You'll do all of your GPO configuration here like normal.
+  - `cyber-lab04-win01` - Windows Server 2022, the hardening target. This is where you **test/verify**. All you need to do here is pull the GPOs and make sure they apply (several parts of the lab grade this machine instead of the DC).
  - Your Net ID account and the semester lab password. The account is a lab Domain Admin account because the lab requires GPO and computer-object permissions.
 - The Microsoft Security Compliance Toolkit staged on `cyber-lab04-win01` at `C:\SCT`:
   - `C:\SCT\LGPO\LGPO.exe`
@@ -43,17 +43,19 @@ nav_order: 4
 
 ## Background
 
-Windows hardening is a layered defense. ASR rules restrict process behaviors used by ransomware and macro-based malware, and protocol restrictions reduce legacy downgrade and compatibility paths. Real organizations deliver controls like these centrally - GPOs linked at the domain level, applied fleet-wide by default - rather than configuring each machine by hand, which doesn't scale and drifts out of sync the moment someone forgets a step on one box. This lab does the same: every control here is linked at the **domain root** of `lab4.local` as the default policy for every device, imported from Microsoft's own SCT baseline plus one small supplemental GPO for the handful of settings that baseline doesn't cover. `cyber-lab04-dc`'s own settings are then specifically overridden where they need to differ by a Domain-Controller-specific GPO linked to the built-in `Domain Controllers` OU - more specific scope wins over the domain-wide default, without needing any security filtering. `cyber-lab04-win01` gets the domain-wide default like any other member server, plus two win01-only settings (the host firewall and Restricted Admin RDP), then the lab verifies the resulting effective state rather than relying only on successful command execution.
+<!-- Windows hardening is a layered defense. ASR rules restrict process behaviors used by ransomware and macro-based malware, and protocol restrictions reduce legacy downgrade and compatibility paths. Real organizations deliver controls like these centrally - GPOs linked at the domain level, applied fleet-wide by default - rather than configuring each machine by hand, which doesn't scale and drifts out of sync the moment someone forgets a step on one box. This lab does the same: every control here is linked at the **domain root** of `lab4.local` as the default policy for every device, imported from Microsoft's own SCT baseline plus one small supplemental GPO for the handful of settings that baseline doesn't cover. `cyber-lab04-dc`'s own settings are then specifically overridden where they need to differ by a Domain-Controller-specific GPO linked to the built-in `Domain Controllers` OU - more specific scope wins over the domain-wide default, without needing any security filtering. `cyber-lab04-win01` gets the domain-wide default like any other member server, plus two win01-only settings (the host firewall and Restricted Admin RDP), then the lab verifies the resulting effective state rather than relying only on successful command execution. -->
+
+Windows hardening is a layering of a ton of different security tools. In a typical setting, all of those controls will be written into GPOs on the DC and then deployed to all computers in the Domain from there. This lab covers the configuration of several such security controls, both on the whole domain and localized to just the non-DC machine.
 
 ---
 
 ## Procedure
 
-> **After finishing each part, run `gpupdate /force` on `cyber-lab04-win01`** (restart if asked) so the new policy is applied before you check it or move on.
+> **After finishing each part, you will need to run `gpupdate /force` on `cyber-lab04-win01` and restart** so the new policy is applied before you check it or move on. However, I'm pretty sure you can just run that and restart at the end of the lab too if you want to trust in the heart of the cards on this.
 
 ### Part 1 - SCT Baseline Application
 
-The baseline is applied at the **domain level**: linked at the domain root as the default policy for every device in `lab4.local`, and administered entirely from `cyber-lab04-dc`.
+The AD Baseline provided by Microsoft's Security Compliance Toolkit (SCT) is a really useful starting point for hardening a Windows Domain. This part of the lab will have you import all of their baseline GPOs and link 6/8 of them for practice and a secure baseline to get started.
 
 **On `cyber-lab04-dc`:**
 
@@ -105,7 +107,7 @@ ASR rules restrict process behaviors that ransomware and malicious macros rely o
 
    Also add `9E6C4E1F-7D60-472F-BA1A-A39EF669E4B2` (Block credential stealing from LSASS) with Value `1`, so it stays enforced whichever GPO's rule list Windows ends up using (see step 3). Click **OK** twice to save.
 
-3. Select the **`lab4.local`** node > **Linked Group Policy Objects** tab, select `Lab4-ASR`, and click the up arrow until its **Link Order** is `1`. When two GPOs set the same rule list, Windows may apply only the higher-precedence GPO's list instead of merging them, so this makes sure `Lab4-ASR` is the one that counts.
+3. Select the **`lab4.local`** node > **Linked Group Policy Objects** tab, select `Lab4-ASR`, and click the up arrow until its **Link Order** is `1` (or just the double up arrow once which shoots it all the way to the top). When two GPOs set the same rule list, Windows may apply only the higher-precedence GPO's list instead of merging them, so this makes sure `Lab4-ASR` is the one that counts.
 
 4. On `cyber-lab04-win01`, run `gpupdate /force`.
 
@@ -137,7 +139,7 @@ Nothing in this lab has configured the host firewall yet. Unlike Parts 1 and 4, 
 
 1. Create and link a new GPO called `Lab4-Win01-Firewall`.
 
-2. Scope it to win01 only: select `Lab4-Win01-Firewall` under the domain node, and on the **Scope** tab under **Security Filtering**, select **Authenticated Users** and click **Remove**. Then click **Add...**, click **Object Types...**, check **Computers**, and add `cyber-lab04-win01` (its computer name is auto-generated and will be different for everyone). Confirm the filtering list shows only `cyber-lab04-win01`.
+2. Scope it to win01 only: select `Lab4-Win01-Firewall` under the domain node, and on the **Scope** tab under **Security Filtering**, select **Authenticated Users** and click **Remove**. Then click **Add...**, click **Object Types...**, check **Computers**, and add your `cyber-lab04-win01` machine (you need to use the computer name / hostname, which is auto-generated and matches `WIN-...`, and NOT "cyber-lab04-win01"). Confirm the filtering list shows only your `cyber-lab04-win01` machine.
 
 3. Edit the GPO and browse to **Computer Configuration > Policies > Windows Settings > Security Settings > Windows Defender Firewall with Advanced Security**. Right-click **Windows Defender Firewall with Advanced Security - LDAP://...** > **Properties**. On each of the **Domain Profile**, **Private Profile**, and **Public Profile** tabs, set **Firewall state** to **On (recommended)**, **Inbound connections** to **Block (default)**, and **Outbound connections** to **Allow (default)**. Click **OK**.
 
@@ -181,7 +183,8 @@ Enhanced PowerShell logging is one of the highest-value, lowest-risk detection i
 
 ## Deliverables
 
-Nothing to submit. Grading connects to `cyber-lab04-win01` directly over WinRM and checks its live state (registry values, `Get-MpPreference`, `Get-SmbServerConfiguration`, `Get-NetFirewallProfile`, `Get-NetFirewallRule`) - no screenshots or pasted command output to hand in. Just make sure the VM is left in its hardened end state when the deadline hits. Do not save credential dumps anywhere retrievable by others.
+Just run the grading bot with your machines on and hardened. It'll check the live state and give you a score accordingly.
+<!-- Nothing to submit. Grading connects to `cyber-lab04-win01` directly over WinRM and checks its live state (registry values, `Get-MpPreference`, `Get-SmbServerConfiguration`, `Get-NetFirewallProfile`, `Get-NetFirewallRule`) - no screenshots or pasted command output to hand in. Just make sure the VM is left in its hardened end state when the deadline hits. Do not save credential dumps anywhere retrievable by others. -->
 
 ---
 
