@@ -38,7 +38,9 @@ nav_order: 5
 
 ## Background
 
-Every certificate you've ever clicked past a browser warning for exists because some part of a PKI trust chain was misconfigured, expired, or never validated - and every certificate that worked silently exists because someone got the chain, the extensions, and the revocation path right. This lab builds a real two-tier CA hierarchy (not a single self-signed cert) specifically because that's the structure production PKI actually uses: an offline Root CA that almost never touches a network, and an online Intermediate CA that does the day-to-day signing, so that a compromise of the busy, exposed tier doesn't automatically compromise the trust anchor everything else depends on.
+Every certificate you've ever clicked past a browser warning for exists because some part of a PKI trust chain was misconfigured, expired, or never validated - and every certificate that worked silently exists because someone got the chain, the extensions, and the revocation path right.
+
+This lab builds a real two-tier CA hierarchy (not a single self-signed cert) specifically because that's the structure production PKI actually uses: an offline Root CA that almost never touches a network, and an online Intermediate CA that does the day-to-day signing, so that a compromise of the busy, exposed tier doesn't automatically compromise the trust anchor everything else depends on.
 
 ---
 
@@ -50,9 +52,9 @@ Every certificate you've ever clicked past a browser warning for exists because 
 
 ### Part 1 - OpenSSL Configuration Files
 
-The default `/etc/ssl/openssl.cnf` is insufficient for a proper PKI. Create dedicated config files for each CA tier.
+The default `/etc/ssl/openssl.cnf` doesn't work well for a proper PKI. The best practice is to create dedicated config files for each CA tier, but we'll be doing a step less than that and just making a specific `.cnf` file for our root and using that for everything.
 
-Replace `172.19.x.18` in `[alt_names]` with your own VM's actual address (`x` = your subnet's third octet - see Tools Required above).
+Replace `172.19.x.18` in `[alt_names]` with your own VM's actual address. Outside of that, you can probably use the file as is, but review it anyways.
 
 Create the directory structure:
 
@@ -156,12 +158,12 @@ authorityKeyIdentifier = keyid:always            # Records which CA key signed t
 
 | Step | Action | Key details | Purpose |
 |---|---|---|---|
-| 1 | Generate the Root CA private key | 4096-bit RSA, encrypted with AES-256; you'll be prompted for a passphrase. Saved to `root-ca/private/ca.key.pem` | Creates the key that anchors your entire trust chain. The passphrase means a stolen key file is useless without it |
+| 1 | Generate the Root CA private key | Use the `openssl genpkey ...` command: 4096-bit RSA, encrypted with AES-256; you'll be prompted for a passphrase; just use something you'll remember for this lab. Save it to `root-ca/private/ca.key.pem` | Creates the key that anchors your entire trust chain. The passphrase means a stolen key file is useless without it |
 | 2 | Lock down the private key | Permissions set to `400` (read-only, owner only) | Prevents accidental modification or deletion and blocks other users from reading it |
-| 3 | Create the self-signed Root CA certificate | Uses `openssl-root.cnf`, the root key, and the `v3_ca` extensions. SHA-256 signature, valid 3650 days (10 years). Saved to `root-ca/certs/ca.cert.pem` | Produces the root certificate. It is self-signed because a root has no higher authority; it vouches for itself, and clients trust it because you install it manually |
-| 4 | Set the subject identity | `-subj` supplies Country `US`, State `Utah`, Organization `CYBER444 Lab`, Common Name `CYBER444 Root CA` | Skips the interactive prompts and sets the name embedded in the certificate |
+| 3 | Set the subject identity in the following steps | `-subj` supplies Country `US`, State `Utah`, Organization `CYBER444 Lab`, Common Name `CYBER444 Root CA` (more about this in the notes below) | You'll want to be able to skip the interactive prompts and set the name embedded in the certificate. You'll use a variant of this `-subj` field for each cert you generate |
+| 4 | Create the self-signed Root CA certificate | Use the `openssl req ...` command: use your `openssl-root.cnf` config file, the root key, the `v3_ca` extensions (as detailed in the config file), SHA-256 signature, valid 3650 days (10 years). Save it to `root-ca/certs/ca.cert.pem` | Produces the root certificate. It is self-signed because a root has no higher authority; it vouches for itself, and clients trust it because you install it manually |
 | 5 | Make the certificate world-readable | Permissions set to `444` (read-only for everyone) | The certificate is public information and needs to be distributed to clients, unlike the key |
-| 6 | Verify the certificate | Prints the certificate details and filters for Issuer, Subject, validity dates, `CA:true`, and `pathlen` | Confirms the issuer and subject are identical (self-signed), the dates span 10 years, and it is marked as a CA |
+| 6 | Verify the certificate | Use `openssl verify ...`, which prints the certificate details and filters for Issuer, Subject, validity dates, `CA:true`, and `pathlen` | Confirms the issuer and subject are identical (self-signed), the dates span 10 years, and it is marked as a CA |
 
 **Notes:**
 - The `-days 3650` on the command line overrides the `default_days = 90` in your config file, which is what you want for a root: roots stay long-lived and offline (rotating one means re-distributing trust to every device that has it installed), while leaf certs get the short, frequently-rotated lifetime instead - see Part 4's note on why.
@@ -176,26 +178,27 @@ authorityKeyIdentifier = keyid:always            # Records which CA key signed t
 
 | Step | Action | Key details | Purpose |
 |---|---|---|---|
-| 1 | Generate the Intermediate CA private key | 4096-bit RSA, encrypted with AES-256 (you'll be prompted for a passphrase). Saved to `intermediate-ca/private/intermediate.key.pem` | Creates the key the intermediate uses to sign server certificates. The passphrase protects it if the file is stolen |
+| 1 | Generate the Intermediate CA private key | Same `openssl` sub-command as before: 4096-bit RSA, encrypted with AES-256 (you'll be prompted for a passphrase). Saved to `intermediate-ca/private/intermediate.key.pem` | Creates the key the intermediate uses to sign server certificates. The passphrase protects it if the file is stolen |
 | 2 | Lock down the private key | Permissions set to `400` (read-only, owner only) | Prevents other users from reading the key and guards against accidental changes |
-| 3 | Create the certificate signing request (CSR) | Uses `openssl-root.cnf` and the intermediate key. SHA-256, subject `US`, `Utah`, `CYBER444 Lab`, CN `CYBER444 Intermediate CA`. Saved to `intermediate-ca/intermediate.csr.pem` | Packages the intermediate's public key and identity into a request for the root to sign |
-| 4 | Sign the CSR with the Root CA | Uses `openssl-root.cnf` with the `v3_intermediate_ca` extensions, SHA-256, valid 1095 days (3 years), `-notext`. Saved to `intermediate-ca/certs/intermediate.cert.pem` | Makes the root vouch for the intermediate. The extensions mark it as a CA with `pathlen:0`, so it can issue end-entity certs but not further sub-CAs. `-notext` keeps the human-readable dump out of the file |
-| 5 | Build the chain file | Concatenates the intermediate cert first, then the root cert, into `intermediate-ca/certs/ca-chain.cert.pem` | Gives servers a single file to present to clients so they can build the path back to the trusted root |
-| 6 | Verify the chain | Checks the intermediate cert against the root cert using `-CAfile` | Confirms the intermediate was correctly signed by the root; a successful check prints `OK` |
+| 3 | Create the certificate signing request (CSR) | Use `openssl req ...` again with your `openssl-root.cnf` config, the intermediate key you just made, SHA-256, subject `US`, `Utah`, `CYBER444 Lab`, CN `CYBER444 Intermediate CA`. Save it to `intermediate-ca/intermediate.csr.pem` | Packages the intermediate's public key and identity into a request for the root to sign |
+| 4 | Sign the CSR with the Root CA | Use `openssl ca ...`: use your `openssl-root.cnf` with the `v3_intermediate_ca` extensions, SHA-256, valid 1095 days (3 years), `-notext`. Saved to `intermediate-ca/certs/intermediate.cert.pem` | Makes the root vouch for the intermediate. The extensions mark it as a CA with `pathlen:0`, so it can issue end-entity certs but not further sub-CAs. `-notext` keeps the human-readable dump out of the file |
+| 5 | Build the chain file | This command is more complicated than most, using a tool you have probably never used before: `cat` (I'm kidding about it being complicated if you couldn't tell). Concatenate the intermediate cert first, then the root cert, into `intermediate-ca/certs/ca-chain.cert.pem` | Gives servers a single file to present to clients so they can build the path back to the trusted root |
+| 6 | Verify the chain | Once again, same `openssl` sub-command. Checks the intermediate cert against the root cert using `-CAfile` | Confirms the intermediate was correctly signed by the root; a successful check prints `OK` |
 
 **Notes:**
 - Steps 3 and 4 both use the root config. That works for the CSR because `openssl req` only needs the `[req]` and subject settings, and it is required for signing because the root is the issuer.
 - This version names the files `intermediate.key.pem` and `intermediate.cert.pem`, while my earlier example used `ca.key.pem` and `ca.cert.pem`. If you create an `openssl-intermediate.cnf`, make sure its `private_key` and `certificate` paths match whichever names you keep.
 - The signing step will only succeed if the CSR's country, state, and organization match the root's (`policy_strict`), which they do here.
 - **Validity:** 1095 days (3 years) sits between the root's 10-year lifetime and the leaf certs' 90 days - a common enterprise-PKI range for an intermediate. It's the CA actually doing day-to-day signing, so it's rotated more often than the offline root, but still far less often than the certs it issues.
+- For the most part, from here on out you'll just be using different flags and such with the `openssl` commands you've already used, so the future tables will assume you understand enough to know which to use until we introduce one final new option.
 
 ### Part 4 - Issue a Server Certificate with SANs
 
-The server certificate must include Subject Alternative Names (SANs) - modern browsers reject certificates without them.
+The server certificate must include Subject Alternative Names (SANs) - modern browsers reject certificates without them. They basically just tell your browser what domain names / ip addresses it should be okay associating the cert with.
 
 | Step | Action | Key details | Purpose |
 |---|---|---|---|
-| 1 | Generate the server private key | 2048-bit RSA, **not** encrypted. Saved to `server/private/server.key.pem` | Creates the key the web server uses for TLS. It has no passphrase so the service can start unattended. 2048 bits is sufficient for a leaf certificate |
+| 1 | Generate the server private key | 2048-bit RSA, **not** encrypted. Save it to `server/private/server.key.pem` | Creates the key the web server uses for TLS. It has no passphrase so the service can start unattended. 2048 bits is sufficient for a leaf certificate |
 | 2 | Lock down the private key | Permissions set to `400` (read-only, owner only) | Stops other users from reading or altering the key. Since it is unencrypted, file permissions are its only protection |
 | 3 | Create the CSR | Uses `openssl-root.cnf` and the server key. SHA-256, subject `US`, `Utah`, `CYBER444 Lab`, CN `lab5.local`. Saved to `server/server.csr.pem` | Packages the server's public key and identity into a request. SANs are not included here; they are added at signing time |
 | 4 | Sign the CSR with the Intermediate CA | Uses the `server_cert` extensions, 90 days, SHA-256, `-notext`. `-keyfile` and `-cert` point to the intermediate's key and certificate. Saved to `server/certs/server.cert.pem` | Makes the intermediate vouch for the server. The `server_cert` section marks it as a non-CA and limits it to TLS server authentication, and it adds the SANs (`lab5.local`, `www.lab5.local`, and the IP) from `[alt_names]` |
@@ -273,16 +276,16 @@ curl http://lab5.local    # should redirect to HTTPS (302/301)
 
 Note that this only makes `lab5.local` trusted *on the VM*. Any other device - including your own laptop's browser - still has no reason to trust this Root CA. Part 6 walks through fixing that.
 
-### Part 6 - Trust the Root CA in Your Browser (Not Graded)
+### Part 6 - Trust the Root CA in Your Browser
 
 The `curl` checks above succeeded because you trusted the Root CA on the VM itself. A real browser has never heard of your lab's Root CA, so it will reject `lab5.local` outright and give you the security warning about the certificate. This section walks through that rejection, then fixes it the same way a real organization distributes its internal CA to employee devices.
 
-This part happens entirely on your own laptop, so there's no way for us to check it automatically - **it isn't graded and there's nothing to submit for it.** Do it anyway; it's the whole point of the lab.
+This part happens entirely on your own laptop, so there's no way for us to check it automatically, BUT it's necessary to test during the next step when you set up Proxmox certs, so do it anyways pretty pls.
 
 1. Add an entry on your computer hosts file for the website "172.19.x.18 lab5.local"
 2. **Observe the untrusted warning.** In a real desktop browser (not curl), navigate to `https://lab5.local`. You should get a full-page warning ("Your connection is not private" / "Warning: Potential Security Risk"). Click through to view the certificate details and confirm the browser is complaining because it doesn't recognize `CYBER444 Root CA` as a trust anchor - not because anything about the cert itself is wrong.
 3. Copy the Root CA certificate `~/pki/root-ca/certs/ca.cert.pem` to your machine
-4. **Import the Root CA into your browser's (or OS's) trust store.** You only need to import the *Root* CA - not the intermediate - since the server already presents the full chain and the browser can build the path from your newly-trusted root down to the leaf cert. Use whichever applies to you:
+4. **Import the Root CA into your browser's (or OS's) trust store.** You only need to import the *Root* CA - not the intermediate - since the server already presents the full chain and the browser can build the path from your newly-trusted root down to the leaf cert. If you're cool and running Fedora or another RHEL distro, you can literally do the end of Part 5 on your local machine. Otherwise, consult Google and follow a walkthrough or something.
 5. **Reload `https://lab5.local`.** The warning should be gone and you should see a trusted padlock. Click the padlock and confirm the chain shown is `CYBER444 Root CA → CYBER444 Intermediate CA → lab5.local`. This may require you to close and reopen your browser.
 
 ### Part 7 - Trust Proxmox's Web UI on All 3 Nodes
@@ -293,18 +296,17 @@ Proxmox's cluster filesystem (`/etc/pve`) is shared across all three nodes, but 
 
 Your `pve1`/`pve2`/`pve3` nodes live on the same subnet as `lab05-pki01`, at `172.19.x.2`, `172.19.x.3`, and `172.19.x.4` (`x` = your subnet's third octet, same as everywhere else in this lab) - you log into them the same way you log into Proxmox's web UI already, as `root`.
 
+For the following configurations, you will run all of the certificate setup and generation on your lab machine, eventually copying files from that machine over to Proxmox.
+
 | Step | Action | Key details | Purpose |
 |---|---|---|---|
-| 1 | Write an ad-hoc extensions file | `~/pki/server/proxmox-ext.cnf`, listing `basicConstraints=CA:FALSE`, `keyUsage`, `extendedKeyUsage=serverAuth`, and `subjectAltName` with all three node IPs | Rather than editing the shared `[alt_names]` in `openssl-root.cnf` (which Part 4's server cert still depends on), `-extfile` lets you supply a one-off set of extensions for just this signing operation - the same mechanism real-world CAs use to issue ad-hoc SAN certs without a master config edit per request |
+| 1 | Write an ad-hoc extensions file | `~/pki/server/proxmox-ext.cnf`, listing `basicConstraints=CA:FALSE`, `keyUsage`, `extendedKeyUsage=serverAuth`, and `subjectAltName` with all three node IPs. Pay attention to old syntaxes. You'll make a top level section with a custom name and then reference that name with `-extenstions` when you use `-extfile` during `openssl ca` to sign | Rather than editing the shared `[alt_names]` in `openssl-root.cnf` (which Part 4's server cert still depends on), `-extfile` lets you supply a one-off set of extensions for just this signing operation - the same mechanism real-world CAs use to issue ad-hoc SAN certs without a master config edit per request |
 | 2 | Generate the Proxmox private key | 2048-bit RSA, unencrypted, same reasoning as Part 4's server key. Saved to `server/private/proxmox.key.pem` | The key the Proxmox nodes' `pveproxy` service will use for TLS |
 | 3 | Create the CSR | Uses the proxmox key, CN set to the first node's IP | Packages the key and identity into a signing request - the SANs come from the extfile at signing time, not from this CSR |
-| 4 | Sign the CSR with the Intermediate CA | Uses `-extfile ~/pki/server/proxmox-ext.cnf` (not `-extensions server_cert`), 90 days, SHA-256, `-notext`. Saved to `server/certs/proxmox.cert.pem` | Same signing authority as your `lab5.local` cert, same 90-day leaf-cert policy from Part 4's note - just different SANs, supplied via the extfile instead of `[alt_names]` |
+| 4 | Sign the CSR with the Intermediate CA | Uses `-extfile ~/pki/server/proxmox-ext.cnf` and your custom extension name (tbh you might be able to do it without a manual `-extensions`, but I'm speaking from what I was able to make work), 90 days, SHA-256, `-notext`. Saved to `server/certs/proxmox.cert.pem` | Same signing authority as your `lab5.local` cert, same 90-day leaf-cert policy from Part 4's note - just different SANs, supplied via the extfile instead of `[alt_names]` |
 | 5 | Build the leaf+intermediate chain file | Concatenate `proxmox.cert.pem` then `intermediate.cert.pem` into `proxmox-chain.cert.pem` | Same reason as Part 5's `server-chain.crt` fix: Proxmox's web server has to send the Intermediate CA cert to connecting browsers too, or a browser that only trusts your Root CA can't bridge the gap to the leaf |
 
-Copy the chain and key to each node and install with Proxmox's own `pvenode cert set`. Despite what its own docs say, `--force` doesn't reliably restart `pveproxy` for you - confirmed live, the cert file was correct but the service kept serving the old self-signed cert until manually restarted - so restart it explicitly:
-
-
-If that still shows `PVE Cluster Manager CA` instead of `CYBER444 Intermediate CA`, `pveproxy` hasn't picked up the change restart pveproxy again.
+Copy the chain and key to each node and install with Proxmox's own `pvenode cert set`. Despite what its own docs say, `--force` doesn't reliably restart `pveproxy` (the system service in charge of certificate management for the website) for you, so you'll need to restart it explicitly.
 
 **Verify:** browse to `https://172.19.x.2:8006`, `https://172.19.x.3:8006`, and `https://172.19.x.4:8006`. Since your Root CA is already trusted in your browser from Part 6, all three should now show a trusted padlock with no warning - the same Root CA vouches for both `lab5.local` and all three Proxmox nodes, through the same Intermediate CA.
 
@@ -322,7 +324,7 @@ Only the CA that *issued* a certificate can revoke it. Your `server.cert.pem` (t
 | 4 | Test the revocation check | `openssl verify` with both `-CAfile` (the trust chain) and `-CRLfile` (your new CRL), plus `-crl_check`, against the leaf cert | Simulates what a revocation-aware client does: build the chain of trust *and* cross-reference the CRL. A cert that still chains fine to a trusted root should now fail with `error 23 at 0 depth lookup: certificate revoked` |
 
 
-### Part 9 - TLS Validation with testssl.sh
+### Part 9 - TLS Validation with testssl.sh (Not graded)
 
 ```bash
 wget https://testssl.sh/testssl.sh -O testssl.sh
