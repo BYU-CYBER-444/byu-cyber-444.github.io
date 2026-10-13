@@ -47,24 +47,11 @@ Your proposal must include:
 - Your target RTO and RPO and how you will measure them
 - Your game-day failure scenarios (at least three)
 
-## Suggested Timeline
-
-There are no graded checkpoints before the final package, so these weeks are pacing targets.
-
-| Week | Focus |
-|---|---|
-| 9 | Proposal; build nodes and app |
-| 10 | HA front end and database replication |
-| 11 | Backups and restore tests |
-| 12 | Measure RTO/RPO; health checks |
-| 14 | Game day, runbook, documentation |
-| 15 | Final package and recorded presentation |
-
 ---
 
 ## Final Documentation Package {#documentation}
 
-**Due:** Last class day. Open a PR titled `Final Project - I1 HA Service Platform with Backup and DR`. Everything lives in `final-project-it/` in your portfolio repo.
+**Due:** December 10, 11:59 PM. Submit everything in Learning Suite, as uploaded files or a link to them (see [Final Deliverables]({% link final-project-it/final-deliverables.md %}#submission)).
 
 1. **Service design and SLA.** What the service is, who depends on it, availability, RTO, and RPO targets with justification, and the design choices that meet them.
 2. **DR runbook.** Failure scenarios, detection, decision points, recovery steps, and verification steps, written for an on-call engineer who did not build the system.

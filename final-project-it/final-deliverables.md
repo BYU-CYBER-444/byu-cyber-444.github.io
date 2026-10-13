@@ -37,13 +37,13 @@ The specific documents and demos depend on your option. Find yours below.
 
 ## Final Documentation Package
 
-### Submission
+### Submission {#submission}
 
-Everything goes in the `final-project-it/` directory of your portfolio repo, navigable from its `README.md`. Open a PR titled `Final Project - [Your Option and Name]` (for example `Final Project - I2 Monitoring and Service Desk`) and submit the PR link in Learning Suite before **11:59 PM on December 10**. The PR is snapshotted at the deadline.
+Submit everything in Learning Suite by **11:59 PM on December 10**. You can upload the files, or submit a link to where they are (for example a GitHub repository or a shared folder). If you submit a link, make sure the instructor and TAs can open it without requesting access, and do not change its contents after the deadline. Organize the package so a grader can navigate it from a `README.md` at the top level.
 
 ### Required for every option
 
-- **`README.md`** at the root of the directory: what the project is, a table of contents linking every deliverable, prerequisites, and exact commands to rebuild the environment from scratch.
+- **`README.md`** at the top level of your package: what the project is, a table of contents linking every deliverable, prerequisites, and exact commands to rebuild the environment from scratch.
 - **Architecture diagram** committed as an image or PDF. A good diagram labels every component with hostname, IP, and role, shows network zones and trust boundaries, and shows the direction of the important data flows. Diagrams that are generic shapes without labels do not receive full credit.
 - **Lessons learned** (`lessons-learned.md`), answering four prompts specifically:
   - What went well, and why (name actual decisions that paid off)

@@ -48,24 +48,11 @@ Your proposal must include:
 - Where logs will go and which events you expect to see
 - Which two (or more) roles your Windows system performs and which controls you will harden on it
 
-## Suggested Timeline
-
-There are no graded checkpoints before the final package, so these weeks are pacing targets.
-
-| Week | Focus |
-|---|---|
-| 9 | Proposal; host and registry up |
-| 10 | Host hardening, baseline benchmark score, app stack |
-| 11 | Scanning and signing in the deploy flow |
-| 12 | TLS proxy, secrets, logging |
-| 14 | Runtime tests, documentation, rehearsal |
-| 15 | Final package and recorded presentation |
-
 ---
 
 ## Final Documentation Package {#documentation}
 
-**Due:** Last class day. Open a PR titled `Final Project - C5 Secure Container Platform`. Everything lives in `final-project-cyber/` in your portfolio repo.
+**Due:** December 10, 11:59 PM. Submit everything in Learning Suite, as uploaded files or a link to them (see [Final Deliverables]({% link final-project-cyber/final-deliverables.md %}#submission)).
 
 1. **Container security design and compliance matrix.** Threat model for the platform, and a table mapping CIS Docker Benchmark sections to your implementation, with justified exceptions.
 2. **Architecture diagram.** Hosts, registry, proxy, containers, networks, trust boundaries, and log flow.

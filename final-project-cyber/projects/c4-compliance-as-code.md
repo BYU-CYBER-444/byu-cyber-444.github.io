@@ -46,24 +46,11 @@ Your proposal must include:
 - Your score threshold for the gate and how you chose it
 - Your drift-detection method and schedule
 
-## Suggested Timeline
-
-There are no graded checkpoints before the final package, so these weeks are pacing targets.
-
-| Week | Focus |
-|---|---|
-| 9 | Proposal; target hosts and runner up |
-| 10 | Roles for 25+ controls, baseline scan |
-| 11 | CI pipeline and gate |
-| 12 | Drift detection, exceptions, score history |
-| 14 | Remediation, documentation, rehearsal |
-| 15 | Final package and recorded presentation |
-
 ---
 
 ## Final Documentation Package {#documentation}
 
-**Due:** Last class day. Open a PR titled `Final Project - C4 Compliance-as-Code Pipeline`. Everything lives in `final-project-cyber/` in your portfolio repo.
+**Due:** December 10, 11:59 PM. Submit everything in Learning Suite, as uploaded files or a link to them (see [Final Deliverables]({% link final-project-cyber/final-deliverables.md %}#submission)).
 
 1. **Pipeline design document.** The flow from commit to enforced state, gate logic and threshold rationale, drift and remediation design, and the exception process.
 2. **Architecture diagram.** Repo, runner, test and target hosts, scanners, report storage, and the network paths between them.
