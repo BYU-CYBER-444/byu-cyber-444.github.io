@@ -1,3 +1,9 @@
+---
+title: "Acme Corp Acceptable Use Policy"
+parent: Labs
+nav_exclude: true
+---
+
 # Acme Corp Acceptable Use Policy
 
 **Version:** 1.1  

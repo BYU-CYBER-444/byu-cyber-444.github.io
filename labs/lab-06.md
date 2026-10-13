@@ -31,9 +31,9 @@ nav_order: 6
   | `lab06-db01` | database server | `172.19.x.20` |
   | `lab06-app01` | application workstation (GNOME desktop) | `172.19.x.21` |
 
-  `x` is the third octet of your own nested subnet, the same one your `pve1`/`pve2`/`pve3` VMs live on. All three VMs are on that subnet, so you can reach them from the same place you reach `pve1`.
+
 - `lab06-app01` has a GNOME desktop; use the hypervisor console for its desktop and SSH for its shell
-- Log in with your own NetID account, using the password you were emailed at the start of the semester. It has administrator (sudo) rights on all three VMs.
+- Log in with your own NetID account. 
 
 These VMs represent Acme Corp’s isolated, non-production Security Validation Lab. Treat their accounts and systems as company resources covered by the policy; use synthetic data only.
 
