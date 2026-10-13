@@ -48,7 +48,7 @@ All five options share the same schedule, submission process, and point structur
 | [Final Documentation Package]({% link final-project-it/final-deliverables.md %}) | Dec 10, 11:59 PM | 5% |
 | [Recorded Presentation and Demo]({% link final-project-it/final-deliverables.md %}#presentation) | Dec 10, 11:59 PM | 5% |
 
-Week 13 is Thanksgiving break and has no class or deliverable. There are no in-class presentations: the presentation is a recording you submit as a link in Learning Suite. There are no graded checkpoints between the proposal and the final package, so use the suggested timeline on your option's page to pace yourself. The documentation package and the recorded presentation are each scored out of 100 points using the rubric on your option's page. The proposal is required: you may not receive credit for the final project without a passing proposal on file.
+Week 13 is Thanksgiving break and has no class or deliverable. There are no in-class presentations: the presentation is a recording you submit as a link in Learning Suite. There are no graded checkpoints between the proposal and the final package. The documentation package and the recorded presentation are each scored out of 100 points using the rubric on your option's page. The proposal is required: you may not receive credit for the final project without a passing proposal on file.
 
 ---
 
@@ -69,6 +69,6 @@ See the [options overview]({% link final-project-it/projects/index.md %}) for a 
 ## Standards for Every Option
 
 - **Isolation.** Build and test only inside your own lab network. Every option is designed to run entirely on your own Proxmox environment; no cloud account is needed.
-- **Reproducibility.** Everything rebuilds from your portfolio repo using only the README.
+- **Reproducibility.** Everything rebuilds from your submitted package using only the README.
 - **Evidence.** Every claim is backed by output, logs, or screenshots.
-- **Submission.** The proposal is a PDF uploaded to Learning Suite. The final package is submitted through your GitHub portfolio with the same pull-request workflow as labs; paste the PR link into Learning Suite. The presentation is a recording whose link you also submit in Learning Suite.
+- **Submission.** Everything is submitted in Learning Suite: the proposal as a PDF, the final package as uploaded files or a link to them, and the presentation as a link to your recording.

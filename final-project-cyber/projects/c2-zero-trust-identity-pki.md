@@ -48,24 +48,11 @@ Your proposal must include:
 - How renewal and revocation will work for each certificate type
 - Which two (or more) trust integrations your Windows system performs
 
-## Suggested Timeline
-
-There are no graded checkpoints before the final package, so these weeks are pacing targets.
-
-| Week | Focus |
-|---|---|
-| 9 | Proposal; CA hierarchy design |
-| 10 | Root and intermediate CA, SSH CA working |
-| 11 | mTLS service pair; MFA |
-| 12 | Automated renewal and revocation |
-| 14 | Negative testing, documentation, rehearsal |
-| 15 | Final package and recorded presentation |
-
 ---
 
 ## Final Documentation Package {#documentation}
 
-**Due:** Last class day. Open a PR titled `Final Project - C2 Zero-Trust Identity and PKI Platform`. Everything lives in `final-project-cyber/` in your portfolio repo.
+**Due:** December 10, 11:59 PM. Submit everything in Learning Suite, as uploaded files or a link to them (see [Final Deliverables]({% link final-project-cyber/final-deliverables.md %}#submission)).
 
 1. **Certificate policy (CP/CPS-lite).** What each CA issues, to whom, validity periods, key protection, revocation process, and who approves issuance.
 2. **Architecture diagram.** Every host and service, each trust relationship (which CA signs what), and the direction of each mTLS and SSH connection.

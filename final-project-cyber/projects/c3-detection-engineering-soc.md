@@ -50,24 +50,11 @@ Your proposal must include:
 - The rules-of-engagement statement above
 - How you will measure detection quality (for example time to alert and false positives per hour of normal activity)
 
-## Suggested Timeline
-
-There are no graded checkpoints before the final package, so these weeks are pacing targets.
-
-| Week | Focus |
-|---|---|
-| 9 | Proposal; stand up victim, SIEM, and attacker hosts |
-| 10 | Log pipeline working; first attack scripts and detections |
-| 11 | Remaining attacks and detections |
-| 12 | Tuning, dashboards, coverage matrix |
-| 14 | Runbook, containment automation, rehearsal |
-| 15 | Final package and recorded presentation |
-
 ---
 
 ## Final Documentation Package {#documentation}
 
-**Due:** Last class day. Open a PR titled `Final Project - C3 Detection Engineering / SOC-in-a-Box`. Everything lives in `final-project-cyber/` in your portfolio repo.
+**Due:** December 10, 11:59 PM. Submit everything in Learning Suite, as uploaded files or a link to them (see [Final Deliverables]({% link final-project-cyber/final-deliverables.md %}#submission)).
 
 1. **Detection catalog and ATT&CK coverage matrix.** For each detection: the technique, the data source, the rule logic, severity, expected false positives, and how it was tested.
 2. **Incident response runbook.** Triage steps, escalation, containment, and evidence preservation for at least two of your scenarios.

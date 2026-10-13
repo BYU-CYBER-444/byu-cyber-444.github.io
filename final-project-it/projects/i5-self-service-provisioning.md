@@ -48,24 +48,11 @@ Your proposal must include:
 - Your request tool, how it authenticates to Proxmox (a scoped API token, not root), and where the inventory is stored
 - Your guardrails: quota, naming standard, and what triggers approval
 
-## Suggested Timeline
-
-There are no graded checkpoints before the final package, so these weeks are pacing targets.
-
-| Week | Focus |
-|---|---|
-| 9 | Proposal; Proxmox API token and image build started |
-| 10 | Golden image and baseline; one catalog item end to end |
-| 11 | Remaining catalog items and guardrails |
-| 12 | Inventory, change records, decommission |
-| 14 | Documentation, testing, rehearsal |
-| 15 | Final package and recorded presentation |
-
 ---
 
 ## Final Documentation Package {#documentation}
 
-**Due:** Last class day. Open a PR titled `Final Project - I5 Self-Service Provisioning and Golden Images`. Everything lives in `final-project-it/` in your portfolio repo.
+**Due:** December 10, 11:59 PM. Submit everything in Learning Suite, as uploaded files or a link to them (see [Final Deliverables]({% link final-project-it/final-deliverables.md %}#submission)).
 
 1. **Service catalog and request workflow.** Each offering (description, size, intended use, cost or quota impact), the request and approval flow, and expected delivery time.
 2. **Standards document.** Naming standard, baseline contents, quotas, image lifecycle (how and when images are rebuilt), and decommission policy.

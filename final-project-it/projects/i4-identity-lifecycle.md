@@ -47,24 +47,11 @@ Your proposal must include:
 - Your SSO product and the application it will protect
 - Your BYOD stance on PHI and one sentence justifying it
 
-## Suggested Timeline
-
-There are no graded checkpoints before the final package, so these weeks are pacing targets.
-
-| Week | Focus |
-|---|---|
-| 9 | Proposal; domain controller and OU design |
-| 10 | Directory, GPOs, and onboarding automation |
-| 11 | Mover and leaver automation |
-| 12 | SSO and access review |
-| 14 | Policies, documentation, rehearsal |
-| 15 | Final package and recorded presentation |
-
 ---
 
 ## Final Documentation Package {#documentation}
 
-**Due:** Last class day. Open a PR titled `Final Project - I4 Identity and Endpoint Lifecycle`. Everything lives in `final-project-it/` in your portfolio repo.
+**Due:** December 10, 11:59 PM. Submit everything in Learning Suite, as uploaded files or a link to them (see [Final Deliverables]({% link final-project-it/final-deliverables.md %}#submission)).
 
 1. **Identity and access standard.** OU and group design, role-to-access matrix, naming standards, privileged-account handling, and the JML process with timing expectations.
 2. **Policies.** Access-control policy and BYOD/MDM policy (device requirements, MDM scope, PHI decision with justification, remote wipe, offboarding).

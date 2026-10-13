@@ -44,24 +44,11 @@ Your proposal must include:
 - Five alert rules, and for each: what it detects and the priority of the ticket it should create
 - Three incident scenarios you will stage
 
-## Suggested Timeline
-
-There are no graded checkpoints before the final package, so these weeks are pacing targets.
-
-| Week | Focus |
-|---|---|
-| 9 | Proposal; fleet and service desk install |
-| 10 | Monitoring stack and service desk configured |
-| 11 | Alert-to-ticket integration |
-| 12 | Staged incidents, SLO dashboard |
-| 14 | PIR, KEDB, ITSM documents, rehearsal |
-| 15 | Final package and recorded presentation |
-
 ---
 
 ## Final Documentation Package {#documentation}
 
-**Due:** Last class day. Open a PR titled `Final Project - I2 Monitoring and Service Desk`. Everything lives in `final-project-it/` in your portfolio repo.
+**Due:** December 10, 11:59 PM. Submit everything in Learning Suite, as uploaded files or a link to them (see [Final Deliverables]({% link final-project-it/final-deliverables.md %}#submission)).
 
 1. **ITSM process document.** Service catalog, priority matrix, SLA targets, escalation path, and how alerts map to tickets.
 2. **Post-incident review and KEDB.** A PIR for your most significant staged incident with timeline, a 5 Whys analysis reaching a systemic root cause, quantified impact, what went well, specific improvements, action items, and a known-error database entry written for a help-desk analyst.

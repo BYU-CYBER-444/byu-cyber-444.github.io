@@ -16,7 +16,7 @@ Pick **one** of the six options below. Each option has its own scope, deliverabl
 
 | # | Project | You build | Best if you enjoyed |
 |---|---|---|---|
-| C1 | [Hardened Infrastructure Build]({% link final-project-cyber/projects/c1-hardened-infrastructure.md %}) | Three servers (Linux identity, Windows app, Linux web/Docker) hardened to CIS Level 2 and DISA STIG, with automation and a System Security Plan | Labs 2-4, 8, 10-11 |
+| C1 | [Hardened Infrastructure Build]({% link final-project-cyber/projects/c1-hardened-infrastructure.md %}) | Three servers (Linux identity, Windows app, Linux web/Docker) hardened to either CIS Level 2 or DISA STIG (your choice of one), with automation and a System Security Plan | Labs 2-4, 8, 10-11 |
 | C2 | [Zero-Trust Identity and PKI Platform]({% link final-project-cyber/projects/c2-zero-trust-identity-pki.md %}) | A private CA hierarchy, SSH CA, MFA, and mutual TLS between services, with automated issue, renew, and revoke | Labs 5-6 |
 | C3 | [Detection Engineering / SOC-in-a-Box]({% link final-project-cyber/projects/c3-detection-engineering-soc.md %}) | A logging and SIEM pipeline plus an isolated attacker host; you write detections mapped to MITRE ATT&CK and respond to live attacks | Lab 12, HW 12 |
 | C4 | [Compliance-as-Code Pipeline]({% link final-project-cyber/projects/c4-compliance-as-code.md %}) | Ansible hardening roles run through a CI pipeline that scans, gates, detects drift, and auto-remediates | Labs 10-11, HW 11 |
@@ -47,6 +47,6 @@ The Windows Server VM is the heaviest part of every option now. Check resource n
 
 - **Windows and Linux.** Every project must include at least one Linux system and at least one Windows Server system, and the Windows system must do real work in the project, not just exist. Both platforms must be covered by your automation, appear in your architecture diagram and documentation, and be shown in your recorded demos. Each option page says what its Windows system does.
 - **Isolation.** Everything you build and every test you run stays inside your own lab network. Do not scan, attack, or probe class infrastructure, other students' environments, or anything outside the lab.
-- **Reproducibility.** Your automation must rebuild the environment from your portfolio repo using only the README. Manual one-off changes that are not captured in code lose points on every rubric.
+- **Reproducibility.** Your automation must rebuild the environment from your submitted package using only the README. Manual one-off changes that are not captured in code lose points on every rubric.
 - **Evidence.** Claims need output: scan reports, command output, logs, screenshots with timestamps. "It works" without evidence earns no credit.
 - **Changing options.** Switching options after your proposal passes requires instructor approval and a new proposal PDF.

@@ -13,7 +13,7 @@ nav_order: 1
 
 The proposal locks in which option you chose and what you will build before you invest significant time. It is graded pass/fail, and all five sections must be present and specific. A brief instructor feedback session in Week 9 lab will confirm your scope and your lab resources.
 
-**Due:** End of Week 9. Submit your proposal as a single **PDF** in Learning Suite. The proposal is not submitted through a pull request, and it does not need to be in your portfolio repo. Pairs submit one PDF with both names on it.
+**Due:** End of Week 9. Submit your proposal as a single **PDF** in Learning Suite. Pairs submit one PDF with both names on it.
 
 {: .important }
 The proposal is required. You may not receive credit for the final project if a passing proposal is not on file.

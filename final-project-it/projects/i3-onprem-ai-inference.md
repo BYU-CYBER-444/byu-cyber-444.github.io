@@ -47,24 +47,11 @@ Your proposal must include:
 - What the service will and will not log, and why
 - At least two HIPAA technical safeguards your design must satisfy
 
-## Suggested Timeline
-
-There are no graded checkpoints before the final package, so these weeks are pacing targets.
-
-| Week | Focus |
-|---|---|
-| 9 | Proposal; host and model running |
-| 10 | Authenticated TLS front door; baseline benchmark |
-| 11 | Observability; isolation tests |
-| 12 | Load benchmarks; policy drafts |
-| 14 | Cost analysis, final policies, documentation, rehearsal |
-| 15 | Final package and recorded presentation |
-
 ---
 
 ## Final Documentation Package {#documentation}
 
-**Due:** Last class day. Open a PR titled `Final Project - I3 On-Prem AI Inference Service`. Everything lives in `final-project-it/` in your portfolio repo.
+**Due:** December 10, 11:59 PM. Submit everything in Learning Suite, as uploaded files or a link to them (see [Final Deliverables]({% link final-project-it/final-deliverables.md %}#submission)).
 
 1. **Design and sizing document.** Use cases, hardware specification with justification, model selection (size, context window, RAM/VRAM), software stack, access control, and security controls.
 2. **Policy set.** AI acceptable-use addendum (consistent with the course AUP), data-handling policy (what may be submitted, what is logged, retention, who audits), and a HIPAA technical-safeguards mapping to your controls.

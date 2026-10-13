@@ -47,6 +47,6 @@ Check resource needs with the instructor in Week 9 lab before you commit. Your l
 
 - **Proxmox only.** Every option is designed to be completed entirely on your own Proxmox environment. You do not need a cloud account for any of them.
 - **Isolation.** Everything you build and test stays inside your own lab network. Do not scan, attack, or probe class infrastructure or other students' environments.
-- **Reproducibility.** Your configuration must rebuild the environment from your portfolio repo using only the README. Manual one-off changes that are not captured in code or documented steps lose points on every rubric.
+- **Reproducibility.** Your configuration must rebuild the environment from your submitted package using only the README. Manual one-off changes that are not captured in code or documented steps lose points on every rubric.
 - **Evidence.** Claims need output: command results, logs, dashboards, screenshots with timestamps. "It works" without evidence earns no credit.
 - **Changing options.** Switching options after your proposal passes requires instructor approval and a new proposal PDF.
