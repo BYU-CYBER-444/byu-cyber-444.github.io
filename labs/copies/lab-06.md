@@ -138,7 +138,7 @@ Firefox must also actually start on `lab06-app01`.
 
 A USB storage device is attached to `lab06-app01`. The policy does not approve removable mass storage in the Security Validation Lab, so all of the following must be true:
 
-1. **Loading is blocked.** The `usb-storage` kernel driver is configured so that any attempt to load it fails. Blocking only automatic loading is not enough: an explicit request to load the driver must also fail. The configuration must be persistent, and it must already be in force at the very start of boot: the system’s early-boot image carries its own copy of the configuration, so a rule that exists only on the installed system can be bypassed while the machine is still starting up.
+1. **Loading is blocked.** The `usb-storage` kernel driver is configured so that any attempt to load it fails. Blocking only automatic loading is not enough: an explicit request to load the driver must also fail. The configuration must be persistent, and it must hold from the very start of boot: the early-boot image has its own set of drivers and does not read the installed system’s module configuration, so a rule that exists only on the installed system can be bypassed while the machine is still starting up.
 2. **It is not loaded now.** The driver is not loaded in the running kernel.
 3. **No USB storage is present or mounted.** No USB mass-storage block device is available to the system, and nothing is mounted from one.
 4. **Automount is off for everyone.** The desktop settings `automount` and `automount-open` are both effectively `false` for every user, and both are **locked** so that a user cannot change them. See the desktop settings table below.
