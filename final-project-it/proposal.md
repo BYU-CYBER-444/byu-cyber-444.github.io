@@ -24,7 +24,7 @@ The proposal is required. You may not receive credit for the final project if a 
 
 ### 1. Option and Team
 
-State which option you chose (for example "I2 - Monitoring and Service Desk") and in one or two sentences why. Say whether you are working alone or in a pair. If in a pair, list both names, what each person owns, and which **pair extension** you will complete.
+State which option you chose (for example "I2 - Monitoring and Service Desk") and in one or two sentences why. Say whether you are working alone or in a pair. If in a pair, list both names and what each person owns. The project requirements are the same for one person or two.
 
 ### 2. Option Scope
 
@@ -60,7 +60,7 @@ Fill in every week with specific deliverables.
 
 | Criterion | Pass | Fail |
 |---|---|---|
-| Option and team | Option named; team and (for pairs) ownership and extension stated | Option or team unclear |
+| Option and team | Option named; team and (for pairs) ownership stated | Option or team unclear |
 | Option scope | Every item in the option's checklist answered specifically | Items missing or vague |
 | Infrastructure and resources | Every component listed with role, address, and resources; fits the lab or budget | Components missing or resources not considered |
 | Tools | Tools listed with justification | Tools omitted or unjustified |

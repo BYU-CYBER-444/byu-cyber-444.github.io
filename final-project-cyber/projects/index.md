@@ -27,24 +27,25 @@ Pick **one** of the six options below. Each option has its own scope, deliverabl
 
 ## Workload and Risk at a Glance
 
-All six are sized to be completed in Weeks 9-15 by one student (or two, see the pair extension on each page). They differ in where the effort and the risk sit.
+All six are sized to be completed in Weeks 9-15 and the scope is the same whether you work alone or in a pair. They differ in where the effort and the risk sit.
 
 | # | Where most of the effort goes | Main risk | Lab resources to confirm in Week 9 |
 |---|---|---|---|
 | C1 | Control-by-control automation and the SSP | Scan scores plateau below target; Windows VM is RAM-heavy | One Windows Server VM |
-| C2 | Getting every trust chain and revocation path right | Small mistakes in a trust chain break everything downstream | Small VMs or LXCs only |
-| C3 | Writing and tuning detections | SIEM stack needs enough RAM to run reliably | SIEM host needs the most RAM; confirm before choosing |
-| C4 | CI pipeline and drift handling | Pipeline must reach your lab network (use a self-hosted runner) | Small VMs or LXCs plus a runner |
-| C5 | Hardening plus the image supply chain | Local registry and scanner add RAM and disk | Small VMs |
-| C6 | Scanner setup and a repeatable patch cycle | Scanner feed downloads are slow; start early | Scanner VM needs the most RAM; confirm before choosing |
+| C2 | Getting every trust chain and revocation path right | Small mistakes in a trust chain break everything downstream | One Windows Server VM plus small Linux VMs or LXCs |
+| C3 | Writing and tuning detections | SIEM stack needs enough RAM to run reliably | SIEM host and a Windows Server VM; confirm before choosing |
+| C4 | CI pipeline and drift handling | Pipeline must reach your lab network (use a self-hosted runner) | One Windows Server VM, one Linux VM, plus the Git/CI service |
+| C5 | Hardening plus the image supply chain | Local registry and scanner add RAM and disk | One Windows Server VM plus small Linux VMs |
+| C6 | Scanner setup and a repeatable patch cycle | Scanner feed downloads are slow; start early | Scanner VM and a Windows Server VM; confirm before choosing |
 
 {: .important }
-Check resource needs with the instructor in Week 9 lab before you commit. Your nested Proxmox environment has a fixed RAM budget, and an option that does not fit will cost you more time than any other mistake.
+The Windows Server VM is the heaviest part of every option now. Check resource needs with the instructor in Week 9 lab before you commit. Your nested Proxmox environment has a fixed RAM budget, and an option that does not fit will cost you more time than any other mistake.
 
 ---
 
 ## Rules That Apply to Every Option
 
+- **Windows and Linux.** Every project must include at least one Linux system and at least one Windows Server system, and the Windows system must do real work in the project, not just exist. Both platforms must be covered by your automation, appear in your architecture diagram and documentation, and be shown in your recorded demos. Each option page says what its Windows system does.
 - **Isolation.** Everything you build and every test you run stays inside your own lab network. Do not scan, attack, or probe class infrastructure, other students' environments, or anything outside the lab.
 - **Reproducibility.** Your automation must rebuild the environment from your portfolio repo using only the README. Manual one-off changes that are not captured in code lose points on every rubric.
 - **Evidence.** Claims need output: scan reports, command output, logs, screenshots with timestamps. "It works" without evidence earns no credit.

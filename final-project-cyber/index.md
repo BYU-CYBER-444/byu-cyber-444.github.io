@@ -32,7 +32,7 @@ All six options share the same schedule, submission process, and point structure
 
 ## Teams and Help
 
-- You may work **alone or in a pair**. Pairs must say so in the proposal, list who owns which pieces, and complete the **pair extension** listed on their option's page.
+- You may work **alone or in a pair**. Pairs must say so in the proposal and list who owns which pieces. The project scope and grading are the same regardless of team size.
 - This is the final exam. You may not receive help on the project itself from the instructor, teaching assistants, classmates, or anyone outside your group. You may ask the instructor or TAs clarifying questions about grading or scope.
 - Late work is not accepted (see the syllabus).
 
@@ -67,6 +67,7 @@ See the [options overview]({% link final-project-cyber/projects/index.md %}) for
 
 ## Standards for Every Option
 
+- **Windows and Linux.** Every project must include at least one Linux system and at least one Windows Server system, and the Windows system must do real work in the project, not just exist. Both platforms must be covered by your automation, appear in your architecture diagram and documentation, and be shown in your recorded demos. Each option page says what its Windows system does.
 - **Isolation.** Build and test only inside your own lab network.
 - **Reproducibility.** Everything rebuilds from your portfolio repo using only the README.
 - **Evidence.** Every claim is backed by output, logs, or reports.

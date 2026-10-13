@@ -47,11 +47,6 @@ Your proposal must include:
 - What the service will and will not log, and why
 - At least two HIPAA technical safeguards your design must satisfy
 
-## Pair Extension (pairs only: complete one)
-
-- Add retrieval over an approved document set (a small knowledge base) with access control on which users can query which documents
-- Compare two models or quantizations on the same benchmark and recommend one with evidence
-
 ## Suggested Timeline
 
 There are no graded checkpoints before the final package, so these weeks are pacing targets.
