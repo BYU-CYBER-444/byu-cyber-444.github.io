@@ -39,7 +39,7 @@ These VMs represent Acme Corp’s isolated, non-production Security Validation L
 
 ## Policy Source
 
-The completed [Acme Corp Acceptable Use Policy]({{ site.baseurl }}/labs/acceptable-use-policy-acme-corp.md) is the authoritative source for this exercise. Every requirement below is stated in the policy; this lab restates each one as an exact end state so there is nothing to guess. The sections that govern the lab are:
+The completed [Acme Corp Acceptable Use Policy]({% link labs/acceptable-use-policy-acme-corp.md %}) is the authoritative source for this exercise. Every requirement below is stated in the policy; this lab restates each one as an exact end state so there is nothing to guess. The sections that govern the lab are:
 
 | Lab Check | Governing policy section |
 |---|---|
