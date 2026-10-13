@@ -34,7 +34,7 @@ All five options share the same schedule, submission process, and point structur
 
 ## Teams and Help
 
-- You may work **alone or in a pair**. Pairs must say so in the proposal, list who owns which pieces, and complete the **pair extension** listed on their option's page.
+- You may work **alone or in a pair**. Pairs must say so in the proposal and list who owns which pieces. The project scope and grading are the same regardless of team size.
 - This is the final exam. You may not receive help on the project itself from the instructor, teaching assistants, classmates, or anyone outside your group. You may ask the instructor or TAs clarifying questions about grading or scope.
 - Late work is not accepted (see the syllabus).
 

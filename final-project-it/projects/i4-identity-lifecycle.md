@@ -47,11 +47,6 @@ Your proposal must include:
 - Your SSO product and the application it will protect
 - Your BYOD stance on PHI and one sentence justifying it
 
-## Pair Extension (pairs only: complete one)
-
-- Add multi-factor authentication to the SSO flow, with an exemption process documented
-- Add a second domain or site with trust, or delegated administration for a department, demonstrated with least-privilege admin accounts
-
 ## Suggested Timeline
 
 There are no graded checkpoints before the final package, so these weeks are pacing targets.

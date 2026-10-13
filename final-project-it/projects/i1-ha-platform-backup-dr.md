@@ -47,11 +47,6 @@ Your proposal must include:
 - Your target RTO and RPO and how you will measure them
 - Your game-day failure scenarios (at least three)
 
-## Pair Extension (pairs only: complete one)
-
-- Add point-in-time recovery for the database (continuous log archiving) and demonstrate restoring to a chosen minute
-- Add a second location for backups (a different host or site) with a documented 3-2-1 backup strategy
-
 ## Suggested Timeline
 
 There are no graded checkpoints before the final package, so these weeks are pacing targets.

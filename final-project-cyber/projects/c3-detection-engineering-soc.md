@@ -33,26 +33,22 @@ A SOC is only as good as its detections. You build a small security operations s
 |---|---|
 | Victim host | Linux server (Ubuntu or Rocky) with `auditd` rules and a log shipper/agent; runs a few realistic services (SSH, a web app) |
 | Log / SIEM host | Graylog, Wazuh, or an Elastic stack receiving and indexing events |
+| Windows victim host | Windows Server 2022 with Sysmon and Windows event forwarding (or a log agent) shipping to the same SIEM. At least 2 of your techniques must target it, for example failed-logon spraying (T1110, event 4625), new local account creation (T1136, event 4720), scheduled-task persistence (T1053.005, event 4698), or clearing the event log (T1070.001, event 1102) |
 | Attacker host | A VM or LXC (Kali or a hand-built toolkit) with scripted attack scenarios, restricted to your lab network |
 | Attack scenarios | At least **5** techniques mapped to ATT&CK, for example SSH brute force (T1110), privilege escalation via sudo misuse (T1548), persistence via cron (T1053), credential file access (T1552), and log tampering (T1070) |
-| Detections | At least **8** detection rules or alerts, with a documented false-positive tuning pass |
+| Detections | At least **8** detection rules or alerts, **at least 3 of them on Windows events**, with a documented false-positive tuning pass |
 | Response | A runbook, plus at least one automated containment action (for example blocking an attacking IP with a firewall rule via Ansible) |
 
-The SIEM host is the heaviest component; confirm RAM with the instructor before choosing Graylog/Elastic over Wazuh or another lighter stack.
+The SIEM host and the Windows Server are the heaviest components; confirm RAM with the instructor before choosing Graylog/Elastic over Wazuh or another lighter stack.
 
 ## Proposal Checklist
 
 Your proposal must include:
 
 - The log/SIEM platform you will use and why it fits your RAM budget
-- The five or more ATT&CK techniques you will simulate, with the technique ID for each
+- The five or more ATT&CK techniques you will simulate, with the technique ID for each, and which of them target the Windows host
 - The rules-of-engagement statement above
 - How you will measure detection quality (for example time to alert and false positives per hour of normal activity)
-
-## Pair Extension (pairs only: complete one)
-
-- Add a second victim (a Windows host with Sysmon or Windows event forwarding) and detections for at least two Windows techniques
-- Add threat-intelligence enrichment or automated ticket creation for high-severity alerts
 
 ## Suggested Timeline
 
@@ -81,7 +77,7 @@ There are no graded checkpoints before the final package, so these weeks are pac
 
 | Criterion | Points | Full credit | Partial credit |
 |---|---|---|---|
-| Detection catalog and matrix | 30 | Complete, specific, and tested | Present; some entries thin or untested |
+| Detection catalog and matrix | 30 | Complete, specific, and tested, with 3+ Windows detections and 2+ Windows techniques | Present; some entries thin or untested |
 | IR runbook | 20 | Actionable steps a new analyst could follow | Generic |
 | Architecture diagram | 15 | Hosts, zones, and log flow clearly labeled | Missing labels or isolation boundary |
 | Automation package | 20 | Rebuilds from checkout; README accurate | Runs with manual fixes |
@@ -98,6 +94,8 @@ The three required demos:
 1. **Attack to alert.** Run one of your attacks live from the attacker host and show the alert fire in your SIEM. State how long it took.
 2. **Triage.** Starting from the alert, use your dashboard and queries to reconstruct what the attacker did.
 3. **Containment.** Contain the attack, either by following your runbook or by an automated action, and show that the attacker is blocked.
+
+At least one of the three demos must use the Windows host.
 
 | Criterion | Points | Full credit | Partial credit |
 |---|---|---|---|

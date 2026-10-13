@@ -24,7 +24,7 @@ The proposal is required. You may not receive credit for the final project if a 
 
 ### 1. Option and Team
 
-State which option you chose (for example "C4 - Compliance-as-Code Pipeline") and in one or two sentences why. Say whether you are working alone or in a pair. If in a pair, list both names, what each person owns, and which **pair extension** you will complete.
+State which option you chose (for example "C4 - Compliance-as-Code Pipeline") and in one or two sentences why. Say whether you are working alone or in a pair. If in a pair, list both names and what each person owns. The project requirements are the same for one person or two.
 
 ### 2. Option Scope
 
@@ -32,7 +32,7 @@ Answer every item in the **Proposal Checklist** on your option's page. Answers m
 
 ### 3. Infrastructure and Resources
 
-List every VM, container, or service you will run, with hostname, OS, role, planned IP, and approximate RAM and disk. Identify the heaviest component and how it fits your lab's RAM budget.
+List every VM, container, or service you will run, with hostname, OS, role, planned IP, and approximate RAM and disk. Your list must include at least one Linux system and at least one Windows Server system, and state what the Windows system does in your project. Identify the heaviest component and how it fits your lab's RAM budget.
 
 ### 4. Tools
 
@@ -48,9 +48,9 @@ Give a personal timeline for Week 9 through Week 15 with specific deliverables e
 
 | Criterion | Pass | Fail |
 |---|---|---|
-| Option and team | Option named; team and (for pairs) ownership and extension stated | Option or team unclear |
+| Option and team | Option named; team and (for pairs) ownership stated | Option or team unclear |
 | Option scope | Every item in the option's checklist answered specifically | Items missing or vague |
-| Infrastructure and resources | Every component listed with role, IP, and resources; fits the lab | Components missing or resources not considered |
+| Infrastructure and resources | Every component listed with role, IP, and resources; includes both Linux and Windows Server; fits the lab | Components missing or resources not considered |
 | Tools | Tools listed with justification | Tools omitted or unjustified |
 | Milestones | Specific weekly deliverables that build to a complete project by Week 15 | Generic or missing milestones |
 

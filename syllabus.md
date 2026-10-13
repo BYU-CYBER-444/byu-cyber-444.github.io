@@ -177,7 +177,7 @@ The final project is a multi-week capstone running from Week 9 through the last 
 
 You may pick either version regardless of which weekly track you have been following, and within a version you choose the option you want to build. The project proposal naming your option is due at the end of Week 9 and is submitted as a PDF in Learning Suite. The final documentation package is submitted through your GitHub portfolio using the same PR workflow as labs. The final deliverable is due on the last class day (December 10), and the pre-recorded presentation and demo is due the same day, submitted as a link in Learning Suite. The proposal is pass/fail; the final documentation package and the recorded presentation are each worth 5% of your course grade.
 
-This will serve as the final exam for the class. You may work alone or in a group of 2; groups complete an additional extension listed with their chosen option. As such, you may not receive help from the instructor, teaching assistants, classmates, or anyone outside your group. Each group must complete the assignment on its own. You may ask the instructor or teaching assistant clarifying questions related to grading or scope requirements, but no help on the project itself will be given.
+This will serve as the final exam for the class. You may work alone or in a group of 2; the project requirements and grading are the same either way. As such, you may not receive help from the instructor, teaching assistants, classmates, or anyone outside your group. Each group must complete the assignment on its own. You may ask the instructor or teaching assistant clarifying questions related to grading or scope requirements, but no help on the project itself will be given.
 
 
 ## Course Policies

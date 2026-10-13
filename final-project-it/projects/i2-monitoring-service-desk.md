@@ -44,11 +44,6 @@ Your proposal must include:
 - Five alert rules, and for each: what it detects and the priority of the ticket it should create
 - Three incident scenarios you will stage
 
-## Pair Extension (pairs only: complete one)
-
-- Add an on-call rotation and escalation: unacknowledged high-priority tickets escalate automatically after a set time
-- Add a self-service knowledge base fed by your known-error database, with a ticket-deflection measurement
-
 ## Suggested Timeline
 
 There are no graded checkpoints before the final package, so these weeks are pacing targets.

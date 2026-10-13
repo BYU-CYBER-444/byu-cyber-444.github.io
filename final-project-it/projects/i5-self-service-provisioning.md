@@ -48,11 +48,6 @@ Your proposal must include:
 - Your request tool, how it authenticates to Proxmox (a scoped API token, not root), and where the inventory is stored
 - Your guardrails: quota, naming standard, and what triggers approval
 
-## Pair Extension (pairs only: complete one)
-
-- Add a lifecycle policy: lease expiry with notification and automatic reclaim of unused machines
-- Add network placement: each offering is placed in the correct VLAN/network with firewall rules chosen from the catalog item
-
 ## Suggested Timeline
 
 There are no graded checkpoints before the final package, so these weeks are pacing targets.

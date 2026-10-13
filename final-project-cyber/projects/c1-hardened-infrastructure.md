@@ -32,6 +32,8 @@ You are the security engineer for a small agency that must show an auditor its s
 | Server 2 | Windows app server | Windows Server 2022 | CIS Windows Server 2022 L2 + DISA Windows STIG |
 | Server 3 | Web / Docker host | Ubuntu 22.04 LTS | CIS Ubuntu L2 + CIS Docker Benchmark |
 
+This option meets the Windows and Linux requirement by design: Servers 1 and 3 are Linux and Server 2 is Windows, all hardened and scanned.
+
 Required on top of the three servers:
 
 - Automation (Ansible, Terraform, or both) that applies the hardening and runs idempotently
@@ -47,11 +49,6 @@ Your proposal must include:
 - The CIS level and STIG that applies to **each** server (not a general list)
 - Your scanning tools (CIS-CAT and OpenSCAP or STIG Viewer) and logging stack, with a sentence justifying each
 - Which identity control you will demonstrate (SSH CA or MFA)
-
-## Pair Extension (pairs only: complete one)
-
-- Add a fourth server (for example a database or DNS server) hardened to the same standard with a fourth set of scans
-- Add a second identity mechanism (both SSH CA and MFA) with an access-control matrix
 
 ## Suggested Timeline
 

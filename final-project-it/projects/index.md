@@ -28,7 +28,7 @@ Most options use **Valley Medical Group**, the 300-employee, HIPAA-regulated org
 
 ## Workload and Risk at a Glance
 
-All five are sized to be completed in Weeks 9-15 by two students. They differ in where the effort and the risk sit.
+All five are sized to be completed in Weeks 9-15 and the scope is the same whether you work alone or in a pair. They differ in where the effort and the risk sit.
 
 | # | Where most of the effort goes | Main risk | Lab resources to confirm in Week 9 |
 |---|---|---|---|

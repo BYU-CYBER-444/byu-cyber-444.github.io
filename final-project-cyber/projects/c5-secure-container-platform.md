@@ -36,6 +36,7 @@ Containers move fast, and unchecked images and over-privileged containers are a 
 | TLS front door | Reverse proxy (nginx, Traefik, or Caddy) with certificates issued by a CA you built (building on Lab 5) |
 | Secrets | Secrets delivered without baking them into images or environment files in the repo |
 | Logging | Container and daemon logs shipped to a central log host |
+| Windows system | A Windows Server 2022 machine integrated into the platform. It must do **at least two** of: host the internal CA that issues the platform's certificates (building on Lab 5), ship its Windows event logs to the central log host, and act as the administrative workstation that builds, scans, signs, and pushes images. It is hardened to the CIS Windows Server 2022 baseline for the controls relevant to its role (at least 10 controls, with evidence) |
 
 ## Proposal Checklist
 
@@ -45,11 +46,7 @@ Your proposal must include:
 - The three containers in your app stack and the network segmentation between them
 - Your scanner, signing tool, and the exact point in the deploy flow where each is enforced
 - Where logs will go and which events you expect to see
-
-## Pair Extension (pairs only: complete one)
-
-- Add an admission-style policy (for example OPA or Kyverno-like rules, or a signed-policy check) covering more than image signatures, such as banned capabilities and required labels
-- Add a runtime-detection tool (Falco or equivalent) with at least three custom rules
+- Which two (or more) roles your Windows system performs and which controls you will harden on it
 
 ## Suggested Timeline
 
@@ -80,7 +77,7 @@ There are no graded checkpoints before the final package, so these weeks are pac
 |---|---|---|---|
 | Design and compliance matrix | 30 | Threat model and benchmark mapping complete and honest | Matrix incomplete |
 | Architecture diagram | 15 | Trust boundaries and flows clearly labeled | Missing labels or boundaries |
-| Scan evidence | 20 | Before and after for both host and images | One scan type or no comparison |
+| Scan evidence | 20 | Before and after for the container host, the images, and the Windows system | One scan type or no comparison |
 | Automation package | 20 | Rebuilds from checkout; README accurate | Runs with manual fixes |
 | Lessons learned | 15 | Specific and reflective; all four prompts | Present but generic |
 
@@ -95,6 +92,8 @@ The three required demos:
 1. **Scan gate.** Attempt to deploy an image with known high-severity vulnerabilities and show it blocked, then deploy a clean image successfully.
 2. **Signature check.** Attempt to deploy an unsigned image and show it refused, then run a signed image.
 3. **Runtime.** Inside a running container, attempt a privileged action (for example mounting a filesystem or writing to a read-only path) and show it fail and appear in your central logs.
+
+At least one of the three demos must show the Windows system doing its job (for example its certificate on the proxy, or its events in central logging).
 
 | Criterion | Points | Full credit | Partial credit |
 |---|---|---|---|
