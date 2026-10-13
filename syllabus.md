@@ -172,12 +172,12 @@ The midterm is administered during Week 10 as an individual, tabletop exercise c
 
 The final project is a multi-week capstone running from Week 9 through the last class, and has a version aligned with each track:
 
-- **Cyber Track final project:** design, harden, document, and present a fully compliant server infrastructure meeting CIS Level 2. See [Final Project (Cyber)]({% link final-project-cyber/index.md %}).
-- **IT Track final project:** design, build, document, and present an enterprise infrastructure deliverable aligned with the IT Track's focus on operations, networking, cloud, monitoring, and policy. See [Final Project (IT)]({% link final-project-it/index.md %}).
+- **Cyber Track final project:** choose one of six security-focused options (hardened infrastructure, zero-trust identity and PKI, detection engineering, compliance-as-code, secure containers, or patch and vulnerability management). See [Final Project (Cyber)]({% link final-project-cyber/index.md %}).
+- **IT Track final project:** choose one of five operations-focused options (HA with backup and DR, monitoring and service desk, on-prem AI inference, identity lifecycle, or self-service provisioning). Every option runs entirely on your own Proxmox environment. See [Final Project (IT)]({% link final-project-it/index.md %}).
 
-You may pick either version regardless of which weekly track you have been following. All project documentation is submitted through your GitHub portfolio using the same PR workflow as labs. A project proposal is due Week 9, and the final deliverable and live presentation are due on the last class day (December 10).
+You may pick either version regardless of which weekly track you have been following, and within a version you choose the option you want to build. The project proposal naming your option is due at the end of Week 9 and is submitted as a PDF in Learning Suite. The final documentation package is submitted through your GitHub portfolio using the same PR workflow as labs. The final deliverable is due on the last class day (December 10), and the pre-recorded presentation and demo is due the same day, submitted as a link in Learning Suite. The proposal is pass/fail; the final documentation package and the recorded presentation are each worth 5% of your course grade.
 
-This will be a group assignment and will serve as the final exam for the class. You will work in groups of 2. As such, you may not receive help from the instructor, teaching assistants, classmates, or anyone outside your group. Each group must complete the assignment on its own. You may ask the instructor or teaching assistant clarifying questions related to grading or scope requirements, but no help on the project itself will be given.
+This will serve as the final exam for the class. You may work alone or in a group of 2; groups complete an additional extension listed with their chosen option. As such, you may not receive help from the instructor, teaching assistants, classmates, or anyone outside your group. Each group must complete the assignment on its own. You may ask the instructor or teaching assistant clarifying questions related to grading or scope requirements, but no help on the project itself will be given.
 
 
 ## Course Policies

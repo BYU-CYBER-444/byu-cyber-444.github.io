@@ -33,8 +33,7 @@ nav_order: 6
 
 | Track | Lab |
 |---|---|
-| **Cyber Track** | [CYBER LAB 6 - SSH Certificate Authority & PAM MFA]({% link labs/cyber-lab-06.md %}) |
-| **IT Track** | [IT LAB 6 - Enterprise Policy Drafting]({% link labs/it-lab-06.md %}) |
+| **Both Tracks** | [LAB 6 - Policy Compliance Audit & Enforcement]({% link labs/lab-06.md %}) |
 
 ---
 
