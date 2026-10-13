@@ -12,9 +12,9 @@ nav_order: 9
 ## Topics
 
 - Midterm exam: comprehensive review session covering Weeks 1-8, followed by the exam itself
-- Final Project overview: scope, deliverables, timeline, and grading rubric for both tracks
-- Final Project proposal requirements: problem statement, target environment, and success criteria
-- Choosing a final project topic: pairing with a real organizational need vs. a self-contained lab-scale simulation
+- Final Project overview: the project options for each track, deliverables, timeline, and grading rubrics
+- Final Project proposal requirements: which option you chose, its scope checklist, your infrastructure and resources, and a week-by-week plan
+- Choosing a final project option: matching an option to your interests and to what your lab environment can run
 
 ---
 
@@ -41,9 +41,11 @@ None this week.
 
 ## Final Project
 
-**Cyber Track:** [Cyber Final Project Proposal]({% link final-project-cyber/proposal.md %})
+Choose one option, then submit a proposal for it as a PDF in Learning Suite by the end of the week.
 
-**IT Track:** [IT Final Project Proposal]({% link final-project-it/proposal.md %}) 
+**Cyber Track:** [Cyber Project Options]({% link final-project-cyber/projects/index.md %}) · [Cyber Final Project Proposal]({% link final-project-cyber/proposal.md %})
+
+**IT Track:** [IT Project Options]({% link final-project-it/projects/index.md %}) · [IT Final Project Proposal]({% link final-project-it/proposal.md %})
 
 ---
 

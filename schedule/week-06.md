@@ -33,7 +33,7 @@ nav_order: 6
 
 | Track | Lab |
 |---|---|
-| **Both Tracks** | [LAB 6 - Policy Compliance Audit & Enforcement]({% link labs/lab-06.md %}) |
+| **Both Tracks** | [LAB 6 - Acceptable Use & Data Classification Enforcement]({% link labs/lab-06.md %}) |
 
 ---
 

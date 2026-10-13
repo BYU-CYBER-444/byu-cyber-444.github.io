@@ -29,4 +29,4 @@ has_toc: false
 | [12]({% link schedule/week-12.md %}) | Nov 17 & 19 | Logging, Monitoring & Audit Architecture | 
 | [13]() | Nov 24 & 26 | **Thanksgiving Break - No Class** |
 | [14]({% link schedule/week-14.md %}) | Dec 1 & 3 | Container Security & AI Infrastructure | 
-| [15]({% link schedule/week-15.md %}) | Dec 8 & 10 | Final Project Presentations | 
+| [15]({% link schedule/week-15.md %}) | Dec 8 & 10 | Final Project Submissions | 
