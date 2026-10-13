@@ -4,14 +4,14 @@ parent: Schedule
 nav_order: 15
 ---
 
-# Week 15 - Final Project Presentations
+# Week 15 - Final Project Submissions
 {: .no_toc }
 
 ---
 
 ## Topics
 
-- **Final Project presentations** - 10 minutes each + Q&A (both tracks)
+- **Final Project** - no in-class presentations. The final documentation package (PR) and a pre-recorded presentation and demo (10 minutes or less, link submitted in Learning Suite) are due December 10 at 11:59 PM (both tracks)
 
 ---
 

@@ -1,10 +1,10 @@
 ---
-title: "LAB 6 - Policy Compliance Audit & Enforcement"
+title: "LAB 6 - Acceptable Use & Data Classification Enforcement"
 parent: Labs
 nav_order: 6
 ---
 
-# LAB 6 - Policy Compliance Audit & Enforcement
+# LAB 6 - Acceptable Use & Data Classification Enforcement
 {: .no_toc }
 
 <details open markdown="block">

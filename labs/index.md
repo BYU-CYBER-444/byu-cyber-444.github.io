@@ -26,6 +26,7 @@ Both tracks complete these labs.
 | [LAB 2]({% link labs/lab-02.md %}) | Linux Network Services, Privilege Management & Storage |
 | [LAB 3]({% link labs/lab-03.md %}) | Active Directory, GPO & Centralized AAA |
 | [LAB 5]({% link labs/lab-05.md %}) | PKI & Certificate Management |
+| [LAB 6]({% link labs/lab-06.md %}) | Acceptable Use & Data Classification Enforcement |
 | [LAB 7]({% link labs/lab-07.md %}) | Patch Management Implementation |
 | [LAB 10]({% link labs/lab-10.md %}) | Ansible Hardening Playbook |
 | [LAB 11]({% link labs/lab-11.md %}) | Ansible Galaxy Hardening Role |
@@ -37,7 +38,6 @@ Both tracks complete these labs.
 | Lab | Title | Week |
 |---|---|---|
 | [CYBER LAB 4]({% link labs/cyber-lab-04.md %}) | Windows Server 2022 Hardening |
-| [CYBER LAB 6]({% link labs/cyber-lab-06.md %}) | SSH Certificate Authority & PAM MFA |
 | [CYBER LAB 8]({% link labs/cyber-lab-08.md %}) | CIS Benchmark Assessment & Targeted Remediation |
 | [CYBER LAB 12]({% link labs/cyber-lab-12.md %}) | Centralized Logging with auditd & Graylog |
 | [CYBER LAB 14]({% link labs/cyber-lab-14.md %}) | Docker & Container Security Hardening |
@@ -49,7 +49,6 @@ Both tracks complete these labs.
 | Lab | Title | Week |
 |---|---|---|
 | [IT LAB 4]({% link labs/it-lab-04.md %}) | DNSSEC & Email Security Configuration |
-| [IT LAB 6]({% link labs/it-lab-06.md %}) | Enterprise Policy Drafting |
 | [IT LAB 8]({% link labs/it-lab-08.md %}) | Data Center Site Survey Exercise |
 | [IT LAB 12]({% link labs/it-lab-12.md %}) | Prometheus & Grafana Monitoring Stack |
 | [IT LAB 14]({% link labs/it-lab-14.md %}) | AI Inference Server Setup and Governance |
