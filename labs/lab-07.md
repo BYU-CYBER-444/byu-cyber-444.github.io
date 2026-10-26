@@ -53,7 +53,7 @@ Patch management is where "apply the update" meets "don't break production" and 
 
 **The first time you run `/grade lab-7`, it does not grade you. It records the starting state of your VMs, and that record is what every later run is compared against.** Run it now, before you install, update, configure, or reboot anything, and before you run any scan. The first run awards no points and cannot be repeated.
 
-Run `/grade lab-7` again when you have finished all the parts. That run is your grade.
+Run `/grade lab-7` again when you have finished all the parts. That run is your grade. NOTE: after this run, each grade run-through will reboot all your machines. You have been warned.
 
 If the first run happens after you have already patched or changed a VM, the comparison is meaningless and the checks that depend on it cannot earn points.
 ---
@@ -87,7 +87,7 @@ The scan must be **completed** (not stopped or interrupted) and must **finish be
 - Only **security** updates are applied.
 - Updates are downloaded **and** applied automatically.
 - The packages `nginx` and `mariadb-server` are excluded from automatic upgrades, because they need manual testing.
-- Results are reported by email to `root` on the local machine, with the host name `lab07-patch01`.
+- Results are reported by email to `root` on the local machine, with the host name `lab07-patch01`. This is a little complicated, so I'll give more guidance. You will need to change the `emitters` section to use a different `emit_via` and set `system_name` here. Then, in the `email` section, you should change just the email to `root@localhost` without editing anything else.
 
 The effective configuration is what counts. A setting in the wrong section, or one `dnf-automatic` does not recognize, is not in force.
 
@@ -120,7 +120,7 @@ AIDE (Advanced Intrusion Detection Environment) is a **file integrity checker**.
 
 ## Part 3 - AIDE Baseline Before Patching (`lab07-patch01`)
 
-Install and initialize AIDE on `lab07-patch01` **before** patching (see the AIDE reference above), so you have a clean record of the filesystem to compare against. The baseline database must be the one AIDE actually reads, and it must have been created **before the first patch is installed**. Do not rebuild it later.
+Install and initialize AIDE on `lab07-patch01` **before** patching (see the AIDE reference above), so you have a clean record of the filesystem to compare against. The baseline database must be the one AIDE actually reads, and it must have been created **before the first patch is installed**. Do not rebuild it later. Once you have created the baseline, you will need to move / copy it to a different file name for the check to work. See the reference above for more details.
 
 ---
 
@@ -151,7 +151,7 @@ Scan `lab07-patch01` a second time with the same settings as Part 1, after patch
 
 ## Part 7 - Major Version Upgrade: Rocky Linux 8 → 9 (`lab07-upgrade01`)
 
-Patching keeps a release current, but it cannot fix something that is only available on a newer major release. This part performs that upgrade for real on `lab07-upgrade01`. This machine needed to be upgraded to **Rocky Linux 9.6**, booted into an EL9 kernel with no Rocky Linux 8 packages or kernels were left behind. AIDE must also be installed and has been initialized on the new system. 
+Patching keeps a release current, but it cannot fix something that is only available on a newer major release. This part performs that upgrade for real on `lab07-upgrade01`. This machine needed to be upgraded to **Rocky Linux 9.6**, booted into an EL9 kernel with no Rocky Linux 8 packages or kernels were left behind. AIDE must also be installed and has been initialized on the new system. You will want to use `leapp` for this most likely, but if you find another solution, feel free to utilize it as well. Rocky Linux 9.6+ should be accepted, so if you accidentally upgrade to a higher version, don't worry about it.
 
 
 ## Part 8 - Troubleshooting a Boot Failure (`lab07-ts01`)
