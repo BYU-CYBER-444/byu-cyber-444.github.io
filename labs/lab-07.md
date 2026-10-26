@@ -46,6 +46,8 @@ nav_order: 7
 
 Patch management is where "apply the update" meets "don't break production" and "anything that can go wrong will go wrong". A team that patches blind, with no before-and-after comparison and no way to recover from a bad updates, is one reboot away from an outage nobody can quickly undo. This lab treats patching as a full lifecycle: measure what is vulnerable, patch deliberately, verify the patch closed what it claimed to, and confirm that nothing changed beyond what the patch was supposed to touch.
 
+Note: The auto grader will reboot your machines to ensure the changes persist between boots.
+
 ---
 
 ## Part 0 - Run the Grader BEFORE You Change Anything
