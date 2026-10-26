@@ -21,8 +21,18 @@ nav_order: 12
 - Alerting rule design: severity levels, routing, avoiding alert fatigue; PagerDuty/OpsGenie integration
 - Capacity planning methodology: trending, forecasting, headroom analysis
 
----
+## Supplemental Readings & Videos
 
+### Readings
+
+- [NIST SP 800-92 Rev. 1: Cybersecurity Log Management Planning Guide (initial public draft)](https://csrc.nist.gov/pubs/sp/800/92/r1/ipd) — A current NIST draft on log generation, retention, access, and organization-wide log-management planning.
+- [Prometheus data model](https://prometheus.io/docs/concepts/data_model/) — Explains metrics, time series, labels, and the model used by Prometheus and PromQL.
+
+### Videos
+
+- [Grafana tutorials](https://grafana.com/tutorials/) — Includes short video tutorials on alerting and dashboard design for monitoring systems.
+
+---
 ## Slides
 
 [Logging, Monitoring & Audit Architecture]({{ site.baseurl }}/lectures/CYBER444_Week12_Logging_Audit_and_Audit_Architecture.pptx)

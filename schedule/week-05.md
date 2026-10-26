@@ -23,8 +23,18 @@ nav_order: 5
 - Key management practicalities: private key storage/permissions, passphrase-protected CA keys, and the operational role of Hardware Security Modules (HSMs) in production PKI
 - PKI lab: building a two-tier internal CA, issuing server certificates, configuring CRL/OCSP, validating with `testssl.sh`
 
----
+## Supplemental Readings & Videos
 
+### Readings
+
+- [How does SSL/TLS work?](https://www.cloudflare.com/learning/ssl/how-does-ssl-work/) — Explains public-key certificates and the TLS handshake in accessible terms.
+- [How it works](https://letsencrypt.org/how-it-works/) — Describes the certificate issuance and renewal workflow used by a public certificate authority.
+
+### Videos
+
+- [SSL/TLS concepts](https://developers.cloudflare.com/videos/strict-ssl-concepts/) — A short video introduces TLS certificates and the relationship between a browser, edge, and origin.
+
+---
 ## Slides
 
 [PKI & Certificate Management]({{ site.baseurl }}/lectures/CYBER444_Week05_PKI_and_Certificate_Management.pptx) 

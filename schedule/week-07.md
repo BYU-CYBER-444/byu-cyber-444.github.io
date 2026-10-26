@@ -20,8 +20,18 @@ nav_order: 7
 - Post-implementation review (PIR) documentation
 - Change metrics and KPIs (success rate, failed changes, emergency change ratio)
 
----
+ ## Supplemental Readings & Videos
 
+### Readings
+
+- [NIST SP 800-40 Rev. 4: Guide to Enterprise Patch Management Planning](https://csrc.nist.gov/pubs/sp/800/40/r4/final) — A current planning guide for prioritizing, testing, deploying, and verifying enterprise patches.
+- [Windows Server update management](https://learn.microsoft.com/en-us/training/modules/windows-server-update-management/) — Microsoft Learn module on WSUS, staged deployments, and update-management workflows.
+
+### Videos
+
+- [Azure Arc Update Management](https://learn.microsoft.com/en-us/shows/it-ops-talk/azure-arc-update-management) — Demonstrates patch management across Windows and Linux servers in hybrid environments.
+
+---
 ## Slides
 
 [Patch Management]({{ site.baseurl }}/lectures/CYBER444_Week07_Patch_Management.pptx) 

@@ -22,8 +22,18 @@ nav_order: 3
 - Windows Server licensing: Standard vs. Datacenter, core model, CALs, volume licensing (EA, CSP)
 - Hyper-V virtualization rights by edition
 
----
+## Supplemental Readings & Videos
 
+### Readings
+
+- [Active Directory Domain Services overview](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/active-directory-domain-services) — Introduces AD DS roles and the directory concepts behind domain administration.
+- [PowerShell 101: Introduction](https://learn.microsoft.com/en-us/powershell/scripting/learn/ps101/00-introduction?view=powershell-7.5) — Builds a foundation for PowerShell objects, pipelines, and administrative scripting.
+
+### Videos
+
+- [Active Directory and PowerShell](https://learn.microsoft.com/en-us/shows/windows-server-2012-r2-active-directoy-enhancements/mod3) — A Microsoft Learn demonstration of automating common Active Directory tasks with PowerShell.
+
+---
 ## Slides
 
 [Windows Server Administration]({{ site.baseurl }}/lectures/CYBER444_Week03_Windows_Server_Administration.pptx)

@@ -21,8 +21,18 @@ nav_order: 6
 - Regulatory compliance: HIPAA technical safeguards, PCI-DSS network segmentation, GDPR data residency and right to erasure
 - Vendor and third-party risk management: SLA/OLA structure, BAAs, and Data Processing Agreements (DPA)
 
----
+## Supplemental Readings & Videos
 
+### Readings
+
+- [NIST SP 800-207: Zero Trust Architecture](https://csrc.nist.gov/pubs/sp/800/207/final) — Defines the architecture and deployment models underlying the identity- and resource-focused controls in this week.
+- [CISA Zero Trust Maturity Model](https://www.cisa.gov/resources-tools/resources/zero-trust-maturity-model) — Provides a practical framework for evaluating identity, devices, networks, applications, and data protections.
+
+### Videos
+
+- [Zero Trust](https://www.cisa.gov/resources-tools/resources/zero-trust) — CISA's recorded discussion introduces the federal Zero Trust initiative and its implementation context.
+
+---
 ## Slides
 
 [SSH CA, PAM MFA & Enterprise Policy]({{ site.baseurl }}/lectures/CYBER444_Week06_SSH_CA_PAM_MFA_and_Enterprise_Policy.pptx)

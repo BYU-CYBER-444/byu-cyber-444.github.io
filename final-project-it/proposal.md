@@ -11,7 +11,7 @@ nav_order: 1
 
 ## Overview
 
-The proposal locks in which option you chose and what you will build before you invest significant time. It is graded pass/fail, and all five sections must be present and specific. A brief instructor feedback session in Week 9 lab will confirm your scope and your lab resources.
+The proposal locks in which option you chose and what you will build before you invest significant time. It is graded pass/fail, and all five sections must be present and specific. A brief instructor check-in during Week 9 will confirm your scope and lab resources.
 
 **Due:** End of Week 9. Submit your proposal as a single **PDF** in Learning Suite. Pairs submit one PDF with both names on it.
 

@@ -38,7 +38,7 @@ Both tracks complete these labs.
 | Lab | Title | Week |
 |---|---|---|
 | [CYBER LAB 4]({% link labs/cyber-lab-04.md %}) | Windows Server 2022 Hardening |
-| [CYBER LAB 8]({% link labs/cyber-lab-08.md %}) | CIS Benchmark Assessment & Targeted Remediation |
+| [CYBER LAB 9]({% link labs/cyber-lab-09.md %}) | CIS Benchmark Assessment & Targeted Remediation |
 | [CYBER LAB 12]({% link labs/cyber-lab-12.md %}) | Centralized Logging with auditd & Graylog |
 | [CYBER LAB 14]({% link labs/cyber-lab-14.md %}) | Docker & Container Security Hardening |
 
@@ -49,6 +49,5 @@ Both tracks complete these labs.
 | Lab | Title | Week |
 |---|---|---|
 | [IT LAB 4]({% link labs/it-lab-04.md %}) | DNSSEC & Email Security Configuration |
-| [IT LAB 8]({% link labs/it-lab-08.md %}) | Data Center Site Survey Exercise |
 | [IT LAB 12]({% link labs/it-lab-12.md %}) | Prometheus & Grafana Monitoring Stack |
 | [IT LAB 14]({% link labs/it-lab-14.md %}) | AI Inference Server Setup and Governance |

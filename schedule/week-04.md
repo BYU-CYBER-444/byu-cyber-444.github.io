@@ -19,8 +19,18 @@ nav_order: 4
 - Email authentication: SPF record structure, DKIM key generation and DNS publishing, DMARC policy modes and reporting
 - Mail server hardening: relay restrictions, TLS enforcement, anti-spam
 
----
+## Supplemental Readings & Videos
 
+### Readings
+
+- [Windows security baselines](https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/windows-security-configuration-framework/windows-security-baselines) — Explains Microsoft's tested baseline approach for hardening Windows and Windows Server.
+- [Binding Operational Directive 18-01: Enhance Email and Web Security](https://www.cisa.gov/news-events/directives/binding-operational-directive-18-01) — CISA guidance covers DNS and email protections, including SPF, DKIM, and DMARC.
+
+### Videos
+
+- [Windows Server Security documentation and demonstrations](https://learn.microsoft.com/en-us/windows-server/security/security-and-assurance) — Includes Microsoft demonstrations of application control and credential-protection features relevant to Windows hardening.
+
+---
 ## Slides
 
 [Windows Hardening and DNS/Email Security.pptx]({{ site.baseurl }}/lectures/CYBER444_Week04_Windows_Hardening_and_email_security.pptx)

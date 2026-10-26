@@ -23,11 +23,11 @@ Slide decks are provided as PowerPoint (.pptx) files.
 | [5]({% link schedule/week-05.md %}) | [PKI & Certificate Management]({{ site.baseurl }}/lectures/CYBER444_Week05_PKI_and_Certificate_Mnagement.pptx)  | 
 | [6]({% link schedule/week-06.md %}) | [SSH CA, PAM MFA & Enterprise Policy]({{ site.baseurl }}/lectures/CYBER444_Week06_SSH_CA_PAM_MFA_and_Enterprise_Policy.pptx) | 
 | [7]({% link schedule/week-07.md %}) | [Patch Management]({{ site.baseurl }}/lectures/CYBER444_Week07_Patch_Management.pptx)  | 
-| [8]({% link schedule/week-08.md %}) | [CIS & STIG Benchmarks & Data Center Fundamentals]({{ site.baseurl }}/lectures/CYBER444_Week08_CIS_and_STIG_Benchmarks_and_Data_Center_Fundamentals.pptx) | 
-| [9]({% link schedule/week-09.md %}) | [ **Midterm Exam** + Final Project Kickoff]({{ site.baseurl }}/lectures/CYBER444_Week09_Midterm_and_Final_Project.pptx) | 
+| [8]({% link schedule/week-08.md %}) | [Data Center Fundamentals]({{ site.baseurl }}/lectures/CYBER444_Week08_Data_Center_Fundamentals.pptx) |
+| [9]({% link schedule/week-09.md %}) | [CIS Benchmarks, DISA STIGs & Compliance]({{ site.baseurl }}/lectures/CYBER444_Week09_CIS_STIG_and_Compliance.pptx) |
 | [10]({% link schedule/week-10.md %}) | [Configuration Management & Cloud Fundamentals]({{ site.baseurl }}/lectures/CYBER444_Week09_Configuration_Management_and_Cloud_Fundamentals.pptx) | 
 | [11]({% link schedule/week-11.md %}) | [Automated Hardening]({{ site.baseurl }}/lectures/CYBER444_Week11_Automated_Hardening.pptx) | 
 | [12]({% link schedule/week-12.md %}) | [Logging, Monitoring & Audit Architecture]({{ site.baseurl }}/lectures/CYBER444_Week12_Logging_Audit_and_Audit_Architecture.pptx) | 
 | [13]() | **Thanksgiving Break - No Class** |
 | [14]({% link schedule/week-14.md %}) | [Container Security & AI Infrastructure]({{ site.baseurl }}/lectures/CYBER444_Week14_Container_Security_and_AI_Infrastructure.pptx) | 
-| [15]({% link schedule/week-15.md %}) | Final Project Presentations | 
+| [15]({% link schedule/week-15.md %}) | Final Project Presentations |
