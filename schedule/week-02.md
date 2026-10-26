@@ -18,8 +18,18 @@ nav_order: 2
 - `firewalld` service scoping
 - Interpreting automated security audit output (filesystem, accounts, network, SSH, and cron findings) and prioritizing remediation
 
----
+## Supplemental Readings & Videos
 
+### Readings
+
+- [Managing users and groups in Red Hat Enterprise Linux 9](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/managing-users-and-groups_configuring-basic-system-settings) — Covers local account and group administration that underpins Linux access control.
+- [BIND 9 Administrator Reference Manual](https://bind9.readthedocs.io/en/v9.18.49/index.html) — Reference for authoritative DNS configuration, zone files, DNSSEC, and operational security.
+
+### Videos
+
+- [Linux Crash Course: Understanding File and Directory Permissions](https://www.youtube.com/watch?v=4e669hSjaX8) — Learn Linux TV demonstrates ownership and permission bits used in day-to-day Linux administration.
+
+---
 ## Slides
 
 [Linux Administration Fundamentals]({{ site.baseurl }}/lectures/CYBER444_Week02_Linux_Administration_Fundamentals.pptx)

@@ -21,8 +21,18 @@ nav_order: 14
 - Securing AI systems: model access control, data pipeline security, preventing model exfiltration
 - AI governance: acceptable use policies, data retention, audit logging for model queries
 
----
+## Supplemental Readings & Videos
 
+### Readings
+
+- [NIST SP 800-190: Application Container Security Guide](https://csrc.nist.gov/pubs/sp/800/190/final) — NIST guidance on container risks and safeguards across images, runtimes, registries, and hosts.
+- [NVIDIA Multi-Instance GPU User Guide](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/) — Explains GPU partitioning and workload isolation relevant to shared AI infrastructure.
+
+### Videos
+
+- [Container Security and Docker Scout](https://www.docker.com/resources/container-security-and-docker-scout-on-demand-training/) — Docker training covers container users, privileges, images, vulnerabilities, and remediation.
+
+---
 ## Slides
 
 [Container Security & AI Infrastructure]({{ site.baseurl }}/lectures/CYBER444_Week14_Container_Security_and_AI_Infrastructure.pptx)

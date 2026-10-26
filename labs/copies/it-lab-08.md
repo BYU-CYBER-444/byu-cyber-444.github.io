@@ -18,267 +18,174 @@ nav_order: 8
 
 ## Objectives
 
-- Evaluate a data center design scenario against Uptime Institute Tier standards
-- Analyze power architecture including UPS, PDU, and generator configurations
-- Assess cooling infrastructure using PUE calculations and hot/cold aisle containment
-- Identify physical security control gaps and propose remediations
-- Produce a formal site assessment report with tier classification and upgrade roadmap
-- Assess the security posture of an out-of-band management interface (IPMI/iDRAC/iLO) and, optionally, operate one directly
+- Break and repair a data center's power chain in openDCIM, and measure what each failure takes down
+- Calculate UPS, generator, and PUE numbers from real telemetry instead of a spec sheet
+- Find cooling hot spots in sensor data and put a number on fixing them
+- Log in to a factory-default out-of-band management controller (BMC), see what an attacker could do, then lock it down and prove it
 
 ---
 
 ## Tools Required
 
-- Provided data center design documents (see scenario below)
-- Calculator or spreadsheet for PUE and power calculations
-- Word processor or Markdown for assessment report
-- Part 6 (optional hands-on path): `ipmitool`, and either QEMU with `-device ipmi-bmc-sim` or a containerized OpenBMC image
+- Your instructor has provisioned a Rocky Linux 9 VM for this lab, `lab08-dc` (2 vCPU, 2GB RAM). Deploy it yourself in Discord using `/deploy` and selecting `it-lab-08`. Your username is your Net ID and your password is the one emailed to you at the start of the semester. It's reachable at `172.19.x.27` (`x` = your subnet's third octet, same addressing scheme as your other lab VMs).
+- It comes pre-loaded with everything this lab uses:
+  - **openDCIM**, an open-source data center infrastructure management (DCIM) tool, already filled in with Meridian's racks, PDUs, power panels, and devices. Open `http://172.19.x.27/dcim/` in your browser and log in with your Net ID and the same password. If your browser can't reach the VM directly, tunnel to it: `ssh -L 8080:127.0.0.1:80 <netid>@172.19.x.27`, then open `http://localhost:8080/dcim/`.
+  - Two telemetry files in `/opt/meridian/`: `telemetry_power.csv` and `telemetry_inlet.csv`.
+  - A simulated **BMC** (the management controller inside a server), listening on UDP 623, plus `ipmitool` and the Net-SNMP tools (`snmpget`, `snmpwalk`).
 
 {: .note }
-Real out-of-band management hardware (an actual iDRAC/iLO card) isn't something most students have access to. Part 6 is written so the security-assessment half works from the provided configuration excerpt regardless of hardware access, with a hands-on option for students who want to actually drive a simulated BMC.
+Real out-of-band management hardware (an iDRAC or iLO card) isn't something most students have access to, so the BMC here is a simulator (OpenIPMI's `ipmi_sim`). It speaks the real IPMI protocol and `ipmitool` talks to it exactly as it would to a real card. Always add `-C 3` to your `ipmitool -I lanplus` commands; the simulator only supports cipher suite 3.
 
 ---
 
 ## Background
 
-The Uptime Institute Tier Classification System (Tier I-IV) defines availability commitments through redundancy in power, cooling, and network paths. Tier IV requires 99.9995% availability (< 26 minutes downtime/year) through fully fault-tolerant, concurrently maintainable infrastructure with no single point of failure.
-
-PUE (Power Usage Effectiveness) = Total Facility Power / IT Equipment Power. Industry average is ~1.58; hyperscale operators achieve 1.1-1.2. High PUE wastes energy on cooling overhead.
+Uptime Institute **Tier III** means every power and cooling path can be maintained without downtime, with no single point of failure (SPOF). **PUE** (Power Usage Effectiveness) = total facility power / IT equipment power; enterprise average is about 1.58 and hyperscalers reach 1.1-1.2.
 
 ---
 
 ## Scenario: Meridian Financial Services Data Center
 
-You are an IT infrastructure consultant hired to assess Meridian Financial Services' primary data center. The facility hosts core banking applications, trading systems, and customer data for a mid-size regional bank (350 employees, $2.1B AUM). A regulatory audit has flagged concerns about availability and physical security. Your task is to evaluate the facility against Uptime Tier III requirements.
+You are an infrastructure consultant assessing Meridian Financial Services' primary data center (core banking, trading systems, customer data) against Tier III. A regulator has flagged availability and physical security. Its facility specifications:
 
-**Facility Specifications Provided:**
+- **Power:** one utility feed (15 MVA); two 80kVA UPS units (A/B) feeding two PDUs per rack; 8ms UPS transfer; one 200kW diesel generator with a 72-hour tank (14.5 gal/h at 200kW) and a 12-second ATS transfer; **IT servers are single-corded** (one power supply each).
+- **Cooling:** 6 × 30-ton CRAC units (5 running, 1 spare); cold-aisle containment on rows 1-4, none on rows 5-8; IT load 180kW, total facility load 306kW.
+- **Physical:** mantrap at the entrance; cameras in the lobby, entrance, and server room doorway but **none inside the server room**; badge + PIN to the server room; visitors may be escorted by **any** badged employee; **open-frame racks**; a shredder with **no media destruction log**.
+- **Network:** one ISP (no BGP), dual Nexus cores, one edge firewall with no HA.
 
-*Power Infrastructure:*
-- Utility feed: Single feed from local utility substation (15 MVA capacity)
-- UPS: Two APC Symmetra 80kVA units, configured A/B feeds to PDUs
-- Transfer time between UPS and utility: 8ms (double conversion)
-- Generator: One 200kW Caterpillar diesel generator with 72-hour fuel tank
-- Generator auto-transfer: ATS with 12-second transfer time
-- PDU configuration: Two PDUs per rack row; single-corded servers (no dual PSUs)
-
-*Cooling Infrastructure:*
-- CRAC units: 6 × 30-ton precision AC units (5 operational, 1 redundant)
-- Airflow: Cold aisle containment installed in rows 1-4; rows 5-8 have no containment
-- Hot aisle: Open, exhausting to raised floor plenum
-- Average inlet temperature: 75°F (measured)
-- Power measurements: IT equipment draw = 180kW; total facility power = 306kW
-
-*Physical Security:*
-- Perimeter: Card-access double door at main entrance (mantrap)
-- Camera coverage: Lobby, main entrance, server room entrance - no cameras inside server room
-- Server room access: Badge + PIN
-- Visitor policy: Visitors escorted by any employee with badge access
-- Rack security: Racks without doors (open frame)
-- Media destruction: Shredder on-site; no dedicated media destruction log
-
-*Network Infrastructure:*
-- ISP connections: Primary fiber (1Gbps) from ISP-A; no secondary ISP
-- BGP: Not configured; single default route to ISP-A
-- Internal switching: Dual Cisco Nexus 5000 core switches, VSS configured
-- Edge firewall: Single Palo Alto PA-3250 (no HA configured)
+Record everything below in one file on your VM, `it-lab08-report.md`: commands you ran, their output, and your short answers.
 
 ---
 
 ## Procedure
 
-### Part 1 - Uptime Tier Classification Analysis
+### Part 1 - Break the power chain (openDCIM)
 
-For each Tier III requirement, evaluate Meridian's compliance:
+openDCIM models Meridian's power as: **Utility Feed 1** (the source) feeding two panels, **UPS-A output** and **UPS-B output**, each feeding one PDU per rack (`R1-PDU-A`, `R1-PDU-B`, ... through row 8). Every device is plugged into a specific PDU outlet.
 
-| Requirement | Tier III Standard | Meridian Status | Gap |
-|-------------|-------------------|-----------------|-----|
-| Power paths | N+1 redundant, single active | | |
-| UPS | N+1 | | |
-| Generators | N+1 | | |
-| Cooling | N+1, concurrently maintainable | | |
-| Network | Redundant paths | | |
-| Concurrent maintainability | All systems maintainable without downtime | | |
-| Single points of failure | None allowed for Tier III | | |
+**1.1 Look around.** Search for `R1-CH1` (the *Search by Name* box) and open the device. Find its power connections and note which PDU it is plugged into, then open its cabinet, **R1**, and look at every device in it and which PDU each uses.
 
-Complete the table. For each Gap, describe the specific deficiency (e.g., "Single utility feed = single point of failure in power delivery path").
+**1.2 Fail things on purpose.** Open **Reports → Simulated Power Outage Report**, pick *Meridian Primary DC*, and run it three times: once with panel **UPS-A output** checked, once with **UPS-B output**, and once with the source **Utility Feed 1** checked (tick *Only show down/unknown devices* if you like). Each run downloads a spreadsheet; open the **Affected Devices** sheet. A row highlighted red has lost every one of its power supplies.
 
-Based on your analysis, determine: **What Tier can Meridian currently claim?** Justify your answer with at least 3 specific supporting points.
+For each of the three runs, record in your report: how many devices are fully down, and how many are on reduced redundancy (one of two supplies down).
+
+**1.3 Find the weak devices.** Run **Reports → Diverse Power Exceptions Report**. Record which kinds of devices it lists and why.
+
+**1.4 Interpret.** In three to five lines in your report: (a) roughly what share of the 180kW IT load does losing UPS-A take down? (device wattages are in each device's record); (b) which single failure takes down everything, and why can't a Tier III facility have it; (c) which Tier can Meridian honestly claim today, with at least three data points from above.
+
+**1.5 Fix it.** Make the three blade chassis in rack R1 (`R1-CH1`, `R1-CH2`, `R1-CH3`) dual-corded: for each, edit the device, set *Power Connections* to **2**, click *Update*, then connect the new second power port to an unused outlet on the **other** side's PDU (a chassis on `R1-PDU-A` gets its second supply on `R1-PDU-B`, and vice versa). Re-run the outage report for UPS-A and for UPS-B and confirm none of the three chassis is fully down in either. Put a screenshot of the R1 rows from both runs in your report.
 
 ---
 
-### Part 2 - Power Architecture Analysis
+### Part 2 - UPS and generator math
 
-**2.1 UPS capacity calculation**
+Write a short script (Python or shell, 10-15 lines) on your VM that prints each of these from the facility numbers above. Save it as `~/power.py` (or `.sh`) and paste its output into your report.
 
-Current UPS: 2 × 80kVA at 0.9 power factor = 2 × 72kW = 144kW combined.
-IT load: 180kW.
+- UPS capacity: 2 × 80kVA at 0.9 power factor, in kW. Is it enough for 180kW? What is available if one UPS fails (N+1)? What IT load can each UPS safely carry at 80%?
+- Generator: the shortfall (in kW) against the 306kW facility load. Because cooling must keep running, the generator can only carry IT load at the facility's current PUE: what IT load is that (200kW / PUE)? What share of the real 180kW IT load must be shed?
+- Fuel: the tank holds 72 hours × 14.5 gal/h. How many gallons, and how long does it last at 200kW?
 
-Calculate:
-- Is current UPS capacity sufficient? (144kW available vs. 180kW load)
-- If one UPS fails (N+1 scenario), what is the available capacity?
-- At 80% safe loading threshold, what is the maximum IT load each UPS can handle?
-
-Show your calculations. What does this reveal about the UPS configuration?
-
-**2.2 Generator runtime analysis**
-
-Generator: 200kW output, 72-hour fuel tank.
-Actual load at full facility: 306kW.
-
-- Can the 200kW generator support the full 306kW facility load? If not, what is the shortfall?
-- At the actual load the generator can sustain (200kW), calculate: which systems must be shed?
-- Assuming IT equipment (180kW) takes priority, how long will the 72-hour tank actually last if the generator runs at 200kW?
-- Note: Fuel consumption at 200kW for a typical diesel generator is approximately 14.5 gallons/hour.
-
-Document a **Load Shedding Priority List** for a generator failover event:
-1. HVAC non-critical zones
-2. Lighting (emergency only)
-3. [Continue for 5 items total]
-
-**2.3 Single-corded server risk**
-
-Servers with single PSUs cannot benefit from A/B power feeds. Estimate: if one PDU fails, what percentage of servers lose power immediately? Propose a remediation plan with cost-benefit analysis (dual PSU server pricing vs. availability improvement).
+Then list five loads you would shed first on a generator transfer, in order, and one line on why for the first and last.
 
 ---
 
-### Part 3 - Cooling and PUE Analysis
+### Part 3 - PUE and cooling from telemetry
 
-**3.1 PUE calculation**
-
-PUE = Total Facility Power / IT Equipment Power = 306kW / 180kW = **1.70**
-
-Evaluate this PUE:
-- Compare to industry benchmarks: Hyperscale (1.1-1.2), enterprise average (1.58), poor (>2.0)
-- Where does Meridian fall?
-- Estimate annual energy cost impact: Assume $0.12/kWh. What is the annual "waste" from cooling overhead vs. a 1.4 PUE facility?
-  - Formula: (PUE_actual - PUE_target) × IT_Load × 8760 hours × $/kWh
-
-**3.2 Hot/cold aisle assessment**
-
-Rows 5-8 have no cold aisle containment. At 75°F average inlet temperature:
-- ASHRAE A2 envelope allows 50-95°F inlet. Is 75°F within spec?
-- What risks arise from hot air recirculation in unconstrained rows?
-- Recommend: (a) seal existing open aisles with blanking panels in rows 1-4, (b) retrofit rows 5-8 with cold aisle containment curtains (estimated cost: $8,000/row × 4 rows = $32,000). Calculate the expected PUE improvement (industry data: proper containment reduces PUE by 0.15-0.25).
-
----
-
-### Part 4 - Physical Security Gap Analysis
-
-For each gap identified, use the following format:
-
-```
-FINDING: [ID] - [Title]
-Severity: Critical / High / Medium / Low
-Current State: [describe what exists]
-Required State: [describe what should exist]
-Risk: [what could go wrong]
-Remediation: [specific action]
-Cost Estimate: [rough order of magnitude]
-Timeline: [immediate / 30 days / 90 days]
-```
-
-Identify at least 5 physical security findings. You should find:
-- Camera blind spots inside server room
-- Visitor escort policy weakness (any badged employee, not security-trained staff)
-- Open-frame racks (no locking doors)
-- Media destruction without chain of custody log
-- One additional finding of your choice
-
----
-
-### Part 5 - Formal Site Assessment Report
-
-Compile your findings into a formal **Data Center Site Assessment Report**:
-
-```
-MERIDIAN FINANCIAL SERVICES
-DATA CENTER SITE ASSESSMENT REPORT
-
-Executive Summary (150 words):
-  Current Tier classification, top 3 risks, overall readiness rating (Red/Yellow/Green).
-
-Tier Classification Finding:
-  Meridian currently meets [Tier X] requirements. The following gaps prevent Tier III certification: [list]
-
-Power Architecture Findings:
-  [From Part 2 - UPS shortfall, generator capacity gap, single-corded servers]
-
-Cooling and Environmental Findings:
-  [From Part 3 - PUE, hot aisle, ASHRAE compliance]
-
-Physical Security Findings:
-  [From Part 4 - 5 findings with severity ratings]
-
-Upgrade Roadmap:
-
-  Phase 1 (0-90 days / ~$X): Critical - address SPOFs that prevent any Tier III claim
-  Phase 2 (90-180 days / ~$X): High - address N+1 gaps
-  Phase 3 (180-365 days / ~$X): Medium - optimize PUE and security posture
-
-Estimated Investment to Reach Tier III: $[range]
-```
-
----
-
-### Part 6 - Out-of-Band Management Assessment (optional hands-on path available)
-
-Every server in Meridian's rack has an IPMI/iDRAC/iLO card - a small independent computer with its own network port, CPU, and power supply that lets an administrator manage the server (power on/off, remote console, sensor readings) even when the OS is unresponsive or the server is powered down. It's also one of the most under-hardened parts of a real data center, because it's easy to forget it's there.
-
-**Security assessment (required, no hardware needed):**
-
-You are given the following excerpt from Meridian's iDRAC configuration export:
-
-```
-iDRAC Network Settings:
-  IP Address: 10.0.0.50 (same VLAN as production application servers)
-  IPMI over LAN: Enabled
-  Web interface: HTTPS, self-signed certificate (never replaced since factory install)
-  Local users:
-    root / calvin          <- factory default account, still active
-    svc-monitor / Monitor123
-  SNMP: v1 enabled, community string "public"
-  Firmware version: 2.10.10.10 (released 4 years ago; current is 6.10.30.20)
-```
-
-Write a findings table (same format as Part 4) identifying at least 4 distinct issues, and for each: what an attacker could do with it, and the specific remediation. At minimum your findings must cover: the factory-default credential, the management-plane network placement, and firmware currency.
-
-**Optional hands-on:** stand up a simulated BMC and drive it with `ipmitool`:
+`/opt/meridian/telemetry_power.csv` has 24 hourly readings (IT, cooling, other, and total kW). `/opt/meridian/telemetry_inlet.csv` has 24 inlet-temperature sensor readings, three per row. Use `awk`, `python3`, or a spreadsheet; show the commands.
 
 ```bash
-# Using QEMU's built-in IPMI BMC simulator (attach to any VM definition)
-# -device ipmi-bmc-sim,id=bmc0 -device isa-ipmi-kcs,bmc=bmc0
-
-ipmitool -I open sensor list
-ipmitool -I open chassis power status
-ipmitool -I open chassis power cycle
-ipmitool -I open sel list      # system event log - what a real BMC records independent of the OS
+head /opt/meridian/telemetry_power.csv
+column -s, -t /opt/meridian/telemetry_inlet.csv | head
 ```
 
-If you try this, capture the `sensor list` and `sel list` output and note one way this out-of-band view differs from what a compromised or powered-off host OS could tell you.
+1. Compute the 24-hour average IT load, average total load, and PUE. Which hour has the worst PUE?
+2. Compute the annual cost of running at your PUE instead of 1.4: `(PUE_actual - PUE_target) × IT_kW × 8760 × $0.12`.
+3. ASHRAE's recommended inlet range is 64.4-80.6°F (allowable range for class A2 is 50-95°F). List every sensor above 80.6°F. Which rows are they in, and what do those rows have in common? Is any sensor outside the allowable range?
+4. Containment on rows 5-8 should cut PUE by 0.15-0.25. Using your numbers from step 2, what is the annual saving at each end of that range? The curtains cost about $8,000 per row; how many months until they pay for themselves at each end?
+
+---
+
+### Part 4 - Physical security findings
+
+From the facility specifications, write five findings, one line each: `finding | severity (Critical/High/Medium/Low) | fix`. Cover the missing cameras inside the server room, the escort policy, the open-frame racks, the media destruction log, and one more of your choosing. In openDCIM, open the R1 cabinet record and note what it says about the rack model and its lock.
+
+---
+
+### Part 5 - Out-of-band management: attack, then harden
+
+Every server has a BMC: a small computer with its own network port that can power the server on and off even when the OS is dead. It's also one of the most commonly forgotten, under-hardened parts of a data center. Meridian's is still on factory settings. Work from a shell on `lab08-dc`.
+
+**5.1 Recon.** What is listening, and who is allowed to reach it?
+
+```bash
+sudo ss -ulnp | grep -E ':(623|161)\b'
+sudo firewall-cmd --list-all
+```
+
+**5.2 Attack.** Log in with the factory-default account and see what an attacker gets:
+
+```bash
+ipmitool -I lanplus -C 3 -H 127.0.0.1 -U root -P calvin user list 1
+ipmitool -I lanplus -C 3 -H 127.0.0.1 -U root -P calvin chassis power status
+ipmitool -I lanplus -C 3 -H 127.0.0.1 -U root -P calvin sel list
+```
+
+Try the other doors too:
+
+```bash
+ipmitool -I lanplus -C 3 -H 127.0.0.1 -U svc-monitor -P Monitor123 chassis power status
+ipmitool -I lanplus -C 3 -H 127.0.0.1 -U '' -P '' chassis power status      # anonymous "null" user
+snmpwalk -v1 -c public 127.0.0.1 system
+```
+
+Now do the damage an attacker could do: power the server off and back on (`chassis power off`, then `chassis power on`; this simulator doesn't bring a `power cycle` back up by itself), and look at the SEL (system event log) afterwards. In your report, list every way you got in, and write one sentence each on what an attacker could do with it.
+
+**5.3 Harden.** Fix all of these, then re-run every command from 5.2:
+
+1. **Credentials.** Create a named admin account of your own (users 1-4 are taken; use ID 5):
+
+   ```bash
+   A="ipmitool -I lanplus -C 3 -H 127.0.0.1"
+   $A -U root -P calvin user set name 5 <your-admin-name>
+   $A -U root -P calvin user set password 5 '<a-strong-password>'
+   $A -U root -P calvin user priv 5 4 1
+   $A -U root -P calvin user enable 5
+   ```
+
+   Then, logged in as your new account, disable `root` (ID 2), `svc-monitor` (ID 3), and the anonymous user (ID 1) with `user disable <id>`. **Leave user 4 (`ta`) alone**; it is how the TA checks your work.
+2. **Network placement.** The BMC and SNMP ports are open to every source, as if the management controller sat on the production VLAN. Remove the plain `623/udp` and `161/udp` ports and allow them only from a management network, `10.99.0.0/24`, using firewalld rich rules (`firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="10.99.0.0/24" port port="623" protocol="udp" accept'`, then `--reload`).
+3. **SNMP.** Remove the `rocommunity public` line from `/etc/snmp/snmpd.conf`, create an SNMPv3 user with authentication and encryption (`sudo systemctl stop snmpd`, `sudo net-snmp-create-v3-user -ro -A <auth-pass> -a SHA -X <priv-pass> -x AES meridian`, `sudo systemctl start snmpd`), and show it working with `snmpget -v3 -l authPriv -u meridian -a SHA -A <auth-pass> -x AES -X <priv-pass> 127.0.0.1 SNMPv2-MIB::sysDescr.0`.
+
+**5.4 Prove it.** In your report, show that: `root/calvin`, `svc-monitor/Monitor123`, and the anonymous login now fail; your new account works; `snmpwalk -v1 -c public` and `-v2c` get no answer while your SNMPv3 query works; and `firewall-cmd --list-all` shows 623/udp and 161/udp only through your rich rules.
+
+---
+
+### Part 6 - One-page summary
+
+At the end of `it-lab08-report.md`, in under 150 words: the tier Meridian can claim today, the top three risks (use your measurements: devices lost, kW short, °F over, how the BMC was compromised), and an overall readiness rating (Red/Yellow/Green).
 
 ---
 
 ## Deliverables
 
-1. Completed Tier Classification Table with current tier determination and justification
-2. Power analysis calculations (UPS capacity, generator load, single-corded server risk)
-3. PUE calculation, industry benchmark comparison, and cooling remediation cost analysis
-4. Five physical security findings in structured format
-5. Complete Site Assessment Report with Executive Summary and Upgrade Roadmap
-6. Out-of-band management findings table (4+ issues) and, if attempted, the hands-on BMC output
+- `it-lab08-report.md` containing, in order: the Part 1 outage-run counts, diverse-power findings, interpretation, and screenshot of the fix; the Part 2 script output and shed list; the Part 3 commands and answers; the Part 4 findings; the Part 5 attack and proof-of-hardening output; the Part 6 summary
+- `~/power.py` (or `.sh`) from Part 2
 
 ---
 
 ## Grading
 
+Part 1's chassis fix and all of Part 5's hardening are checked directly on your VM; the rest is graded from your report.
+
 | Item | Points |
 |------|--------|
-| Tier classification table + current tier determination | 18 |
-| Power architecture calculations (correct math required) | 22 |
-| PUE analysis + cooling remediation | 18 |
-| Physical security findings (5, structured) | 17 |
-| Site Assessment Report with Executive Summary | 13 |
-| Out-of-band management findings (4+, structured) | 12 |
+| Part 1 - outage runs, diverse-power findings, tier call | 10 |
+| Part 1 - R1 chassis dual-corded (checked live) | 15 |
+| Part 2 - UPS, generator, and fuel calculations (correct math required) | 15 |
+| Part 3 - PUE, annual cost, hot-spot sensors, containment payback | 15 |
+| Part 4 - five physical security findings | 10 |
+| Part 5 - BMC hardening: default root, svc-monitor and anonymous logins refused, a named admin works, IPMI and SNMP ports restricted, SNMP v1/v2c `public` refused (checked live) | 30 |
+| Part 6 - one-page summary | 5 |
 | **Total** | **100** |
 
 [← Back to Labs]({{ site.baseurl }}/labs/)
