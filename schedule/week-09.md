@@ -50,7 +50,7 @@ nav_order: 9
 
 | Track | Lab |
 |---|---|
-| **Cyber Track** | [CYBER LAB 9 - CIS Benchmark Assessment & Targeted Remediation]({% link labs/cyber-lab-09.md %}) |
+| **Both Tracks** | [LAB 9 - CIS Benchmark Assessment & Targeted Remediation]({% link labs/lab-09.md %}) |
 
 ---
 
