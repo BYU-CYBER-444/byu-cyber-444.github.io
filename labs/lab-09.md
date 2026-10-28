@@ -18,115 +18,174 @@ nav_order: 9
 
 ## Purpose
 
-Assess a Rocky Linux 9 server against the CIS Level 1 Server profile, explain what five selected controls are intended to prevent, apply the controls, and use AIDE to detect an unexpected privileged file.
+Assess a Rocky Linux 9 server against the CIS Level 1 Server profile, investigate ten selected findings, remediate them, and compare a focused before-and-after assessment. The selected controls cover login notices, system cryptography, temporary storage, boot protection, scheduled-task access, unused services, persistent logs, and PAM authentication policy.
 
-By the end of the lab, you should be able to interpret control-level scan results, connect hardening controls to attack techniques, verify configuration in the running system, and explain what an integrity-monitoring baseline can and cannot tell you.
+The full profile will likely report other findings. You are responsible for the ten areas listed here; you are not expected to make the entire profile pass.
 
-## Environment and constraints
 
-- Use the Rocky Linux 9 VM provisioned for you: `lab09-cis01`. Log in with your own Net ID.
-- OpenSCAP, the SCAP Security Guide content, and AIDE are installed already.
-- The assessment uses the `cis_server_l1` profile in `/usr/share/xml/scap/ssg/content/ssg-rl9-ds.xml`.
-- Optional references: [CIS Rocky Linux 9 Benchmark](https://www.cisecurity.org/benchmark/rocky_linux) and [MITRE ATT&CK](https://attack.mitre.org).
+## Part 1 - Record the baseline
 
-{: .note }
-OpenSCAP's content is derived from the RHEL content in the SCAP Security Guide. The report uses the title “CIS Red Hat Enterprise Linux 9 Benchmark”; it is a measurement against the benchmark, not a CIS certification or official CIS score.
+Before changing the VM, run the full CIS Level 1 Server assessment. Save the machine-readable and HTML reports in your home directory as:
 
-The autograder connects to your VM and checks its state; it does not read or grade a written report. Keep the VM accessible while grading. Do not remove or alter the `ta` account, its SSH key, or its sudo access; add SSH allow/deny rules; change the installed SCAP content or `oscap`; or stop `sshd` or `crond`.
+- `lab09-baseline.xml`
+- `lab09-baseline.html`
 
-## Work to complete
+An OpenSCAP exit code of `2` is expected when the scan finds failures. Use the selected-rule descriptions below to understand the checks; you do not need to search the HTML report for their definitions. Record which selected checks fail in the baseline. The HTML report is still useful for seeing the host-specific evidence and any finding-specific guidance. Some related checks, such as `/tmp` mount options, may be reported as not applicable until the mount exists.
 
-### 1. Establish and interpret a baseline
+## Part 2 - Understand the selected rules
 
-Before changing the VM, assess it with the `cis_server_l1` profile. Save the result files in your home directory as:
+The quoted phrases below are short excerpts from the selected SCAP rule titles. The explanations state the full requirement being assessed for this lab in plain language. The rule IDs match the rules used by the grader. Values shown are this lab's target settings.
 
-- `/home/<netid>/lab09-baseline.xml`
-- `/home/<netid>/lab09-baseline.html`
 
-Review the HTML findings for the five controls listed below. Read each control's description, rationale, and remediation guidance. The XML is the machine-readable evidence; retain it unchanged for the final check. An OpenSCAP exit code of `2` is expected when the scan finds failing rules.
+### 1. Local and remote login banners
 
-### 2. Relate controls to ATT&CK techniques
+**Rule title excerpt:** “Login Banner”
 
-For each control, select the one MITRE ATT&CK technique from the list that best describes the threat it helps prevent. Base your choice on the control rationale and the technique definition. A technique can apply to more than one control.
+**Selected rules:** `banner_etc_issue_cis`, `banner_etc_issue_net_cis`
 
-Save `/home/<netid>/lab09-attack-map.csv` as a CSV with this exact header and one row per rule, in the order shown:
+Configure both `/etc/issue` (local console) and `/etc/issue.net` (remote login) with an approved notice that access is restricted to authorized users and activity may be monitored. The CIS profile's suggested wording is `Authorized users only. All activity may be monitored and reported.`
 
-```text
-rule_id,technique_id
-sshd_set_max_auth_tries,T1xxx.xxx
-sshd_disable_root_login,T1xxx.xxx
-kernel_module_cramfs_disabled,T1xxx.xxx
-sudo_require_reauthentication,T1xxx.xxx
-sudo_add_use_pty,T1xxx.xxx
-```
+**Verify:** Inspect both files and confirm each contains the intended notice.
 
-Choose only from these techniques:
+### 2. System-wide cryptographic policy
 
-| Technique ID | Name |
-|---|---|
-| T1021.004 | Remote Services: SSH |
-| T1059.004 | Command and Scripting Interpreter: Unix Shell |
-| T1068 | Exploitation for Privilege Escalation |
-| T1070.002 | Indicator Removal: Clear Linux or Mac System Logs |
-| T1078.003 | Valid Accounts: Local Accounts |
-| T1091 | Replication Through Removable Media |
-| T1110.001 | Brute Force: Password Guessing |
-| T1548.003 | Abuse Elevation Control Mechanism: Sudo and Sudo Caching |
-| T1556 | Modify Authentication Process |
-| T1557 | Adversary-in-the-Middle |
+**Rule title excerpt:** “Crypto Policy”
 
-### 3. Apply and verify the five controls
+**Selected rule:** `configure_custom_crypto_policy_cis`
 
-Use each rule's rationale and remediation guidance to decide how to harden the VM. The five areas are SSH authentication attempts, direct root SSH access, the `cramfs` kernel module, sudo reauthentication, and sudo terminal handling. Make each change effective on the VM, validate configuration syntax where applicable, and check the running state. A file edit by itself is not sufficient when the service or kernel behavior must change.
+Use custom crypto-policy modules and activate them as part of the system-wide policy. The selected policy must disable CBC ciphers for SSH, the listed weak SSH ciphers and MACs, and weak MACs globally. Create these module files in `/etc/crypto-policies/policies/modules/`, using exactly these names and contents: `NO-SSHCBC.pmod` contains `cipher@SSH = -*-CBC`; `NO-SSHWEAKCIPHERS.pmod` contains `cipher@SSH = -3DES-CBC -AES-128-CBC -AES-192-CBC -AES-256-CBC -CHACHA20-POLY1305`; `NO-SSHWEAKMACS.pmod` contains `mac@SSH = -HMAC-MD5* -UMAC-64* -UMAC-128*`; and `NO-WEAKMAC.pmod` contains `mac = -*-128*`. Where the installed RPM crypto backend supports it (that is, when `/etc/crypto-policies/back-ends/rpm-sequoia.config` exists), also disable SHA-1 for RPM verification with a fifth module, `NO-RPMSHA1.pmod`, containing `hash@rpm = -SHA1`. The rule checks for these exact file names and lines. A custom module file by itself is not enough: the modules must be included in the active policy.
 
-| OpenSCAP rule ID | Control area |
-|---|---|
-| `sshd_set_max_auth_tries` | SSH authentication attempts |
-| `sshd_disable_root_login` | Direct root SSH access |
-| `kernel_module_cramfs_disabled` | `cramfs` kernel module |
-| `sudo_require_reauthentication` | Sudo reauthentication |
-| `sudo_add_use_pty` | Sudo terminal handling |
+**Verify:** Inspect the active policy and its custom modules. Confirm the active policy names the modules and the effective SSH cipher/MAC list excludes the prohibited algorithms.
 
-Validate SSH changes before reloading the service. Keep your current session open and verify a second login before closing it. Use `visudo` or validate a sudoers drop-in with `visudo -c` so a syntax error does not disable sudo.
+### 3. Separate `/tmp` mount and mount options
 
-Check individual controls during your work. The final full-profile assessment in the next task is the required evidence that all five pass together.
+**Rule title excerpt:** “Separate Partition”
 
-### 4. Produce a post-remediation assessment
+**Selected rules:** `partition_for_tmp`, `mount_option_tmp_nodev`, `mount_option_tmp_noexec`, `mount_option_tmp_nosuid`
 
-Document the VM's final condition with a second full-profile OpenSCAP report. Put the result files in your home directory at:
+Mount `/tmp` separately from the root filesystem and make the mount persistent. A dedicated `tmpfs` mount is acceptable for this lab. The active mount and its persistent configuration must include all three options:
 
-- `/home/<netid>/lab09-post-remediation.xml`
-- `/home/<netid>/lab09-post-remediation.html`
+- `nodev` prevents device files on the temporary filesystem from being treated as devices.
+- `noexec` prevents programs stored there from being executed directly.
+- `nosuid` prevents set-user-ID and set-group-ID privilege behavior there.
 
-Review the new report beside your baseline. Use rule-level details to identify any remaining issue, correct it, and capture an updated final report. Keep both XML snapshots separate and unchanged.
+The mount-option checks can be not applicable before `/tmp` is a separate mount.
 
-### 5. Establish and exercise AIDE monitoring
+### 4. GRUB boot password
 
-After the remediations, initialize the AIDE database and install the new database as `/var/lib/aide/aide.db.gz`. Confirm that the active database exists and is non-empty.
+**Rule title excerpt:** “Boot Loader”
 
-Exercise AIDE with a temporary, unauthorized SUID file under `/usr/local/bin`, then remove that file and confirm the test artifact is gone. The autograder performs its own detection check; your manual test is practice. The cron job is created after the baseline, so it may also be reported as a new AIDE entry.
+**Selected rule:** `grub2_password`
 
-Schedule a daily check by creating `/etc/cron.d/aide-check` with exactly this line:
+Configure a GRUB superuser and password so a person with console or physical access cannot freely edit boot settings or select an alternate boot path. The system must store a protected password hash, not a plaintext password. Keep the password private and out of shell history, scripts, and shared files.
 
-```text
-0 3 * * * root /usr/sbin/aide --check >> /var/log/aide-check.log 2>&1
-```
+**Verify:** Confirm the protected GRUB user configuration exists and that OpenSCAP reports the rule passing. 
 
-Make sure `crond` is enabled and active. Do not edit `/etc/aide.conf` to exclude paths.
+### 5. Cron access and file permissions
+
+**Rule title excerpt:** “cron.allow”
+
+**Selected rules:** `file_cron_allow_exists`, `file_cron_deny_not_exist`, `file_permissions_cron_d`, `file_permissions_cron_daily`, `file_permissions_cron_hourly`, `file_permissions_cron_monthly`, `file_permissions_cron_weekly`, `file_permissions_crontab`
+
+Use an allow-list for ordinary users' crontabs: `/etc/cron.allow` must exist and `/etc/cron.deny` must be absent. The selected ownership and modes are below. The rules check that `/etc/cron.allow` exists and that the directories and `/etc/crontab` are at these modes or stricter; `root:root` and `0640` on `cron.allow` follow the CIS recommendation.
+
+| Path | Owner and group | Mode |
+|---|---|---:|
+| `/etc/cron.allow` | `root:root` | `0640` |
+| `/etc/cron.d`, `/etc/cron.daily`, `/etc/cron.hourly`, `/etc/cron.monthly`, `/etc/cron.weekly` | `root:root` | `0700` |
+| `/etc/crontab` | `root:root` | `0600` |
+
+These permissions prevent unprivileged users from changing scheduled jobs or cron configuration. Root remains able to administer cron.
+
+**Verify:** Check the two allow/deny file conditions, then inspect ownership and modes for every listed path.
+
+### 6. NFS and RPC services
+
+**Rule title excerpt:** “rpcbind”
+
+**Selected rules:** `service_nfs_disabled`, `service_rpcbind_disabled`
+
+If this VM is not providing network file shares or RPC services, stop and **mask** `nfs-server` and `rpcbind` (or remove their packages). The rules pass only when each unit is inactive and masked; disabling alone does not satisfy them. `rpcbind` advertises RPC service ports; NFS uses it to support network file sharing. Do not disable either service on a host that depends on it.
+
+**Verify:** Confirm `nfs-server` and `rpcbind` are inactive and masked. Check both the service and socket units when present.
+
+### 7. Bluetooth service
+
+**Rule title excerpt:** “Bluetooth”
+
+**Selected rule:** `service_bluetooth_disabled`
+
+This server does not need Bluetooth. Stop and **mask** the Bluetooth service (or remove the `bluez` package). The rule passes only when `bluetooth.service` is inactive and masked; disabling alone does not satisfy it.
+
+**Verify:** Confirm `bluetooth.service` is inactive and masked.
+
+### 8. Persistent and compressed system journal
+
+**Rule title excerpt:** “persistent disk”
+
+**Selected rules:** `journald_storage`, `journald_compress`
+
+Configure `systemd-journald` to retain journal data on disk across reboot and to compress journal files. The effective settings are `Storage=persistent` and `Compress=yes`. Restart or reload the service as required for the settings to take effect; a configuration file that has not been applied is not sufficient.
+
+**Verify:** Inspect the effective journald configuration and confirm the journal is using persistent storage.
+
+### 9. PAM account lockout
+
+**Rule title excerpt:** “Lock Accounts”
+
+**Selected rules:** `enable_authselect`, `accounts_password_pam_modules_in_authselect_profile`, `account_password_pam_faillock_password_auth`, `account_password_pam_faillock_system_auth`, `accounts_passwords_pam_faillock_deny`, `accounts_passwords_pam_faillock_unlock_time`
+
+Use a valid `authselect` profile to manage the PAM configuration. The active profile must include `pam_faillock.so`, `pam_pwquality.so`, `pam_pwhistory.so`, and `pam_unix.so` in both `system-auth` and `password-auth`. The faillock module must be present in the pre-authentication stack of both PAM files. Configure failed-login lockout with `deny = 5` and `unlock_time = 900` seconds; use `fail_interval = 900` seconds for the selected lab policy.
+
+The lockout control limits repeated password guessing. Incorrect PAM ordering or editing generated `/etc/pam.d` files directly can break login or be overwritten. Keep your current SSH session open and confirm another login works after applying changes.
+
+**Verify:** Run `authselect check`; inspect the active profile and the generated PAM stacks for the modules and pre-authentication entries; inspect `/etc/security/faillock.conf` for the values above.
+
+### 10. PAM password quality and history
+
+**Rule title excerpt:** “Password Reuse”
+
+**Selected rules:** `accounts_password_pam_dictcheck`, `accounts_password_pam_difok`, `accounts_password_pam_minlen`, `accounts_password_pam_minclass`, `accounts_password_pam_maxrepeat`, `accounts_password_pam_pwhistory_enforce_for_root`, `accounts_password_pam_pwhistory_remember_password_auth`, `accounts_password_pam_pwhistory_remember_system_auth`
+
+Configure `pam_pwquality` with these selected requirements:
+
+| Setting | Target | Meaning |
+|---|---:|---|
+| `dictcheck` | `1` | Reject passwords containing dictionary words. |
+| `difok` | `2` | Require at least two characters to differ from the old password. |
+| `minlen` | `14` | Require at least 14 characters. |
+| `minclass` | `4` | Require characters from all four classes: uppercase, lowercase, digits, and symbols. |
+| `maxrepeat` | `3` | Reject runs of more than three identical consecutive characters. |
+
+Enable password history and enforce it for root. The CIS profile requires `remember=24` or higher, so the grader checks `remember=24` on the active `pam_pwhistory.so` entries in both `password-auth` and `system-auth`. Set it on the PAM entries only: do not also put `remember` in `/etc/security/pwhistory.conf`, because the OpenSCAP check fails when the value appears in both places; verify the generated files after applying the authselect profile.
+
+**Verify:** Inspect `/etc/security/pwquality.conf` and `/etc/security/pwhistory.conf`, then inspect both active PAM stacks. Confirm the history option is present on each `pam_pwhistory.so` line and that the corresponding OpenSCAP checks pass.
+
+## Part 3 - Remediate the ten areas
+
+Use the requirements and verification evidence in Part 2 to plan and apply your changes. For each area, record the baseline result, the setting or service you changed, the evidence that the effective state is correct, and the post-remediation result in your own notes. Choose supported system tools and verify the live state; a file edit alone does not prove that a policy or service is active.
+
+Re-run the relevant OpenSCAP checks as you work. If a finding remains, compare its expected state above with the active system state and the exact file or service state reported by OpenSCAP. In particular, check both authselect profile templates and generated PAM files for password-history settings.
+
+## Part 4 - Capture the post-remediation assessment
+
+After the ten areas are configured, run the same full CIS profile again. Save the results as:
+
+- `~/lab09-post-remediation.xml`
+- `~/lab09-post-remediation.html`
+
+Review the post-remediation report. Correct selected findings that remain, then save a new post-remediation report. The grader checks that the ten selected areas changed from their baseline state to passing in the post report and in a fresh scan of the VM. Other CIS findings may remain; they are outside this lab's grading scope.
 
 ## Required evidence and grading
 
-Nothing is uploaded. Keep the named files in your home directory and leave the required configuration on the VM for the autograder.
+Nothing is uploaded. Keep the two XML and two HTML reports in your home directory and leave the remediations active on the VM.
 
 | Part | What is checked | Points |
 |---|---|---:|
-| 1 | Baseline assessment and retained result files. | 10 |
-| 2 | ATT&CK mapping file and its five control-to-technique choices (2 points each). | 10 |
-| 3 | Effectiveness of the five remediations, including verification on the VM (10 points each). | 50 |
-| 4 | Post-remediation assessment and comparison with baseline. | 10 |
-| 5 | AIDE database exists (5); AIDE detects the grader's temporary SUID file as added (10); the exact daily cron job exists and `crond` is enabled and active (5). | 20 |
+| 1 | Valid baseline assessment using the required profile. | 10 |
+| 2-3 | Ten selected areas change from their baseline findings to passing in a fresh scan (7 points each). | 70 |
+| 4 | Valid post-remediation assessment, created after the baseline; all selected checks pass in the saved report. | 20 |
 | | **Total** | **100** |
 
-The autograder removes its temporary test file when it finishes. There are no written answers, screenshots, or reports to submit; grading is based on evidence and system state that can be checked mechanically.
 
 [← Back to Labs]({{ site.baseurl }}/labs/)
