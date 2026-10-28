@@ -28,6 +28,7 @@ Both tracks complete these labs.
 | [LAB 5]({% link labs/lab-05.md %}) | PKI & Certificate Management |
 | [LAB 6]({% link labs/lab-06.md %}) | Acceptable Use & Data Classification Enforcement |
 | [LAB 7]({% link labs/lab-07.md %}) | Patch Management Implementation |
+| [LAB 9]({% link labs/lab-09.md %}) | CIS Benchmark Assessment & Targeted Remediation |
 | [LAB 10]({% link labs/lab-10.md %}) | Ansible Hardening Playbook |
 | [LAB 11]({% link labs/lab-11.md %}) | Ansible Galaxy Hardening Role |
 
@@ -38,7 +39,6 @@ Both tracks complete these labs.
 | Lab | Title | Week |
 |---|---|---|
 | [CYBER LAB 4]({% link labs/cyber-lab-04.md %}) | Windows Server 2022 Hardening |
-| [CYBER LAB 9]({% link labs/cyber-lab-09.md %}) | CIS Benchmark Assessment & Targeted Remediation |
 | [CYBER LAB 12]({% link labs/cyber-lab-12.md %}) | Centralized Logging with auditd & Graylog |
 | [CYBER LAB 14]({% link labs/cyber-lab-14.md %}) | Docker & Container Security Hardening |
 
