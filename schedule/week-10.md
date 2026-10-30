@@ -44,7 +44,7 @@ nav_order: 10
 
 | Track | Lab |
 |---|---|
-| **Both Tracks** | [LAB 10 - Ansible Hardening Playbook]({% link labs/lab-10.md %}) |
+| **Both Tracks** | [LAB 10 - Infrastructure as Code: Terraform & Ansible]({% link labs/lab-10.md %}) |
 
 ---
 

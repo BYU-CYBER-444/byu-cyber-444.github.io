@@ -43,7 +43,7 @@ nav_order: 11
 
 | Track | Lab |
 |---|---|
-| **Both Tracks** | [LAB 11 - Ansible Galaxy Hardening Role]({% link labs/lab-11.md %}) |
+| **Both Tracks** | [LAB 11 - Automated Hardening & Drift Detection]({% link labs/lab-11.md %}) |
 
 ---
 

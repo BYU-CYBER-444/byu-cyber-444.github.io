@@ -29,8 +29,8 @@ Both tracks complete these labs.
 | [LAB 6]({% link labs/lab-06.md %}) | Acceptable Use & Data Classification Enforcement |
 | [LAB 7]({% link labs/lab-07.md %}) | Patch Management Implementation |
 | [LAB 9]({% link labs/lab-09.md %}) | CIS Benchmark Assessment & Targeted Remediation |
-| [LAB 10]({% link labs/lab-10.md %}) | Ansible Hardening Playbook |
-| [LAB 11]({% link labs/lab-11.md %}) | Ansible Galaxy Hardening Role |
+| [LAB 10]({% link labs/lab-10.md %}) | Infrastructure as Code: Terraform & Ansible |
+| [LAB 11]({% link labs/lab-11.md %}) | Automated Hardening & Drift Detection |
 
 ---
 
