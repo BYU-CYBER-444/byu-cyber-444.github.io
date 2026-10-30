@@ -29,24 +29,17 @@ For each issue found, document:
 |---|---|---|---|---|---|
 | Ex. | *(illustrative only - not one of the issues in your provided Dockerfile; find your own 8+)* | Private key copied into image (`COPY id_rsa /root/.ssh/id_rsa`) | SSH private key becomes permanently recoverable from any pulled copy of the image via `docker history`/`docker save`, even if a later layer deletes the file | T1552.004 - Unsecured Credentials: Private Keys | Line removed entirely; key never enters the image - mounted at runtime via a secret store instead |
 
-Issue types to look for: running as root, unpinned base image (floating tag), secrets in environment variables or build args, world-readable sensitive files, unnecessary packages installed, no HEALTHCHECK defined, missing `--no-install-recommends`, exposed unnecessary ports, missing `.dockerignore` patterns.
 
-You must find **at least 8 issues**. Provide the full corrected Dockerfile as a deliverable.
+You must find **at least 5 issues**. Provide the full corrected Dockerfile as a deliverable.
 
 ### Part 2 - Docker Compose Security Audit (35 pts)
 
-A Docker Compose file is provided: [Acme Widgets Co. - Vulnerable Docker Compose Stack]({% link homework/description-files/cyber-hw-14-docker-compose.md %}). It defines a 3-service stack: web (Nginx), app (Python), and database (PostgreSQL). For each of the **10 security improvements** you identify, document:
+A Docker Compose file is provided: [Acme Widgets Co. - Vulnerable Docker Compose Stack]({% link homework/description-files/cyber-hw-14-docker-compose.md %}). It defines a 3-service stack: web (Nginx), app (Python), and database (PostgreSQL). For each of the **5 security improvements** you identify, document:
 
 | CIS Docker Benchmark Control # | Title | Current State | Risk | Remediated Compose Snippet | Priority |
 |---|---|---|---|---|---|
 | Secrets management (CIS/NIST guidance) | No plaintext passwords in environment variables | *Illustrative example only - not one of your 10; your provided stack doesn't have a `cache` service.* A hypothetical `cache` service setting `REDIS_PASSWORD=cachepass123` directly in `environment:` | Any principal who can read the Compose file or run `docker inspect` has the credential in cleartext | `secrets:` top-level block (file-backed), consumed via `REDIS_PASSWORD_FILE` pointing at `/run/secrets/redis_password` | P1 |
 
-Your 10 improvements must include:
-- At minimum 2 that address privilege escalation (user mapping, capabilities)
-- At minimum 2 that address secret management (no plaintext passwords in environment variables - implement Docker secrets or a `.env` file with proper permissions)
-- At minimum 1 that addresses network segmentation (don't put all services on the same network)
-- At minimum 2 that address resource limits (CPU, memory, and pids limits)
-- At minimum 1 read-only filesystem mount
 
 Provide the full remediated `docker-compose.yml` as a deliverable.
 
@@ -83,8 +76,8 @@ Ground your write-up in the specifics of your own work: for hands-on assignments
 
 | Criterion | Points |
 |---|---|
-| Dockerfile audit - 8+ issues, corrected file provided | 40 |
-| Compose audit - 10 controls, all required categories covered | 35 |
+| Dockerfile audit - 5+ issues, corrected file provided | 40 |
+| Compose audit - 5 controls, all required categories covered | 35 |
 | Container escape analysis - mechanism explained, controls mapped | 25 |
 
 

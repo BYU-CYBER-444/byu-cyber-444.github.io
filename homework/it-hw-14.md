@@ -78,14 +78,6 @@ Write a 1-paragraph Acceptable Use Policy addendum for Valley Medical Group cove
 
 Then define: who owns the AI system from a governance perspective (IT? Clinical informatics? CISO?), how the model is updated (who approves a new model version and what security review is required?), and how the system is decommissioned when no longer needed.
 
-### Part 6 - Cost Summary (10 pts)
-
-Produce a 3-year total cost of ownership:
-
-- Year 0: hardware acquisition, setup labor (estimate hours × your loaded hourly rate)
-- Years 1-3: power, maintenance contract or self-maintained labor, storage growth, model updates
-- Compare to 3-year cost of a HIPAA-compliant cloud AI API (Azure OpenAI with BAA, or AWS Bedrock) at estimated query volume
-- State the break-even point and your recommendation
 
 ---
 
@@ -108,8 +100,7 @@ Ground your write-up in the specifics of your own work: for hands-on assignments
 | Model evaluation - 3 models compared, selection justified | 20 |
 | Hardware spec - derived from model requirements, costs shown | 20 |
 | Security architecture - network isolation, auth, audit log schema, IR plan | 25 |
-| AUP + governance | 10 |
-| 3-year TCO + cloud comparison | 10 |
+| AUP + governance | 20 |
 
 
 [← Back to Homework]({{ site.baseurl }}/homework/)
