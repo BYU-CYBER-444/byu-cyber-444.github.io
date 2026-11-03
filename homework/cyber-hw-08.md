@@ -52,7 +52,7 @@ For every Tier 1 and Tier 2 control (and at least 5 Tier 3 controls), provide:
 
 Format as a numbered remediation runbook - a junior admin should be able to run through it sequentially and harden the system.
 
-**For at least 5 controls**, show before-and-after: paste the CIS-CAT output line showing the failure, apply your remediation, then re-run the specific check and paste the passing result.
+~~**For at least 5 controls**, show before-and-after: paste the CIS-CAT output line showing the failure, apply your remediation, then re-run the specific check and paste the passing result.~~
 
 ---
 
