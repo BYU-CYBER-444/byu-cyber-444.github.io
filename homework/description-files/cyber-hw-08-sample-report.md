@@ -10,11 +10,27 @@ nav_exclude: true
 {: .note }
 This is the reference report for [CYBER HW 8]({% link homework/cyber-hw-08.md %}). Use it as the source data for Parts 1 and 2 - you do not need to run CIS-CAT Pro or any scanner yourself to get a set of findings to analyze.
 
-The report below is a CIS Ubuntu Linux 22.04 LTS Benchmark v2.0.0 (Level 1 - Server profile) assessment against a fictional host, `cyber-hw08-sample01`. It contains 48 controls (21 FAIL, 27 PASS) across all 7 benchmark sections, formatted the same way a real CIS-CAT Pro HTML report is: overall score, per-section score table, and a detailed results table with control ID, title, level, and result.
+{: .warning }
+**Two versions are available below.** The CIS Ubuntu 22.04 Benchmark has been revised since this report was first created. The control IDs and section structure changed significantly between versions — the same control may have a completely different number. Pick the version that matches the benchmark PDF your instructor provided, then use that version for all your work. Do not mix IDs from both versions.
 
-This data is synthetic - built to look and score like a real assessment, not copied from an actual CIS-CAT Pro run. The control IDs and titles correspond to real CIS Ubuntu 22.04 Benchmark recommendations, so your remediation research and commands in Part 2 should reflect the actual, correct fix for that control on a real Ubuntu 22.04 system.
+<div style="margin: 16px 0 8px;">
+  <strong>Select benchmark version:</strong>
+  <span style="margin-left: 12px;">
+    <button id="btn-v1" onclick="showVersion('v1')" style="padding:6px 16px;border-radius:4px;border:2px solid #14324d;background:#14324d;color:#fff;font-weight:600;cursor:pointer;margin-right:8px;">Original (v1.x IDs)</button>
+    <button id="btn-v3" onclick="showVersion('v3')" style="padding:6px 16px;border-radius:4px;border:2px solid #14324d;background:#fff;color:#14324d;font-weight:600;cursor:pointer;">Updated (v3.0.0 IDs)</button>
+  </span>
+</div>
 
----
+<script>
+function showVersion(v) {
+  document.getElementById('report-v1').style.display = (v === 'v1') ? 'block' : 'none';
+  document.getElementById('report-v3').style.display = (v === 'v3') ? 'block' : 'none';
+  document.getElementById('btn-v1').style.background = (v === 'v1') ? '#14324d' : '#fff';
+  document.getElementById('btn-v1').style.color = (v === 'v1') ? '#fff' : '#14324d';
+  document.getElementById('btn-v3').style.background = (v === 'v3') ? '#14324d' : '#fff';
+  document.getElementById('btn-v3').style.color = (v === 'v3') ? '#fff' : '#14324d';
+}
+</script>
 
 <style>
   .cis-sample-report { font-family: "Segoe UI", Arial, sans-serif; color: #1a1a1a; background: #fff; border: 1px solid #d7dee3; border-radius: 6px; overflow: hidden; margin: 24px 0; }
@@ -43,10 +59,14 @@ This data is synthetic - built to look and score like a real assessment, not cop
   .cis-sample-report .csr-footer { padding: 16px 32px; font-size: 11px; color: #888; border-top: 1px solid #d7dee3; }
 </style>
 
-<div class="cis-sample-report" markdown="0">
+<!-- ═══════════════════════════════════════════════════════════
+     VERSION 1 — Original IDs (v1.x numbering)
+     ═══════════════════════════════════════════════════════════ -->
+<div id="report-v1" markdown="0">
+<div class="cis-sample-report">
   <div class="csr-header">
     <h2>CIS Benchmark Configuration Assessment Report</h2>
-    <div class="csr-sub">Benchmark: CIS Ubuntu Linux 22.04 LTS Benchmark v2.0.0 &nbsp;|&nbsp; Profile: Level 1 - Server</div>
+    <div class="csr-sub">Benchmark: CIS Ubuntu Linux 22.04 LTS Benchmark v1.x &nbsp;|&nbsp; Profile: Level 1 - Server</div>
   </div>
 
   <div class="csr-meta">
@@ -140,6 +160,111 @@ This data is synthetic - built to look and score like a real assessment, not cop
   </div>
 
   <div class="csr-footer">Sample assessment report generated for CYBER 444 - CIS Benchmark Gap Analysis (HW 8). Synthetic data for coursework use only.</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     VERSION 2 — Updated IDs (v3.0.0 numbering)
+     ═══════════════════════════════════════════════════════════ -->
+<div id="report-v3" style="display:none;" markdown="0">
+<div class="cis-sample-report">
+  <div class="csr-header">
+    <h2>CIS Benchmark Configuration Assessment Report</h2>
+    <div class="csr-sub">Benchmark: CIS Ubuntu Linux 22.04 LTS Benchmark v3.0.0 &nbsp;|&nbsp; Profile: Level 1 - Server</div>
+  </div>
+
+  <div class="csr-meta">
+    <div><span class="csr-label">Target Host</span><span class="csr-val">cyber-hw08-sample01</span></div>
+    <div><span class="csr-label">IP Address</span><span class="csr-val">10.60.14.22</span></div>
+    <div><span class="csr-label">OS</span><span class="csr-val">Ubuntu 22.04.3 LTS</span></div>
+    <div><span class="csr-label">Scan Date</span><span class="csr-val">2026-07-14 09:41 UTC</span></div>
+    <div><span class="csr-label">Report ID</span><span class="csr-val">cyber-hw08-sample01-baseline</span></div>
+  </div>
+
+  <div class="csr-score-panel">
+    <div class="csr-gauge"><span>56.3%</span></div>
+    <div class="csr-score-text">
+      <h3>Overall Compliance Score: 27 / 48 controls passing</h3>
+      <p>21 FAIL &nbsp;&middot;&nbsp; 27 PASS &nbsp;&middot;&nbsp; 0 NOT APPLICABLE &nbsp;&middot;&nbsp; 0 ERROR</p>
+    </div>
+  </div>
+
+  <h4>Section Scores</h4>
+  <table class="csr-section-table">
+    <tr><th>Section</th><th>Controls</th><th>Pass</th><th>Fail</th><th>Score</th></tr>
+    <tr><td>1 - Initial Setup</td><td>10</td><td>7</td><td>3</td><td>70.0%</td></tr>
+    <tr><td>2 - Services</td><td>8</td><td>6</td><td>2</td><td>75.0%</td></tr>
+    <tr><td>3 - Network</td><td>5</td><td>3</td><td>2</td><td>60.0%</td></tr>
+    <tr><td>4 - Host Based Firewall</td><td>2</td><td>0</td><td>2</td><td>0.0%</td></tr>
+    <tr><td>5 - Access Control</td><td>12</td><td>5</td><td>7</td><td>41.7%</td></tr>
+    <tr><td>6 - Logging and Auditing</td><td>7</td><td>3</td><td>4</td><td>42.9%</td></tr>
+    <tr><td>7 - System Maintenance</td><td>4</td><td>3</td><td>1</td><td>75.0%</td></tr>
+  </table>
+
+  <h4>Detailed Results</h4>
+  <div class="csr-detail-table-wrap">
+  <table class="csr-detail-table">
+    <tr><th>#</th><th>Control ID</th><th>Title</th><th>Level</th><th>Result</th></tr>
+
+    <tr><td class="csr-rownum">1</td><td>1.1.1.1</td><td>Ensure cramfs kernel module is not available</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">2</td><td>1.1.1.7</td><td>Ensure squashfs kernel module is not available</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">3</td><td>1.1.1.9</td><td>Ensure usb-storage kernel module is not available</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">4</td><td>1.1.2.1.1</td><td>Ensure /tmp is tmpfs or a separate partition</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">5</td><td>1.1.2.1.2</td><td>Ensure nodev option set on /tmp partition</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">6</td><td>1.1.2.1.4</td><td>Ensure noexec option set on /tmp partition</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">7</td><td>1.3.1.1</td><td>Ensure the apparmor packages are installed</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">8</td><td>1.4.2</td><td>Ensure access to bootloader config is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">9</td><td>1.5.1</td><td>Ensure randomize_va_space is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">10</td><td>1.6.1</td><td>Ensure /etc/motd is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+
+    <tr><td class="csr-rownum">11</td><td>2.1.1</td><td>Ensure autofs services are not in use</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">12</td><td>2.1.11</td><td>Ensure print server services are not in use</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">13</td><td>2.1.13</td><td>Ensure rsync services are not in use</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">14</td><td>2.2.1</td><td>Ensure NIS Client is not installed</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">15</td><td>2.2.4</td><td>Ensure telnet client is not installed</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">16</td><td>2.3.1.1</td><td>Ensure a single time synchronization daemon is in use</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">17</td><td>2.4.1.1</td><td>Ensure cron daemon is enabled and active</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">18</td><td>2.4.1.2</td><td>Ensure access to /etc/crontab is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+
+    <tr><td class="csr-rownum">19</td><td>3.3.1.1</td><td>Ensure net.ipv4.ip_forward is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">20</td><td>3.3.1.4</td><td>Ensure net.ipv4.conf.all.send_redirects is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">21</td><td>3.3.1.8</td><td>Ensure net.ipv4.conf.all.accept_redirects is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">22</td><td>3.3.1.14</td><td>Ensure net.ipv4.conf.all.accept_source_route is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">23</td><td>3.3.2.7</td><td>Ensure net.ipv6.conf.all.accept_ra is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+
+    <tr><td class="csr-rownum">24</td><td>4.1.1</td><td>Ensure ufw is installed</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">25</td><td>4.1.3</td><td>Ensure ufw incoming default is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+
+    <tr><td class="csr-rownum">26</td><td>5.1.1</td><td>Ensure access to /etc/ssh/sshd_config is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">27</td><td>5.1.5</td><td>Ensure sshd Banner is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">28</td><td>5.1.7</td><td>Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">29</td><td>5.1.16</td><td>Ensure sshd MaxAuthTries is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">30</td><td>5.1.20</td><td>Ensure sshd PermitRootLogin is disabled</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">31</td><td>5.2.7</td><td>Ensure access to the su command is restricted</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">32</td><td>5.3.3.2.3</td><td>Ensure password complexity is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">33</td><td>5.3.3.3.1</td><td>Ensure password history remember is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">34</td><td>5.4.1.1</td><td>Ensure password expiration is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">35</td><td>5.4.1.2</td><td>Ensure minimum password age is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">36</td><td>5.4.1.5</td><td>Ensure inactive password lock is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">37</td><td>5.4.2.5</td><td>Ensure root path integrity</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+
+    <tr><td class="csr-rownum">38</td><td>6.1.2.1</td><td>Ensure rsyslog is installed</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">39</td><td>6.1.2.4</td><td>Ensure rsyslog log file creation mode is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">40</td><td>6.1.2.8</td><td>Ensure logrotate is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">41</td><td>6.2.1.1</td><td>Ensure auditd packages are installed</td><td><span class="csr-lvl">L2</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">42</td><td>6.2.1.2</td><td>Ensure auditd service is enabled and active</td><td><span class="csr-lvl">L2</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">43</td><td>6.2.3.1</td><td>Ensure changes to system administration scope (sudoers) is collected</td><td><span class="csr-lvl">L2</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">44</td><td>6.3.1</td><td>Ensure AIDE is installed</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+
+    <tr><td class="csr-rownum">45</td><td>7.1.1</td><td>Ensure access to /etc/passwd is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">46</td><td>7.1.5</td><td>Ensure access to /etc/shadow is configured</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+    <tr><td class="csr-rownum">47</td><td>7.1.12</td><td>Ensure no files or directories without an owner and a group exist</td><td><span class="csr-lvl">L1</span></td><td class="csr-fail">FAIL</td></tr>
+    <tr><td class="csr-rownum">48</td><td>7.2.1</td><td>Ensure accounts in /etc/passwd use shadowed passwords</td><td><span class="csr-lvl">L1</span></td><td class="csr-pass">PASS</td></tr>
+  </table>
+  </div>
+
+  <div class="csr-footer">Sample assessment report generated for CYBER 444 - CIS Benchmark Gap Analysis (HW 8). Synthetic data for coursework use only.</div>
+</div>
 </div>
 
 
