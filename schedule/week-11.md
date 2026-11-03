@@ -39,13 +39,6 @@ nav_order: 11
 
 ---
 
-## Labs
-
-| Track | Lab |
-|---|---|
-| **Both Tracks** | [LAB 11 - Automated Hardening & Drift Detection]({% link labs/lab-11.md %}) |
-
----
 
 ## Homework
 
