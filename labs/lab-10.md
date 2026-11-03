@@ -1,12 +1,11 @@
 ---
-title: "LAB 10 - Ansible Hardening Playbook"
+title: "LAB 10 & 11 - Automated Hardening and Drift Detection"
 parent: Labs
 nav_order: 10
 ---
 
-# LAB 10 - Ansible Hardening Playbook
+# LAB 10 & 11 - Automated Hardening and Drift Detection
 {: .no_toc }
-
 
 <details open markdown="block">
   <summary>Contents</summary>
@@ -14,3 +13,5 @@ nav_order: 10
 1. TOC
 {:toc}
 </details>
+
+---
