@@ -11,6 +11,7 @@ nav_order: 14
 
 ## Topics
 
+- Containers and Docker: images, layers, registries, namespaces, cgroups; essential Docker commands; volumes and networking; Docker Compose
 - Hypervisor security: Type 1 vs. Type 2 hardening, VM isolation, CIS VMware/Hyper-V benchmarks
 - Docker security model: namespaces, cgroups, capabilities; CIS Docker Benchmark
 - Kubernetes security basics: RBAC, Network Policies, Pod Security Standards
