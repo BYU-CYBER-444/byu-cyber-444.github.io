@@ -22,19 +22,26 @@ Assess a Rocky Linux 9 server against the CIS Level 1 Server profile, investigat
 
 The full profile will likely report other findings. You are responsible for the ten areas listed here; you are not expected to make the entire profile pass.
 
+**The actual flow of the lab is as follows**: you'll start by recording a baseline configuration scan. Then you will go through the findings and for each of 10 categories listed in section 2, you will fix the issue. Then you will run a final configuration scan with those 10 components fixed.
+
 
 ## Part 1 - Record the baseline
 
-Before changing the VM, run the full CIS Level 1 Server assessment. Save the machine-readable and HTML reports in your home directory as:
+Before changing the VM, run the full CIS Level 1 Server assessment. The machine has been pre-loaded with the `oscap` tool, which you will use to do this. Save the machine-readable and HTML reports in your home directory as:
 
 - `lab09-baseline.xml`
 - `lab09-baseline.html`
 
 An OpenSCAP exit code of `2` is expected when the scan finds failures. Use the selected-rule descriptions below to understand the checks; you do not need to search the HTML report for their definitions. Record which selected checks fail in the baseline. The HTML report is still useful for seeing the host-specific evidence and any finding-specific guidance. Some related checks, such as `/tmp` mount options, may be reported as not applicable until the mount exists.
 
+Honestly, the purpose of this part isn't to make you struggle to find the command, so the full initial command is included below:
+```sh
+sudo oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis_server_l1 --results "$HOME/lab09-baseline.xml" --report "$HOME/lab09-baseline.html" /usr/share/xml/scap/ssg/content/ssg-rl9-ds.xml
+```
+
 ## Part 2 - Understand the selected rules
 
-The quoted phrases below are short excerpts from the selected SCAP rule titles. The explanations state the full requirement being assessed for this lab in plain language. The rule IDs match the rules used by the grader. Values shown are this lab's target settings.
+The quoted phrases below are short excerpts from the selected SCAP rule titles. The explanations state the full requirement being assessed for this lab in plain language. The rule IDs match the rules used by the grader. Values shown are this lab's target settings. All of the below will be recorded as well with basically the same pointers given in the HTML document that you can search through if you scp it to your local computer.
 
 
 ### 1. Local and remote login banners
@@ -174,7 +181,7 @@ After the ten areas are configured, run the same full CIS profile again. Save th
 - `~/lab09-post-remediation.xml`
 - `~/lab09-post-remediation.html`
 
-Review the post-remediation report. Correct selected findings that remain, then save a new post-remediation report. The grader checks that the ten selected areas changed from their baseline state to passing in the post report and in a fresh scan of the VM. Other CIS findings may remain; they are outside this lab's grading scope.
+Review the post-remediation report. Correct selected findings that remain, then save a new post-remediation report. You only need to worry about the areas listed in section 2, ignore other failed checks bc we're not going to make you fix literally everything.
 
 ## Required evidence and grading
 
