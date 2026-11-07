@@ -22,7 +22,7 @@ Compliance is not a scan you run once: it is a pipeline that applies, measures, 
 
 ## Pitch
 
-Servers drift. Someone changes a setting by hand, a package update reverts a control, and the compliance score you proved last month is wrong today. You build a pipeline that treats hardening as code: Ansible roles apply a benchmark, a CI pipeline lints and tests every change, scans produce a score, a gate blocks changes that lower it, scheduled scans detect drift, and remediation puts the host back. This builds directly on Labs 10-11 and the HW 11 drift exercise.
+Servers drift. Someone changes a setting by hand, a package update reverts a control, and the compliance score you proved last month is wrong today. You build a pipeline that treats hardening as code: Ansible roles apply a benchmark, a CI pipeline lints and tests every change, scans produce a score, a gate blocks changes that lower it, scheduled scans detect drift, and remediation puts the host back. This builds on Labs 10-11 and HW 11's review of automated hardening changes.
 
 ## What You Build
 
