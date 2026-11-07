@@ -25,7 +25,7 @@ Both tracks complete these assignments.
 | [HW 3]({% link homework/hw-03.md %}) | Inactive AD Account PowerShell Script & LDAP Filters |
 | [HW 7]({% link homework/hw-07.md %}) | Patch Management & Vulnerability Policy |
 | [HW 9]({% link homework/hw-09.md %}) | Midterm Practice Exam (ungraded) |
-| [HW 11]({% link homework/hw-11.md %}) | Configuration Drift: Detection, Threat Modeling & Monitoring |
+| [HW 11]({% link homework/hw-11.md %}) | Ansible Hardening Change Review |
 
 ---
 

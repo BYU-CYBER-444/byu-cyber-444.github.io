@@ -44,7 +44,7 @@ nav_order: 11
 
 | Track | Assignment |
 |---|---|
-| **Both Tracks** | [HW 11 - Configuration Drift: Detection, Threat Modeling & Monitoring]({% link homework/hw-11.md %}) |
+| **Both Tracks** | [HW 11 - Ansible Hardening Change Review]({% link homework/hw-11.md %}) |
 
 ---
 
