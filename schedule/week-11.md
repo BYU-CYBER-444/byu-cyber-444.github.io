@@ -13,13 +13,6 @@ nav_order: 11
 
 - Ansible Galaxy and reusable roles; CIS hardening roles (dev-sec.io)
 - Drift detection with `ansible --check`; CI/CD pipeline integration for compliance-as-code
-- Terraform state security (remote backends, state encryption); HashiCorp Vault for secrets
-- Cloud IAM: roles, policies, least privilege, role chaining, service accounts
-- Security groups vs. NACLs; CloudTrail / Azure Monitor audit logging and retention
-- Cloud cost management: tagging strategies, budgets, and alerts
-- Cloud patching strategies: golden AMIs, immutable infrastructure
-- AWS Well-Architected Framework: security pillar overview
-- Docker Compose for multi-service stacks: service definitions, port binding security, image update policies
 
 ## Supplemental Readings & Videos
 
