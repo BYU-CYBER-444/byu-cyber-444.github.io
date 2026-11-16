@@ -13,3 +13,6 @@ nav_order: 12
 1. TOC
 {:toc}
 </details>
+
+
+# This assignment has been dropped and does not need to be completed.

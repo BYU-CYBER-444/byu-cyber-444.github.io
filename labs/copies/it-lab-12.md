@@ -18,374 +18,129 @@ nav_order: 12
 
 ## Objectives
 
-- Deploy a Prometheus + Grafana monitoring stack with node_exporter for host metrics
-- Write PromQL queries covering rate calculations, aggregations, and histogram analysis
-- Build a production-quality Grafana dashboard for infrastructure health
-- Configure Alertmanager with multi-channel routing and alert inhibition rules
-- Define SLOs and implement error budget burn rate alerting
+- Deploy and operate a host monitoring stack across the three assigned VMs.
+- Collect and interpret CPU, memory, disk, network, filesystem, and load metrics from every host.
+- Create a multi-host Grafana dashboard with eight useful panels.
+- Design severity-based alert routing and suppress redundant alerts when a host is down.
+- Validate infrastructure alerts and HTTP SLO burn-rate rules, and explain which can produce live alerts in this environment.
 
----
+## Tools and Starting Conditions
 
-## Tools Required
+Your instructor has provisioned three Ubuntu 22.04 LTS VMs:
 
-- Your instructor has provisioned three Ubuntu 22.04 LTS VMs for this lab: `it-lab12-mon01` (monitoring server, runs Prometheus/Grafana/Alertmanager) and `it-lab12-node01`/`it-lab12-node02` (monitored nodes, at 10.0.0.21/10.0.0.22)
-- Packages: Prometheus, Grafana, Alertmanager, node_exporter (download from prometheus.io)
-- `curl`, `jq`
+| Host | Address | Role |
+|---|---|---|
+| `it-lab12-mon01` | assigned monitoring VM address | Monitoring server and one monitored host |
+| `it-lab12-node01` | `10.0.0.21` | Monitored host |
+| `it-lab12-node02` | `10.0.0.22` | Monitored host |
 
----
+Your username on all three is your Net ID; use the password emailed at the start of the semester. You need SSH access to all three VMs and a browser that can reach the monitoring server.
+
+**First action:** Connect to each VM and confirm its hostname matches the table before making changes. If a VM or address does not match, contact your instructor before continuing.
+
+**Estimated effort:** 3–4 hours (unpiloted, adjustable planning estimate; actual time may vary with download speed and dashboard familiarity).
+
+**Help route:** If access, starting conditions, or expected results do not match this brief, stop and contact your instructor or course lab support. Include the VM name, the check you performed, its observed result, and a focused question.
 
 ## Background
 
-Prometheus uses a pull model: it scrapes metrics endpoints at configured intervals. All metrics are time-series with labels for dimensionality. PromQL is Prometheus's query language - it differs from SQL in that it operates on time ranges rather than rows.
-
-An **SLO** (Service Level Objective) is a target for reliability - e.g., "99.9% of HTTP requests complete in < 200ms." An **error budget** is the allowed failure space: 0.1% of requests over 30 days = 43.2 minutes of allowed downtime. **Burn rate** alerting catches SLO threats before the budget is exhausted.
-
----
-
-## Procedure
-
-### Part 1 - Stack Deployment
-
-```bash
-# Create a dedicated user for Prometheus
-sudo useradd --no-create-home --shell /bin/false prometheus
-
-# Download and install Prometheus
-PROM_VER="2.47.0"
-wget -q https://github.com/prometheus/prometheus/releases/download/v${PROM_VER}/prometheus-${PROM_VER}.linux-amd64.tar.gz
-tar xzf prometheus-${PROM_VER}.linux-amd64.tar.gz
-sudo cp prometheus-${PROM_VER}.linux-amd64/{prometheus,promtool} /usr/local/bin/
-sudo mkdir -p /etc/prometheus /var/lib/prometheus
-sudo cp -r prometheus-${PROM_VER}.linux-amd64/{consoles,console_libraries} /etc/prometheus/
-sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus
-
-# Download and install node_exporter
-NE_VER="1.6.1"
-wget -q https://github.com/prometheus/node_exporter/releases/download/v${NE_VER}/node_exporter-${NE_VER}.linux-amd64.tar.gz
-tar xzf node_exporter-${NE_VER}.linux-amd64.tar.gz
-sudo cp node_exporter-${NE_VER}.linux-amd64/node_exporter /usr/local/bin/
-sudo useradd --no-create-home --shell /bin/false node_exporter
-
-# Create systemd units
-sudo tee /etc/systemd/system/node_exporter.service << 'EOF'
-[Unit]
-Description=Node Exporter
-After=network.target
-
-[Service]
-User=node_exporter
-ExecStart=/usr/local/bin/node_exporter \
-    --collector.systemd \
-    --collector.processes \
-    --web.listen-address=:9100
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-sudo tee /etc/systemd/system/prometheus.service << 'EOF'
-[Unit]
-Description=Prometheus
-After=network.target
-
-[Service]
-User=prometheus
-ExecStart=/usr/local/bin/prometheus \
-    --config.file=/etc/prometheus/prometheus.yml \
-    --storage.tsdb.path=/var/lib/prometheus \
-    --storage.tsdb.retention.time=30d \
-    --web.enable-lifecycle \
-    --web.enable-admin-api
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-sudo systemctl daemon-reload
-sudo systemctl enable --now node_exporter prometheus
-```
-
-**Configure `/etc/prometheus/prometheus.yml`:**
-
-```yaml
-global:
-  scrape_interval:     15s
-  evaluation_interval: 15s
-  external_labels:
-    environment: lab
-    region: us-east-1
+Prometheus collects time-series data by scraping configured metrics endpoints. PromQL is used to calculate and compare measurements over time. An SLO (Service Level Objective) describes a reliability target; its error budget is the amount of unreliability allowed within the target period. Burn-rate alerts indicate how quickly that budget would be consumed if the current failure rate continued.
 
-rule_files:
-  - /etc/prometheus/rules/*.yml
+The assigned VMs provide host metrics through node_exporter. They do not run an HTTP application that publishes request metrics. Your HTTP SLO rules must therefore be syntactically valid and loaded by Prometheus, but are not expected to fire.
 
-alerting:
-  alertmanagers:
-    - static_configs:
-        - targets: ['localhost:9093']
-
-scrape_configs:
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: ['localhost:9090']
-
-  - job_name: 'node'
-    static_configs:
-      - targets: ['localhost:9100', '10.0.0.21:9100', '10.0.0.22:9100']
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: instance
-        regex: '([^:]+).*'
-        replacement: '$1'
-```
+## Work and Required Outcomes
 
-Verify Prometheus is scraping: `curl -s http://localhost:9090/api/v1/targets | jq '.data.activeTargets[].health'`
+Complete the work across the three hosts. Install and run node_exporter on all three VMs. Run Prometheus, Grafana, and Alertmanager on `it-lab12-mon01`; configure Prometheus to collect from itself and both monitored nodes. Set up the Prometheus scrape and alert-rule configuration before relying on the service. Keep the monitoring services available for grading.
 
-**Install Grafana:**
+Create a submission directory on the monitoring host at `~/lab12-submission`. Work in the order below and retain each named artifact there.
 
-```bash
-sudo apt install -y apt-transport-https software-properties-common
-wget -q -O - https://apt.grafana.com/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/grafana.gpg
-echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" \
-    | sudo tee /etc/apt/sources.list.d/grafana.list
-sudo apt update && sudo apt install -y grafana
-sudo systemctl enable --now grafana-server
-```
+### 1. Monitoring stack
 
-Add Prometheus as a data source in Grafana UI (http://localhost:3000, admin/admin): Configuration → Data Sources → Add data source → Prometheus → URL: http://localhost:9090.
+The three node_exporter services must be active. Prometheus must be active with a valid configuration and three healthy node targets, one for each VM. Grafana must be active and have a working Prometheus data source. Alertmanager must be active and report ready.
 
----
+Allow enough time for initial scrapes and rate calculations. If a service or target check fails, inspect the relevant service logs and configuration, correct the cause, and repeat the check before moving on.
 
-### Part 2 - PromQL Queries
+### 2. Host metric queries
 
-Write and test each of the following PromQL queries. For each, record the query, a brief explanation, and a screenshot or formatted output.
+Prepare and run one PromQL query for each required result. Each query must return live data for all three host instances. Record one row for each returned series, including the instance, value, and any additional identifying labels. Values vary over time and between VMs; grading checks that the required result is present and queryable, not that it equals a fixed measurement.
 
-**2.1 CPU utilization (rate-based)**
+Save the query expressions in these files under `~/lab12-submission/queries/`:
 
-```promql
-# CPU usage percentage per instance
-100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
-```
+| File | Required result |
+|---|---|
+| `cpu.promql` | Per-host CPU utilization percentage calculated from recent CPU activity |
+| `memory.promql` | Per-host percentage of memory available |
+| `disk-read.promql` | Per-host disk read throughput in decimal MB/s, excluding loop and RAM devices |
+| `disk-write.promql` | Per-host disk write throughput in decimal MB/s, excluding loop and RAM devices |
+| `network-inbound.promql` | Per-host inbound network throughput in decimal Mbps, excluding loopback |
+| `network-top3-outbound.promql` | The three highest per-host outbound traffic rates, excluding loopback |
+| `filesystem-usage.promql` | Filesystem use as a percentage, excluding temporary and device-backed filesystems |
+| `system-load.promql` | Per-host 15-minute load average normalized by logical CPU count |
 
-**2.2 Memory available**
+Save the observed results in `~/lab12-submission/query-results.md`. Include the query ID, instance, value, and any series labels beyond instance. Use the eight file basenames as the query IDs.
 
-```promql
-# Memory available as percentage of total
-(node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
-```
+### 3. Grafana dashboard
 
-**2.3 Disk I/O throughput**
+Create and save a dashboard titled **Infrastructure Health**. Use the Prometheus data source and include the following eight panels. The displayed measurements must correspond to the selected host or hosts, and each panel must use its named title, visualization type, unit, and threshold behavior.
 
-```promql
-# Disk read throughput in MB/s
-rate(node_disk_read_bytes_total{device="sda"}[5m]) / 1024 / 1024
+| Panel title | Type | Required display and behavior |
+|---|---|---|
+| CPU Usage | Time series | CPU utilization percentage; green below 70%, yellow from 70%, red from 90% |
+| Memory Available | Gauge | Available memory percentage; red below 10%, yellow from 10%, green from 20% |
+| Disk I/O Read | Time series | Disk read throughput in decimal MB/s |
+| Disk I/O Write | Time series | Disk write throughput in decimal MB/s |
+| Network Inbound | Time series | Inbound network throughput in decimal Mbps |
+| Filesystem Usage | Bar gauge | Filesystem use percentage; green below 80%, red from 80% |
+| System Load | Stat | 15-minute load normalized by logical CPU count; red from 1.5 |
+| Up/Down Status | Stat | Whether each selected node target is up; red when down and green when up |
 
-# Disk write throughput in MB/s
-rate(node_disk_written_bytes_total{device="sda"}[5m]) / 1024 / 1024
-```
+Add a query-based dashboard variable named `instance`, backed by the Prometheus data source. It must support selecting multiple instances and an all-host selection. All eight panels must respond to the variable so a grader can inspect either individual hosts or all three together.
 
-**2.4 Network traffic**
+Export the saved dashboard to `~/lab12-submission/infrastructure-health.json`. The export must represent the live dashboard, with the required title, eight panels, variable, and panel behavior. The live Grafana dashboard is the grading source of truth; the JSON export is also a required deliverable.
 
-```promql
-# Inbound network traffic in Mbps
-rate(node_network_receive_bytes_total{device="ens33"}[5m]) * 8 / 1024 / 1024
-
-# Top 3 instances by outbound traffic
-topk(3, rate(node_network_transmit_bytes_total[5m]) * 8 / 1024 / 1024)
-```
+### 4. Alert routing and inhibition
 
-**2.5 Filesystem usage with alerting threshold**
+Configure Alertmanager with a default receiver named `team-default` and a critical receiver named `team-oncall`. Warning alerts must route to `team-default`; critical alerts must route to `team-oncall`. Use the lab example addresses `it-ops@lab.internal` and `oncall@lab.internal` for the corresponding receivers. The grader checks configuration and routing, not email delivery.
 
-```promql
-# Filesystems above 80% usage
-(node_filesystem_size_bytes{fstype!~"tmpfs|devtmpfs"} - node_filesystem_free_bytes{fstype!~"tmpfs|devtmpfs"})
-/ node_filesystem_size_bytes{fstype!~"tmpfs|devtmpfs"} * 100 > 80
-```
+Configure instance-based inhibition so an `InstanceDown` alert suppresses alerts named `High.*` or `DiskSpaceLow` for that same instance. Alertmanager must validate the configuration and report ready. Save a copy of the active configuration as `~/lab12-submission/alertmanager.yml`.
 
-**2.6 System load vs. CPU count**
+### 5. Alert rules and SLO
 
-```promql
-# Load average normalized by CPU count (> 1 means overloaded)
-node_load15 / count without(cpu, mode)(node_cpu_seconds_total{mode="idle"})
-```
-
-For each query: run it in Prometheus UI (http://localhost:9090/graph) and save the graph screenshot.
-
----
-
-### Part 3 - Grafana Dashboard
-
-Build a Grafana dashboard named "Infrastructure Health" with the following panels:
-
-| Panel | Type | PromQL | Thresholds |
-|-------|------|--------|------------|
-| CPU Usage (all hosts) | Time series | From 2.1 | Green < 70%, Yellow 70-90%, Red > 90% |
-| Memory Available % | Gauge | From 2.2 | Red < 10%, Yellow 10-20% |
-| Disk I/O Read | Time series | From 2.3 read | - |
-| Disk I/O Write | Time series | From 2.3 write | - |
-| Network Inbound | Time series | From 2.4 inbound | - |
-| Filesystem Usage | Bar gauge | Adapted from 2.5 | Red > 80% |
-| System Load | Stat | From 2.6 | Red > 1.5 |
-| Up/Down Status | Stat | `up{job="node"}` | Red = 0 |
-
-Configure dashboard variables: `$instance` (multi-value query variable from `label_values(up, instance)`) so individual hosts can be filtered.
-
-Export the dashboard JSON and include in your submission.
-
----
-
-### Part 4 - Alertmanager Configuration
-
-**Install Alertmanager:**
-
-```bash
-AM_VER="0.26.0"
-wget -q https://github.com/prometheus/alertmanager/releases/download/v${AM_VER}/alertmanager-${AM_VER}.linux-amd64.tar.gz
-tar xzf alertmanager-${AM_VER}.linux-amd64.tar.gz
-sudo cp alertmanager-${AM_VER}.linux-amd64/{alertmanager,amtool} /usr/local/bin/
-sudo mkdir -p /etc/alertmanager
-```
-
-**Create `/etc/alertmanager/alertmanager.yml`:**
-
-```yaml
-global:
-  resolve_timeout: 5m
-  smtp_smarthost: 'localhost:25'
-  smtp_from: 'alertmanager@lab.internal'
-
-templates:
-  - '/etc/alertmanager/templates/*.tmpl'
-
-route:
-  group_by: ['alertname', 'instance']
-  group_wait:      30s
-  group_interval:  5m
-  repeat_interval: 4h
-  receiver: 'team-default'
-  routes:
-    - match:
-        severity: critical
-      receiver: 'team-oncall'
-      continue: false
-    - match:
-        severity: warning
-      receiver: 'team-default'
-
-inhibit_rules:
-  - source_match:
-      alertname: 'InstanceDown'
-    target_match_re:
-      alertname: 'High.*'
-    equal: ['instance']
-
-receivers:
-  - name: 'team-default'
-    email_configs:
-      - to: 'it-ops@lab.internal'
-        send_resolved: true
-  - name: 'team-oncall'
-    email_configs:
-      - to: 'oncall@lab.internal'
-        send_resolved: true
-```
-
-Explain the `inhibit_rules` entry: when an instance is completely down, suppress all other alerts for that instance (CPU high, memory low, disk full, etc.) since they are all caused by the outage.
-
----
-
-### Part 5 - Alerting Rules and SLO Error Budget
-
-**Create `/etc/prometheus/rules/infrastructure.yml`:**
-
-```yaml
-groups:
-  - name: infrastructure
-    rules:
-    - alert: InstanceDown
-      expr: up{job="node"} == 0
-      for: 2m
-      labels:
-        severity: critical
-      annotations:
-        summary: "Instance {{ $labels.instance }} is down"
-        description: "{{ $labels.instance }} has been unreachable for > 2 minutes"
-
-    - alert: HighCPUUsage
-      expr: 100 - (avg by(instance)(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
-      for: 5m
-      labels:
-        severity: warning
-      annotations:
-        summary: "High CPU on {{ $labels.instance }}: {{ $value | printf \"%.1f\" }}%"
-
-    - alert: DiskSpaceLow
-      expr: |
-        (node_filesystem_size_bytes - node_filesystem_free_bytes)
-        / node_filesystem_size_bytes * 100 > 85
-      for: 10m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Disk {{ $labels.mountpoint }} on {{ $labels.instance }} is {{ $value | printf \"%.1f\" }}% full"
-
-  - name: slo-web-availability
-    rules:
-    # SLO: 99.9% availability over 30 days
-    # Error budget: 0.1% = 43.2 minutes/month
-    - alert: ErrorBudgetBurnRateFast
-      expr: |
-        sum(rate(http_requests_total{status=~"5.."}[1h]))
-        / sum(rate(http_requests_total[1h])) > 0.14
-      for: 2m
-      labels:
-        severity: critical
-      annotations:
-        summary: "SLO burning fast: 14x burn rate (1h window)"
-        description: "At this rate, the monthly error budget will be exhausted in < 2 hours"
-
-    - alert: ErrorBudgetBurnRateSlow
-      expr: |
-        sum(rate(http_requests_total{status=~"5.."}[6h]))
-        / sum(rate(http_requests_total[6h])) > 0.05
-      for: 15m
-      labels:
-        severity: warning
-      annotations:
-        summary: "SLO burning slowly: 5x burn rate (6h window)"
-```
-
-Validate: `promtool check rules /etc/prometheus/rules/infrastructure.yml`
-
-Write a 200-word explanation of the error budget burn rate alerting strategy:
-- Why are there two alerts (fast and slow burn)?
-- What does "14x burn rate" mean in plain language?
-- How does this approach differ from simple threshold alerting?
-
----
+Create and load these three infrastructure alert rules with the stated conditions, durations, and severities:
+
+| Rule | Condition | Duration | Severity |
+|---|---|---:|---|
+| `InstanceDown` | A node target reports down | 2 minutes | critical |
+| `HighCPUUsage` | CPU use exceeds 90% | 5 minutes | warning |
+| `DiskSpaceLow` | A non-temporary filesystem exceeds 85% use | 10 minutes | warning |
+
+Also create and load the following HTTP SLO rules for a 99.9% availability objective over 30 days. The fast rule detects a 14x burn rate over a 1-hour window; the slow rule detects a 5x burn rate over a 6-hour window. Both use HTTP server-error requests relative to all requests. `ErrorBudgetBurnRateFast` has a 2-minute duration and critical severity; `ErrorBudgetBurnRateSlow` has a 15-minute duration and warning severity. The lab has no HTTP request metric source, so these rules must validate and load but need not fire.
+
+The Prometheus rule validator must report success, Prometheus must remain active, and its live rules view must show all five exact rule names with the required conditions, durations, and severities. Save the rule file as `~/lab12-submission/infrastructure.yml` and the successful validator output as `~/lab12-submission/promtool-check.txt`.
 
 ## Deliverables
 
-1. Prometheus + Grafana stack running: screenshot of Prometheus targets page showing all scraped targets
-2. Six PromQL queries with output screenshots or formatted results
-3. Grafana dashboard JSON export + screenshot showing all 8 panels
-4. Alertmanager config + inhibit rule explanation
-5. Alert rules file + `promtool check` output
-6. 200-word error budget burn rate explanation
+Keep the following items on `it-lab12-mon01` in `~/lab12-submission`:
 
----
+- Eight named query files under `queries/` and `query-results.md` with observed values and labels.
+- `infrastructure-health.json`, an export of the saved Grafana dashboard.
+- `alertmanager.yml`, a copy of the active Alertmanager configuration.
+- `infrastructure.yml`, the five required Prometheus alert rules.
+- `promtool-check.txt`, showing successful rule validation.
+
+The grader checks the live services, target health, active configurations, query results, dashboard, routing, inhibition, and loaded alert rules, along with the required copies. It does not compare dynamic metric values against fixed numbers. Leave all three VMs powered on and reachable, with the required services running, until grading is complete.
 
 ## Grading
 
-| Item | Points |
-|------|--------|
-| Stack deployment and all targets scraping | 20 |
-| PromQL queries (6) with evidence | 25 |
-| Grafana dashboard (8 panels + variable) | 25 |
-| Alertmanager config with routing and inhibition | 15 |
-| Alert rules + burn rate explanation | 15 |
-| **Total** | **100** |
+Each listed check is assessed against the live VMs and required copies. Checks within each category are scored separately, so a missed check does not remove credit for other checks in that category.
 
+| Item | Automatic checks | Points |
+|---|---|---:|
+| Stack deployment | node_exporter active on each VM (2 each); each of the three node targets healthy (1 each); Prometheus active/config valid (4); Grafana active with tested Prometheus data source (4); Alertmanager active and ready (3) | 20 |
+| PromQL queries | Each of the eight named query files contains the required expression and returns series from the live API (3 each); `query-results.md` is present and records instance labels and values (1) | 25 |
+| Grafana dashboard | Exact dashboard title (1); each panel has its required title/type (1 each) and expression (1 each); instance variable settings (4); thresholds (3); exported JSON matches the live dashboard (1) | 25 |
+| Alertmanager | Service active and ready (3); config passes validation (3); default and severity routes are correct (5); instance-down inhibition rule is correct (4) | 15 |
+| Alert rules and SLO | Rule validation succeeds and all five rules are loaded (5); each of the three infrastructure rules has its required expression, duration, and severity (2 each); each SLO rule has its required expression, duration, and severity (2 each) | 15 |
+| **Total** |  | **100** |
 
 [← Back to Labs]({{ site.baseurl }}/labs/)
