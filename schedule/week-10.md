@@ -35,7 +35,7 @@ nav_order: 10
 
 | Track | Lab |
 |---|---|
-| **Both Tracks** | [LAB 10 - Infrastructure as Code: Terraform & Ansible]({% link labs/lab-10.md %}) |
+| **Both Tracks** | [LAB 10 & 11 - Automated Provisioning & Hardening]({% link labs/lab-10.md %}) |
 
 ---
 
