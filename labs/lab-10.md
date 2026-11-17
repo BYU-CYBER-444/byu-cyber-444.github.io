@@ -29,14 +29,13 @@ By the end of this lab, you will be able to:
 - Build five Rocky Linux targets with your own cloud-init configuration and provisioning automation.
 - Apply a documented Linux baseline to all five targets with an Ansible role.
 - Prepare separate student and TA access on every target.
-- Explain how each control is represented in the target system and how you verify it independently.
 - Make repeatable changes that report `changed=0` on a second run.
 - Test the full workflow before a one-time external grade run.
 
 
 ## Read before starting
 
-The instructor autograder runs once for the final grade; it is not a debugging loop. Before requesting that run, use your own test suite to verify provisioning, access, hardening, idempotency, drift detection, and remediation.
+The instructor autograder runs once for the final grade; it is not a debugging loop. Before requesting that run, test provisioning, access, hardening, and idempotency yourself (a second run must report `changed=0`).
 
 The autograder deletes the five assigned VMs and then runs the deployment script you create at **`/opt/autograder.sh`** on `lab11-ctrl`. That script must rebuild the VMs and apply your hardening playbook using only software already present on the LXC. It must not prompt for input. The autograder will then independently inspect the resulting VMs.
 
@@ -44,7 +43,7 @@ The autograder depends on all VMIDs, names, and IP addresses matching the table 
 
 ## Environment
 
-You have been given the machine `lab11-ctrl`, which is your Ansible controller. You will create five target VMs in your own Proxmox cluster as part of this lab. Download the official Rocky Linux 9 GenericCloud x86_64 QCOW2 image from the [Rocky Linux image repository](https://dl.rockylinux.org/pub/rocky/9/images/x86_64/) directly to the Proxmox host where you will create the VMs. Verify it against the adjacent `.CHECKSUM` file. Do not download or store the VM disk image on `lab11-ctrl` or inside a guest VM. This file will need to live inside of an appropriate directory on Proxmox such that cloud-init will be able to access it; as you read online about cloud-init in trying to set up your automation, you should learn where to move it on the system.
+You have been given the machine `lab11-ctrl`, which is your Ansible controller. You will create five target VMs in your own Proxmox cluster as part of this lab. Download the official Rocky Linux 9 GenericCloud x86_64 QCOW2 image from the [Rocky Linux image repository](https://dl.rockylinux.org/pub/rocky/9/images/x86_64/) directly to the Proxmox host where you will create the VMs. Do not download or store the VM disk image on `lab11-ctrl` or inside a guest VM. This file will need to live inside of an appropriate directory on Proxmox such that cloud-init will be able to access it; as you read online about cloud-init in trying to set up your automation, you should learn where to move it on the system.
 
 Starter code is provided to help you with this, which you should download using the link below. The starter code contains the intended layout of directories and files (including any roles you should be making), and the different files you need to complete have helpful comments that should be able to guide you to the right resources.
 
@@ -111,7 +110,7 @@ Test access with your own self-generated key pair: verify that your private key 
 
 ## Part 2 - Build the Linux baseline
 
-Fill in `roles/linux_hardening`. Put configurable target values in `defaults/main.yml`, use handlers for required service restarts, and assign each control an Ansible tag matching its ID in lowercase. Every task name must begin with its bracketed ID exactly as shown, for example `[LNX-03] Set sshd session limits`.
+Fill in `roles/linux_hardening`. Apply every control to all five hosts through `site.yml`.
 
 | ID | Control | Required end state |
 |---|---|---|
@@ -145,20 +144,19 @@ Run `ansible-lint` on `site.yml` and your role. Fix the findings that apply to y
 
 ## Part 4 - Prepare for the one-time instructor autograder
 
-The instructor autograder is not a test environment. It runs once for the final grade. Finish the student-built suite and inspect its output before requesting that run.
+The instructor autograder is not a test environment. It runs once for the final grade. Test everything yourself and inspect the output before requesting that run.
 
 Before grading, confirm:
 
 - Your project is in `/home/<netid>/lab11/` and contains `provision.yml`, `site.yml`, `roles/create_vms/`, and `roles/linux_hardening/`.
-- `provision/create-vms.yml` is at the exact path used by the autograder; it creates VMIDs 1001–1005 from scratch with cloud-init and generates the protected inventory. `provision/vault.yml` is encrypted and contains no plaintext secrets.
-- `provision/README.md` records the image filename and checksum, the Proxmox host and storage locations of the image and cloud-init snippets, all five VM IDs and required IP addresses (`172.19.x.27`–`172.19.x.31`), and your provisioning approach. The image and snippets remain available on Proxmox storage after VM deletion and are not in Git or stored only on `lab11-ctrl`.
-- `/opt/autograder.sh` exists, is executable, and has been run successfully from a clean state. It creates the five assigned VMIDs, configures access, generates `/opt/lab11/inventory.ini`, and applies `site.yml`.
+- `provision.yml` and `roles/create_vms/` create VMIDs 1001–1005 from scratch with cloud-init and generate the protected inventory. `provision/vault.yml` is encrypted and contains no plaintext secrets.
+- `provision/README.md` records the image filename and all five VM IDs and required IP addresses (`172.19.x.27`–`172.19.x.31`). The image and snippets remain available on Proxmox storage after VM deletion and are not in Git or stored only on `lab11-ctrl`.
+- `/opt/autograder.sh` exists, is executable, and has been run successfully from a clean state. It creates the five assigned VMIDs, configures access, generates `/opt/lab11/inventory.ini` (mode `0600`), and applies `site.yml`.
 - You have verified the full rebuild path by removing only your assigned VMs, then confirming the deployment script recreates them correctly. Do this before requesting the one-time instructor run.
 - `/opt/password` contains the Vault password and is readable by the autograder but is excluded from the project and Git.
 - All five targets are reachable, the role applies without prompts, and a second run reports `changed=0` and `failed=0` for every host.
-- The default target inventory is `/opt/lab11/inventory.ini`; deployment and hardening run without prompts, privilege-escalation password prompts, unexpected extra variables, or collection installs. Your script points Ansible at `/opt/password`; the autograder sets no Ansible variables for you.
+- The default target inventory is `/opt/lab11/inventory.ini` (mode `0600`); deployment and hardening run without prompts, privilege-escalation password prompts, unexpected extra variables, or collection installs. Your script points Ansible at `/opt/password`; the autograder sets no Ansible variables for you.
 - The full playbook completes in under 15 minutes.
-- `tests/self-test.sh` completes successfully from `/home/<netid>/lab11/` and its output is saved.
 
 ### Run your script exactly as the autograder does
 
@@ -203,7 +201,7 @@ Then check all of these:
 
 - It printed `RC=0`. Any other number means it failed; read the end of `/tmp/lab11-rehearsal.log` (`tail -n 40 /tmp/lab11-rehearsal.log`).
 - Do it **from a clean state at least once**: remove VMIDs `1001`-`1005` first (in the Proxmox web interface: stop each VM, then **More > Remove**, tick **Destroy unreferenced disks**), run the rehearsal, and confirm all five VMs come back, reachable, with the baseline applied.
-- Afterwards `tests/self-test.sh` still passes, and a second `site.yml` run reports `changed=0`.
+- Afterwards a second `site.yml` run reports `changed=0`.
 
 <!-- | What you see in the log | Likely cause | Fix |
 |---|---|---|
@@ -218,29 +216,25 @@ Then check all of these:
 
 ### What the instructor autograder does, in order
 
-
 1. Deletes only the five assigned VMs, VMIDs `1001`–`1005`.
-2. Executes `/opt/autograder.sh` on `lab11-ctrl` with the exact command above. Your script must use the Vault password in `/opt/password` itself. The script provisions the VMs using `provision/create-vms.yml`, then applies `site.yml`. It does not install anything on the LXC.
-3. Waits for cloud-init and SSH, then confirms the five exact names and VMIDs, assigned IP addresses, target inventory, and TA key access.
-4. Checks the applied baseline and records the play recap without prompts or extra variables.
+2. Executes `/opt/autograder.sh` on `lab11-ctrl` with the exact command above. Your script must use the Vault password in `/opt/password` itself. The script provisions the VMs with `provision.yml`, then applies `site.yml`. It does not install anything on the LXC.
+3. Waits for cloud-init and SSH, then confirms the five exact names and VMIDs, assigned IP addresses, and TA key access.
+4. Checks the generated `/opt/lab11/inventory.ini` (mode `0600`), your project for leaked secrets, and your README.
 5. Checks all 10 controls independently on all five targets.
 6. Runs `site.yml` a second time and requires `changed=0` on all five hosts.
-<!-- 7. Calls `detect-drift.sh` with no options and requires exit `0` with an empty report. -->
-<!-- 8. Introduces drift in three randomly selected controls on each target, then requires detector exit `2` and a report naming exactly those controls for the correct hosts. -->
-<!-- 9. Calls `detect-drift.sh` with its remediation option, then checks again for exit `0` and a clean report. -->
+7. Runs `ansible-lint` on `site.yml` and `roles/linux_hardening/` and a syntax check of both playbooks.
 
-If any student-built test fails, do not proceed to the one-time instructor run. Read the failing assertion or report, fix the corresponding role or detector, reapply the hardening playbook or recreate an affected assigned VM if needed, and run the full student suite again.
+If any of your own checks fails, do not proceed to the one-time instructor run. Read the failing output, fix the corresponding role or playbook, recreate an affected assigned VM if needed, and test again.
 
 ## Grading
 
 | Area | What is checked | Points |
 |---|---|---:|
-| Environment, cloud-init, and connectivity | Five from-scratch Rocky VMs at the required VMIDs and IP addresses, encrypted provisioning secrets, original cloud-init and provisioning automation at the required path, generated protected inventory, and working student and TA key-based access. | 70 |
+| Environment, cloud-init, and connectivity | Five from-scratch Rocky VMs at the required VMIDs and IP addresses, encrypted provisioning secrets, original cloud-init and provisioning automation at the required path, generated protected inventory (mode `0600`), a README recording the image filename and the VM IDs and addresses, and working student and TA key-based access. | 70 |
 | Linux hardening controls | LNX-01 through LNX-10 reach their specified end states on all five hosts after provisioning and role application (6 points per control: 1 for each compliant host, plus 1 when all five are). | 60 |
-| Role structure and safe automation | Required role layout, defaults, bracketed task IDs, matching tags, handlers, and safeguards that preserve SSH access. | 25 |
-| Idempotency | Second full run reports `changed=0` and `failed=0` on all five hosts. | 25 |
-<!-- | Student-built checks | Independent read-only assertions cover all 50 host-control results; the self-test runner checks repeatability, clean state, exact injected drift, valid JSON, remediation, and exit `1` for an unreachable host. | 25 | -->
-| Lint, syntax, and grader compatibility | Lint and syntax checks are clean; grader paths, no-prompt execution, installed dependencies, and time limit are met. | 20 |
+| Role structure and safe automation | The `linux_hardening` role has its `defaults`, `handlers`, and `tasks` files and `site.yml` applies it to your inventory's group; safeguards preserve SSH access (sshd configuration validated with `sshd -t`, `PermitRootLogin` and `PasswordAuthentication` untouched, `ta` and your account still working). | 25 |
+| Idempotency | A second run of `site.yml` reports `changed=0` and `failed=0` on all five hosts. | 25 |
+| Lint, syntax, and grader compatibility | `ansible-lint` on `site.yml` and `roles/linux_hardening/` and syntax checks are clean; grader paths, no-prompt execution, installed dependencies, and time limit are met. | 20 |
 | **Total** |  | **200** |
 
 ---
