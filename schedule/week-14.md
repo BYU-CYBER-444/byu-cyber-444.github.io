@@ -36,7 +36,9 @@ nav_order: 14
 ---
 ## Slides
 
-[Container Security & AI Infrastructure]({{ site.baseurl }}/lectures/CYBER444_Week14_Container_Security_and_AI_Infrastructure.pptx)
+[Container & Hypervisor Security]({{ site.baseurl }}/lectures/CYBER444_Week14_Container_and_Hypervisor_Security.pptx)
+
+[AI Infrastructure & Security]({{ site.baseurl }}/lectures/CYBER444_Week14_AI_Infrastructure_and_Security.pptx)
 
 ---
 
