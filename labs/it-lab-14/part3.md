@@ -18,7 +18,7 @@ nav_order: 3
 ---
 
 {: .highlight }
-> **Optional background (watch before starting):** [Full NGINX Tutorial](https://www.youtube.com/watch?v=q8OleYuqntY) by TechWorld with Nana covers `upstream` blocks, `proxy_pass`, and `location` routing — the core Nginx concepts for this part.
+> **Optional background (watch before starting):** [Full NGINX Tutorial](https://www.youtube.com/watch?v=q8OleYuqntY) by TechWorld with Nana covers `upstream` blocks, `proxy_pass`, and `location` routing - the core Nginx concepts for this part.
 
 The Ollama API should not be directly exposed. Place an Nginx reverse proxy with rate limiting in front.
 
@@ -39,7 +39,7 @@ flowchart TD
 ## Setup Steps
 
 {: .important }
-> **SELinux is enforcing.** Without the `httpd_can_network_connect` boolean set to `on`, Nginx will silently return a 502 Bad Gateway when it tries to proxy to Ollama — the config will look correct but all API requests will fail. This is the most common failure point in this part.
+> **SELinux is enforcing.** Without the `httpd_can_network_connect` boolean set to `on`, Nginx will silently return a 502 Bad Gateway when it tries to proxy to Ollama - the config will look correct but all API requests will fail. This is the most common failure point in this part.
 
 1. Install Nginx using `dnf`.
 2. Rocky Linux 9 runs SELinux in enforcing mode. Set the `httpd_can_network_connect` boolean to allow Nginx to proxy to backend processes.
@@ -58,7 +58,7 @@ export API_KEY="your-key-here"
 
 ## Create `/etc/nginx/conf.d/ollama-proxy.conf`
 
-Your config must implement the following requirements. The example below shows the structure — replace placeholder values with your own:
+Your config must implement the following requirements. The example below shows the structure - replace placeholder values with your own:
 
 - An `upstream` block pointing to Ollama at `127.0.0.1:11434`
 - Rate-limiting zones: 10 requests/minute per IP, max 5 concurrent connections per IP
@@ -69,7 +69,7 @@ Your config must implement the following requirements. The example below shows t
 - A catch-all `location /` that returns `404`
 
 ```nginx
-# Example — adapt values to your setup
+# Example - adapt values to your setup
 upstream ollama_backend {
     server 127.0.0.1:11434;
     keepalive 32;
@@ -114,7 +114,7 @@ server {
 ```
 
 {: .warning }
-> **Nginx `if` is considered harmful.** The `if ($http_x_api_key != ...)` pattern works for this lab but is flagged in the official Nginx documentation as error-prone in `location` contexts. The more robust alternative is the `auth_request` directive, which delegates auth to a subrequest — it handles edge cases like CORS preflight that the `if` approach misses. The self-check script captures `auth_request` as the name of the preferred directive for exactly this reason.
+> **Nginx `if` is considered harmful.** The `if ($http_x_api_key != ...)` pattern works for this lab but is flagged in the official Nginx documentation as error-prone in `location` contexts. The more robust alternative is the `auth_request` directive, which delegates auth to a subrequest - it handles edge cases like CORS preflight that the `if` approach misses. The self-check script captures `auth_request` as the name of the preferred directive for exactly this reason.
 
 Test the config with `nginx -t`, then enable and start Nginx, then reload it.
 
@@ -126,17 +126,17 @@ If the second or third test below returns 200 instead of 401/403, re-run
 ```bash
 # Confirm API_KEY is set before running (run: export API_KEY="your-key-here")
 
-# Test 1: valid key — expect HTTP 200
+# Test 1: valid key - expect HTTP 200
 CODE1=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:8080/api/generate \
     -H "X-API-Key: $API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"model":"llama3.2:1b","prompt":"Hello","stream":false}')
 
-# Test 2: wrong key — expect HTTP 401
+# Test 2: wrong key - expect HTTP 401
 CODE2=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api/generate \
     -H "X-API-Key: wrong-key")
 
-# Test 3: blocked endpoint — expect HTTP 403
+# Test 3: blocked endpoint - expect HTTP 403
 CODE3=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api/delete \
     -H "X-API-Key: $API_KEY")
 
@@ -154,7 +154,7 @@ echo "auth_request" > ~/lab14-submission/part3_auth_directive.txt
 ---
 
 {: .highlight }
-> **Before moving on — Part 3 complete when:**
+> **Before moving on - Part 3 complete when:**
 > - Nginx is running and shows `active` when you check its status
 > - Port 8080 is reachable from your terminal on the VM (e.g., `curl http://localhost:8080/`)
 > - A request with your valid key to `/api/generate` returns HTTP 200

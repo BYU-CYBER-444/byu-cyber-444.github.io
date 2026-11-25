@@ -17,7 +17,7 @@ nav_order: 2
 
 ---
 
-Write a Python benchmarking script named `benchmark_inference.py`. Save it to your home directory and run it with `python3`. A reference implementation is provided below — read it, understand what each section does, then save and run it:
+Write a Python benchmarking script named `benchmark_inference.py`. Save it to your home directory and run it with `python3`. A reference implementation is provided below - read it, understand what each section does, then save and run it:
 
 ```python
 #!/usr/bin/env python3
@@ -29,7 +29,11 @@ import statistics
 
 OLLAMA_URL = "http://localhost:11434"
 
-MODELS = ["llama3.2:1b", "llama3.2:3b", "mistral:7b-instruct-q4_K_M"]
+MODELS = [
+    "hf.co/bartowski/Llama-3.2-1B-Instruct-GGUF:Q4_K_M",
+    "hf.co/bartowski/Llama-3.2-3B-Instruct-GGUF:Q4_K_M",
+    "hf.co/bartowski/Mistral-7B-Instruct-v0.3-GGUF:Q4_K_M",
+]
 PROMPTS = [
     ("short", "What is DNS? Answer in one sentence."),
     ("medium", "Explain the difference between TCP and UDP in 3 paragraphs."),
@@ -98,8 +102,10 @@ import json, os
 d = json.load(open(os.path.expanduser("~/lab14-submission/benchmark_results.json")))
 short = {r["model"]: r["tokens_per_sec"] for r in d if r["prompt_type"] == "short"}
 fastest = max(short, key=short.get)
-ratio = round(short["llama3.2:1b"] / short["mistral:7b-instruct-q4_K_M"], 2)
-candidates = {m: v for m, v in short.items() if "7b" not in m}
+m1b = next(m for m in short if "1B" in m)
+m7b = next(m for m in short if "7B" in m or "Mistral" in m)
+ratio = round(short[m1b] / short[m7b], 2)
+candidates = {m: v for m, v in short.items() if "7B" not in m and "Mistral" not in m}
 recommended = max(candidates, key=candidates.get)
 
 import json as j
@@ -114,7 +120,7 @@ EOF
 ---
 
 {: .highlight }
-> **Before moving on — Part 2 complete when:**
+> **Before moving on - Part 2 complete when:**
 > - The benchmark script ran to completion without errors for all three models
 > - `benchmark_results.json` exists and contains 9 entries (3 models × 3 prompt types)
 > - Every entry shows a `tokens_per_sec` value greater than zero
