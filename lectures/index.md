@@ -29,5 +29,5 @@ Slide decks are provided as PowerPoint (.pptx) files.
 | [11]({% link schedule/week-11.md %}) | [Automated Hardening]({{ site.baseurl }}/lectures/CYBER444_Week11_Automated_Hardening.pptx) | 
 | [12]({% link schedule/week-12.md %}) | [Logging, Monitoring & Audit Architecture]({{ site.baseurl }}/lectures/CYBER444_Week12_Logging_Audit_and_Audit_Architecture.pptx) | 
 | [13]() | **Thanksgiving Break - No Class** |
-| [14]({% link schedule/week-14.md %}) | [Container Security & AI Infrastructure]({{ site.baseurl }}/lectures/CYBER444_Week14_Container_Security_and_AI_Infrastructure.pptx) | 
+| [14]({% link schedule/week-14.md %}) | [Container & Hypervisor Security]({{ site.baseurl }}/lectures/CYBER444_Week14_Container_and_Hypervisor_Security.pptx) · [AI Infrastructure & Security]({{ site.baseurl }}/lectures/CYBER444_Week14_AI_Infrastructure_and_Security.pptx) |
 | [15]({% link schedule/week-15.md %}) | Final Project Presentations |
