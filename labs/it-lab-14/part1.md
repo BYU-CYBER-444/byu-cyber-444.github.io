@@ -18,11 +18,11 @@ nav_order: 1
 ---
 
 {: .highlight }
-> **Optional background (watch before starting):** [Run your own AI (but private)](https://www.youtube.com/watch?v=WxYC9-hBM_g) by NetworkChuck (~25 min) walks through Ollama installation and running local models step by step — close to what this part covers.
+> **Optional background (watch before starting):** [Run your own AI (but private)](https://www.youtube.com/watch?v=WxYC9-hBM_g) by NetworkChuck (~25 min) walks through Ollama installation and running local models step by step - close to what this part covers.
 
 ## Install Prerequisites
 
-Rocky Linux 9 does not include pip by default. Use `dnf` to install Python 3, pip, and `jq`. Then use `pip3` to install the `requests` and `prometheus_client` Python packages.
+Rocky Linux 9 does not include pip by default. Use `dnf` to install Python 3, pip, and `jq`. Then use `pip3` to install the `requests` Python package.
 
 ## Install Ollama
 
@@ -34,24 +34,24 @@ curl -fsSL https://ollama.ai/install.sh | sh
 
 ## Pull Models
 
-Pull the following three models using `ollama pull`. Pulling all three will take several minutes depending on your connection speed.
+Pull the following three models from Hugging Face using `ollama pull`. Ollama supports pulling GGUF models directly from HuggingFace using the `hf.co/` prefix. Pulling all three will take several minutes depending on your connection speed.
 
-- `llama3.2:1b` — small model (~1.3 GB), fast on CPU
-- `llama3.2:3b` — medium model (~2.0 GB)
-- `mistral:7b-instruct-q4_K_M` — larger quantized model (~4.1 GB)
+- `hf.co/bartowski/Llama-3.2-1B-Instruct-GGUF:Q4_K_M` - small model (~0.8 GB), fast on CPU
+- `hf.co/bartowski/Llama-3.2-3B-Instruct-GGUF:Q4_K_M` - medium model (~2.0 GB)
+- `hf.co/bartowski/Mistral-7B-Instruct-v0.3-GGUF:Q4_K_M` - larger quantized model (~4.1 GB)
 
 ## Configure Ollama for Production Use
 
 Create the directory `/etc/systemd/system/ollama.service.d/` and write an `override.conf` file inside it. The file must configure the following environment variables with these exact values (the grader checks them):
 
 {: .tip }
-> **What is a systemd drop-in?** The drop-in directory holds files that *merge with* the base unit — they do not replace it. Any `[Service]` entries in `override.conf` are layered on top of the installer's unit. Run `systemctl daemon-reload` after any change; systemd reads all unit files at that point and does not detect changes automatically.
+> **What is a systemd drop-in?** The drop-in directory holds files that *merge with* the base unit - they do not replace it. Any `[Service]` entries in `override.conf` are layered on top of the installer's unit. Run `systemctl daemon-reload` after any change; systemd reads all unit files at that point and does not detect changes automatically.
 
 The directory structure looks like this:
 
 ```
 /etc/systemd/system/
-├── ollama.service          ← base unit (created by installer — do not edit)
+├── ollama.service          ← base unit (created by installer - do not edit)
 └── ollama.service.d/       ← the directory you create
     └── override.conf       ← your additions
 ```
@@ -96,7 +96,7 @@ curl -s http://localhost:11434/api/tags | jq '.models[].name'
 sudo systemctl is-active ollama
 ```
 
-If any model is missing, re-run its `ollama pull` command. If the service is not
+If any model is missing, re-run its `ollama pull hf.co/...` command. If the service is not
 active, check `journalctl -u ollama -n 30` before proceeding.
 
 ## Part 1 Capture Commands
@@ -110,7 +110,7 @@ systemctl show ollama --property=Environment > ~/lab14-submission/part1_override
 ---
 
 {: .highlight }
-> **Before moving on — Part 1 complete when:**
+> **Before moving on - Part 1 complete when:**
 > - The Ollama service is running and shows `active` when you check its status
 > - All three models appear when you list installed models
 > - Checking the running service's environment shows the override variables you set
